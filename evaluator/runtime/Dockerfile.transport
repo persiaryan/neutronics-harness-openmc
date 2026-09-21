@@ -1,0 +1,17 @@
+ARG DEPENDENCY_IMAGE
+ARG NATIVE_IMAGE
+FROM ${DEPENDENCY_IMAGE} AS dependencies
+FROM ${NATIVE_IMAGE} AS native
+FROM python@sha256:d04f49f5882f49a3b91f874e75e19f0c265f7222da8659741a9d7eab148f22a9
+COPY --from=dependencies /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+# Reviewed installation contains only native OpenMC and HDF5 components.
+# Copy no old harness, build evidence, model, reference or nuclear-data files.
+COPY --from=native /opt/openmc/bin /opt/openmc/bin
+COPY --from=native /opt/openmc/lib /opt/openmc/lib
+RUN --network=none /opt/openmc/bin/openmc --version
+RUN --network=none python -I -B -c "import openmc; assert openmc.__version__ == '0.15.3'"
+COPY idle.py probe.py transport_worker.py /opt/evaluator/
+USER 1000:1000
+ENV HOME=/tmp/home TMPDIR=/tmp MPLCONFIGDIR=/tmp/mpl OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 HDF5_PLUGIN_PRELOAD=::
+WORKDIR /work
+ENTRYPOINT ["python", "-I", "-B", "/opt/evaluator/idle.py"]

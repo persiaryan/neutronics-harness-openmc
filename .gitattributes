@@ -1,0 +1,36 @@
+# Preserve retained evidence/reference bytes, including solver whitespace.
+evidence/** -text -whitespace
+evaluation/*/frozen/** -text -whitespace
+
+# Source archives only: this does NOT sanitize Git history or a push.
+evidence export-ignore
+evaluation/*/frozen export-ignore
+evaluation/candidates/SCIENTIFIC_REVIEW.md export-ignore
+PUBLICATION.md export-ignore
+publication export-ignore
+TASK.md export-ignore
+experiments/study.py export-ignore
+experiments/study_evidence.py export-ignore
+experiments/continuation.py export-ignore
+experiments/STUDY.md export-ignore
+experiments/STUDY_ANALYSIS.md export-ignore
+experiments/CONTINUATION_ANALYSIS.md export-ignore
+
+# Portable synthetic tests; private regressions stay in research Git history.
+tests/* export-ignore
+tests/__init__.py -export-ignore
+tests/test_boundaries.py -export-ignore
+tests/test_boundary_reduction.py -export-ignore
+tests/test_model_factory.py -export-ignore
+tests/test_evaluator.py -export-ignore
+tests/test_transport.py -export-ignore
+tests/test_isolated_builder.py -export-ignore
+tests/test_builder_prompts.py -export-ignore
+tests/test_builder_environment.py -export-ignore
+tests/test_response_reader.py -export-ignore
+tests/test_guided_authoring.py -export-ignore
+tests/test_boundary_adapter.py -export-ignore
+tests/fixtures -export-ignore
+tests/fixtures/* export-ignore
+tests/fixtures/__init__.py -export-ignore
+tests/fixtures/responses.py -export-ignore

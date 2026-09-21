@@ -1,0 +1,10 @@
+ARG PACKAGES_IMAGE
+ARG BUILDER_IMAGE
+FROM ${PACKAGES_IMAGE} AS packages
+FROM ${BUILDER_IMAGE}
+# Retain the exact baseline OS, Python, Node, CLI and entrypoint. Copy only
+# installed public third-party Python packages, never the evaluator directory.
+COPY --from=packages /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+ENV OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 MPLCONFIGDIR=/tmp/mpl
+RUN --network=none python3 -I -B -c "import openmc; assert openmc.__version__ == '0.15.3'"
+LABEL neutronics-harness-v5.authoring-environment="openmc-python-0.15.3"

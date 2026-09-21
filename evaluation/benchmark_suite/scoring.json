@@ -1,0 +1,79 @@
+{
+  "format": "private-weighted-keff-rubric-v2",
+  "applicable_points": 70,
+  "categories": {
+    "geometry": {
+      "weight": 20,
+      "checks": [
+        "interfaces",
+        "extent_and_map",
+        "domain",
+        "boundaries"
+      ]
+    },
+    "materials": {
+      "weight": 15,
+      "checks": [
+        "composition",
+        "density",
+        "thermal_scattering",
+        "temperature"
+      ]
+    },
+    "physics_settings": {
+      "weight": 10,
+      "checks": [
+        "physics",
+        "sampling",
+        "source",
+        "entropy_mesh_and_output"
+      ]
+    },
+    "keff": {
+      "weight": 15,
+      "checks": [
+        "equivalence_demonstrated"
+      ]
+    },
+    "statistical_quality": {
+      "weight": 5,
+      "checks": [
+        "precision",
+        "entropy_screen"
+      ]
+    },
+    "engineering_consistency": {
+      "weight": 5,
+      "checks": [
+        "leakage_probability",
+        "leakage_boundary_consistency"
+      ]
+    }
+  },
+  "not_applicable": {
+    "flux_spectrum": 10,
+    "reaction_rate_power": 10,
+    "other_observables": 5
+  },
+  "hard_gates": [
+    "model_builds",
+    "openmc_runs",
+    "valid_geometry",
+    "required_data",
+    "finite_statepoint",
+    "required_observables"
+  ],
+  "model_caused_gate_failure_score": 0,
+  "infrastructure_or_evaluator_failure": "unscored",
+  "unassessed_evidence": "unscored",
+  "category_fraction": "Equal weight boolean checks within each category; all applicable subchecks in a named check must pass.",
+  "normalization": "100 * earned_points / 70; no points for N/A categories",
+  "strict_correctness": "All gates and all category checks must pass; weighted score does not override a failed check.",
+  "case_weights": "Equal weights across the six frozen tasks; also report each case and development/held-out partitions.",
+  "equivalence_margin_pcm": 150.0,
+  "interval_multiplier": 1.96,
+  "maximum_candidate_std_dev_pcm": 51.96152422706632,
+  "entropy_active_half_drift_screen_bits": 0.02,
+  "candidate_seed": 1,
+  "grading_enabled": false
+}

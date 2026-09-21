@@ -1,0 +1,127 @@
+{
+  "format": "boundary-task-requirements-v1",
+  "scope": "six external root box faces, open face interiors",
+  "location_comparison": {
+    "kind": "exact"
+  },
+  "property_comparison": {
+    "kind": "exact"
+  },
+  "tasks": {
+    "reflective_pin_cell": {
+      "source": {
+        "path": "prompts/cases/reflective_pin_cell.md",
+        "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+        "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+      },
+      "domain_bounds_cm": [
+        [
+          -0.63,
+          0.63
+        ],
+        [
+          -0.63,
+          0.63
+        ],
+        [
+          -0.63,
+          0.63
+        ]
+      ],
+      "boundary_type": "reflective",
+      "effective_albedo": 1.0
+    },
+    "reflected_7x7": {
+      "source": {
+        "path": "prompts/cases/reflected_7x7.md",
+        "sha256": "648cae7b2ee73e85beafa1bd7b1b9659324d79b58805af15b9e1f514553f18b3",
+        "clause": "8 cm lateral and 10 cm axial water reflector; all six outer faces vacuum."
+      },
+      "domain_bounds_cm": [
+        [
+          -12.41,
+          12.41
+        ],
+        [
+          -12.41,
+          12.41
+        ],
+        [
+          -40.0,
+          40.0
+        ]
+      ],
+      "boundary_type": "vacuum",
+      "effective_albedo": null
+    },
+    "two_composition_5x5": {
+      "source": {
+        "path": "prompts/cases/two_composition_5x5.md",
+        "sha256": "42445c0351b80ddbfdd4635d99cd810570bd6dde3629ee472024d9ae13c8f74d",
+        "clause": "Outer box dimensions; all six outer plane faces vacuum."
+      },
+      "domain_bounds_cm": [
+        [
+          -10.15,
+          10.15
+        ],
+        [
+          -10.15,
+          10.15
+        ],
+        [
+          -33.0,
+          33.0
+        ]
+      ],
+      "boundary_type": "vacuum",
+      "effective_albedo": null
+    },
+    "axially_zoned_5x5": {
+      "source": {
+        "path": "prompts/cases/axially_zoned_5x5.md",
+        "sha256": "7a761811e30f366b6f7d2aa47a856f0bc1242378e72a6c32b8f2d03465983021",
+        "clause": "Outer box dimensions; all six outer plane faces vacuum."
+      },
+      "domain_bounds_cm": [
+        [
+          -11.15,
+          11.15
+        ],
+        [
+          -11.15,
+          11.15
+        ],
+        [
+          -40.0,
+          40.0
+        ]
+      ],
+      "boundary_type": "vacuum",
+      "effective_albedo": null
+    },
+    "asymmetric_5x5": {
+      "source": {
+        "path": "prompts/cases/asymmetric_5x5.md",
+        "sha256": "6e31d5e935f0bb1a721059a5db8dad2c99138e42dc7ab3d0283430eeee5976f7",
+        "clause": "Asymmetric outer box dimensions; all six outer plane faces vacuum."
+      },
+      "domain_bounds_cm": [
+        [
+          -8.15,
+          13.15
+        ],
+        [
+          -10.15,
+          9.15
+        ],
+        [
+          -38.0,
+          42.0
+        ]
+      ],
+      "boundary_type": "vacuum",
+      "effective_albedo": null
+    }
+  }
+}

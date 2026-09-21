@@ -1,0 +1,106 @@
+{
+  "index_sha256": "e4c1b3e58456bfda4130bf625fbed2f6443f94e18c8be77b1e800ca4f3ab3935",
+  "files": {
+    "H1.h5": {
+      "sha256": "5252b5e931c7d5aa6bab34867e77b158b9d3dafbf99ecd5c6758379955eebe2b",
+      "bytes": 327696,
+      "tables": [
+        [
+          "neutron",
+          "H1"
+        ]
+      ]
+    },
+    "O16.h5": {
+      "sha256": "6e321e89a0050722f45711b220a4d49f9fbb5ec91ba41e240c0492c7c45025a5",
+      "bytes": 8748896,
+      "tables": [
+        [
+          "neutron",
+          "O16"
+        ]
+      ]
+    },
+    "U235.h5": {
+      "sha256": "c8588197fb3135bf51e95451548e829ff734a2279cc9df4b9541daa1e7df6d60",
+      "bytes": 168040840,
+      "tables": [
+        [
+          "neutron",
+          "U235"
+        ]
+      ]
+    },
+    "U238.h5": {
+      "sha256": "d6e8d35ec3812dbb44b063594a2d3fd84fd84d9f668bec8dfaeecc2abf1c3f8e",
+      "bytes": 119489136,
+      "tables": [
+        [
+          "neutron",
+          "U238"
+        ]
+      ]
+    },
+    "Zr90.h5": {
+      "sha256": "cde7bf3f29552606b23f308df4d4c9c74aa45aea7a1e1242cb936b706d1e2685",
+      "bytes": 7333872,
+      "tables": [
+        [
+          "neutron",
+          "Zr90"
+        ]
+      ]
+    },
+    "Zr91.h5": {
+      "sha256": "874ec8bd95a4768b4cfd7f63189a5ca2c0501e5589e6c7a544eaa10c03cd5ef9",
+      "bytes": 16150128,
+      "tables": [
+        [
+          "neutron",
+          "Zr91"
+        ]
+      ]
+    },
+    "Zr92.h5": {
+      "sha256": "f1eb825052b7023e354cb2bd2c3fdbd066f8ea42eb6d2e47a8fdf8101a2762f3",
+      "bytes": 8195536,
+      "tables": [
+        [
+          "neutron",
+          "Zr92"
+        ]
+      ]
+    },
+    "Zr94.h5": {
+      "sha256": "e976618e62bfb217791b2cb505793102082572d48014d8595ce24060f20c9600",
+      "bytes": 7656384,
+      "tables": [
+        [
+          "neutron",
+          "Zr94"
+        ]
+      ]
+    },
+    "Zr96.h5": {
+      "sha256": "5dfca31688a28f156ccb443ef195aa1923821532728ba12b5e7002b2746c6ba7",
+      "bytes": 4785112,
+      "tables": [
+        [
+          "neutron",
+          "Zr96"
+        ]
+      ]
+    },
+    "c_H_in_H2O.h5": {
+      "sha256": "52d106ff05b03257eb184a61b6ab01d7aac550017a8ef98a83d3a7ea30f98253",
+      "bytes": 2634154032,
+      "tables": [
+        [
+          "thermal",
+          "c_H_in_H2O"
+        ]
+      ]
+    }
+  },
+  "snapshot": "read_only_host_mount_with_before_after_hash_checks"
+}

@@ -1,0 +1,23 @@
+# Local caches and environments
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+uv.lock
+
+# Credentials and personal agent state never belong in this repository.
+.env
+.env.*
+!.env.example
+.codex/
+auth.json
+
+# Temporary experiments; retain required evidence explicitly under evidence/.
+scratch/
+.runtime/
+
+# Private local execution and assessment artifacts in a public source checkout.
+evidence/
+evaluation/*/frozen/
