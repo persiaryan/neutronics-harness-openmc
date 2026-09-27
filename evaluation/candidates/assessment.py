@@ -100,7 +100,8 @@ def fidelity_checks(case, fidelity, observation=None):
     result['materials'] = dict(composition=field_checks(m['checks'], ['composition', 'required_material_roles', 'forced_isotropic']),
                               density=field_checks(m['checks'], ['density']),
                               thermal_scattering=field_checks(m['checks'], ['thermal_scattering']),
-                              temperature=m['temperature_failures'] == 0)
+                              temperature=False if m['temperature_failures'] else
+                              None if m.get('temperature_unresolved',0) else True)
     if field_checks(m['checks'], ['composition', 'required_material_roles']) is False:
         result['materials']['composition'] = False
         # Unknown roles have no trusted target density or S(a,b) assignment.

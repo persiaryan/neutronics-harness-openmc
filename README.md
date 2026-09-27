@@ -20,11 +20,18 @@ contract and independent assessment, alongside the agent itself.
 - Repeated research comparisons, including optional native smoke feedback in the
   later Request-16 study.
 
-**Source versus study:** this lightweight public release implements the earlier
-A/B construction/boundary workflow and v4 assessment route. The completed study
-below used a later research implementation with v7 assessment and C smoke
-assistance. This documentation update does not add that implementation or its
-private executor and reference packages.
+**Source versus study:** this lightweight public release implements the A/B
+construction/boundary workflow and the prospective
+`factory-assessment-boundaries-v4-temperature-v1` route. It ports only the
+qualified effective-temperature semantics from the experimental v7 evaluator:
+finite scalars and singleton lists/tuples are equivalent, wrong finite values
+still fail, and unsupported/non-finite/distributed values remain unresolved.
+This is not arbitrary temperature-distribution equivalence or complete v7 parity.
+
+The completed study below used the later research implementation with v7
+assessment and C smoke assistance. Its historical results are unchanged; the
+public source does not include that study executor, smoke tool or private
+reference packages.
 
 ## Architecture
 

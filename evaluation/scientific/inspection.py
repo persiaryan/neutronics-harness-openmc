@@ -97,7 +97,7 @@ def inspect_xml(xml, points, output, *, wall_seconds=60, capability='legacy'):
             raise ValueError('Inspector input exceeds byte budget')
         (output/'input.json').write_bytes(payload)
         (output/'worker.py').write_bytes(worker)
-        write_json(output/'manifest.json', {'format':('private-scientific-inspection-v2' if capability=='legacy'
+        write_json(output/'manifest.json', {'format':('private-scientific-inspection-v3' if capability=='legacy'
                                                      else 'private-boundary-inspection-v2'),'image_id':IMAGE,
             'model_xml_sha256':digest(xml),'worker_sha256':digest(worker),'input_sha256':digest(payload),
             'points':len(points),'wall_seconds':wall_seconds,'candidate_python_access':False,
