@@ -39,7 +39,9 @@ builder reply and assigning no scientific credit.
 The completed study below used the later research implementation with v7
 assessment and C smoke assistance. Its historical results are unchanged; the
 public source now includes bounded smoke and the optional Request-16 authoring
-profile. The study executor and private reference packages are not included.
+profile. Read-only trajectory projection separates smoke completion from
+demonstrated feedback delivery and provides an allowlisted metadata view.
+The study executor and private reference packages are not included.
 
 ## Architecture
 
@@ -70,7 +72,8 @@ See [the architecture walkthrough](DESIGN.md),
 [boundary support](evaluation/scientific/BOUNDARIES.md),
 [the boundary tool](builder/INSPECT_BOUNDARIES.md),
 [bounded smoke assistance](builder/SMOKE.md),
-[authoring request profiles](builder/AUTHORING_PROFILES.md) and
+[authoring request profiles](builder/AUTHORING_PROFILES.md),
+[trajectory projection](builder/TRAJECTORY.md) and
 [scoring](evaluation/benchmark_suite/SCORING.md).
 
 ## Experimental results

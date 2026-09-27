@@ -158,9 +158,9 @@ Smoke process outcomes and bounded log excerpts are candidate diagnostics, never
 private comparisons or scientific credit. Missing/failed output validation or
 uncertain cleanup cannot establish completed smoke. The coding container still
 has no solver, nuclear data or reference access. Call records and usage do not
-prove downstream feedback delivery or interpretation. Request-16 was outside
-P4; the P5 addition is described below. Trajectory extensions and the study
-executor remain outside these ports.
+prove downstream feedback delivery or interpretation. The Request-16 and
+trajectory additions are described below; the study executor remains outside
+these ports.
 Portable smoke tests use local doubles only; native integration and efficacy are
 not qualified by these tests. The assessment route and all historical results
 retain their identities.
@@ -183,6 +183,26 @@ Submission review binds C's smoke adapter identity as well. These are operationa
 checks, with no scientific score or assessment-route change. Portable controls
 use synthetic request bodies and local process doubles; they do not qualify
 live provider configuration, native execution or full experimental v7 parity.
+
+The read-only [P6 trajectory projection](builder/TRAJECTORY.md) ports smoke-call
+reconstruction from the same frozen continuation, with public missingness and
+publication controls. `codex-trajectory-v3` distinguishes recorded native
+outcome, tool status and exact compact-feedback delivery through a later
+request. A delayed `write_stdin` output can establish delivery; completion
+alone cannot. Duplicate, truncated, differently typed or unbound feedback does
+not establish complete delivery. Missing/duplicate runtime call bindings also
+prevent boundary-delivery claims. Subsequent actions show sequence only, never
+understanding or causal learning.
+
+Smoke effort retains observed counts separately from totals supported by usage,
+call inventories and available runtime events. Missing evidence stays null;
+explicit consistent zero usage is zero. Token sums cover available valid
+completed responses, with separate count and sequence completeness. The existing
+operator summary remains private. `public-trajectory-v1` is a separate
+allowlisted projection of counts, hashes, statuses and restricted relative
+evidence references, excluding raw commands, transcripts, logs and error text.
+It is descriptive metadata, not an evidence verifier or automatic publication.
+No evaluator, prompt, tool, budget, historical result or execution route changes.
 
 Evidence binds task/prompt, model/adapter, budgets/protocol, code/environment/data,
 artifacts, process outcomes and justifications. Hashes identify bytes; they are
