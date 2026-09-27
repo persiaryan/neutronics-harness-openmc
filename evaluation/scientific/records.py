@@ -42,7 +42,7 @@ def inspection_record(case, directory, xml, worker):
     from evaluation.scientific.inspection import verify, admit, IMAGE
     def read(name):return read_regular(directory/name)
     manifest=json.loads(read('manifest.json'));raw=read('input.json');payload=json.loads(raw)
-    require(manifest['format']=='private-scientific-inspection-v2' and manifest['model_xml_sha256']==digest(xml), 'Inspection XML/version changed')
+    require(manifest['format']=='private-scientific-inspection-v3' and manifest['model_xml_sha256']==digest(xml), 'Inspection XML/version changed')
     require(manifest['image_id']==IMAGE and manifest['candidate_python_access'] is False and
             manifest['nuclear_data_access'] is False and manifest['host_mounts'] is False and
             manifest['native_transport']=='not_run', 'Inspector execution boundary changed')

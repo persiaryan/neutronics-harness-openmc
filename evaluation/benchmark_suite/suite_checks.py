@@ -65,21 +65,28 @@ def assess(case, root, observation, sampling, *, boundary_result):
     roles,material_checks=check_materials(case,observation['materials'])
     points,groups=probes(case)
     if len(points)!=len(observation['observations']): raise ValueError('Observation count mismatch')
-    counts={};failures=[];temp_failures=0;invalid_geometry=0
+    counts={};failures=[];temp_failures=0;temp_unresolved=0;invalid_geometry=0
     for index,(p,group,(state,leaves)) in enumerate(zip(points,groups,observation['observations'])):
         target=expected(case,p)
         actual=('outside' if state=='outside' else ('void' if leaves[0][0] is None else roles.get(str(leaves[0][0]),'unknown'))
                 if state=='ok' and len(leaves)==1 else state)
         count=counts.setdefault(group,dict(probes=0,failures=0));count['probes']+=1;count['failures']+=actual!=target
         invalid_geometry+=state in ('overlap','missing','gap','lost') or (state=='outside' and target!='outside')
-        thermal=all(close(t,293.6) for m,t in leaves if m is not None);temp_failures+=not thermal
+        temperatures=[t for m,t in leaves if m is not None]
+        wrong=any(t is not None and not close(t,293.6) for t in temperatures)
+        unknown=any(t is None for t in temperatures)
+        thermal=not wrong and not unknown
+        temp_failures+=wrong;temp_unresolved+=unknown
         if (actual!=target or not thermal) and len(failures)<20:
             failures.append(dict(probe=index,point=p,expected=target,actual=actual,state=state))
     result=dict(materials=dict(status='passed_checks' if all(c['passed'] for c in material_checks) and not temp_failures else 'discrepancy',
-                               checks=material_checks,temperature_failures=temp_failures),
+                               checks=material_checks,temperature_failures=temp_failures,
+                               temperature_unresolved=temp_unresolved),
                 geometry=dict(status='passed_checks' if all(g['failures']==0 for g in counts.values()) else 'discrepancy',
                               probes=len(points),groups=counts,invalid_geometry=invalid_geometry,first_discrepancies=failures),
                 boundaries=boundary_result,settings=settings)
+    if temp_unresolved and not temp_failures and result['materials']['status']=='passed_checks':
+        result['materials']['status']='inconclusive'
     states={v['status'] for v in result.values()}
     result['status']='discrepancy' if 'discrepancy' in states else 'inconclusive' if 'inconclusive' in states else 'passed_checks'
     result['coverage']='Finite all-matching-cell probes and reachable boundary inventory, not exhaustive proof of CSG correctness.'

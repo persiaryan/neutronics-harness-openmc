@@ -5,11 +5,28 @@ It loads only inline materials and CSG, not Model/settings/plots or Python code.
 """
 import json
 import math
+from numbers import Real
 import sys
 import xml.etree.ElementTree as ET
 
 import numpy as np
 import openmc
+
+
+def scalar_temperature(value):
+    """Finite scalar or singleton real sequence; no distributed-instance choice."""
+    if value is None:
+        return None, 'missing_effective_temperature'
+    if isinstance(value, (list, tuple)):
+        if len(value) != 1:
+            return None, 'distributed_or_empty_temperature'
+        value = value[0]
+    if isinstance(value, bool) or not isinstance(value, Real):
+        return None, 'unsupported_temperature_type'
+    value = float(value)
+    if not math.isfinite(value):
+        return None, 'nonfinite_temperature'
+    return value, None
 
 
 def inspect(payload):
@@ -69,6 +86,8 @@ def inspect(payload):
             raise ValueError('Only ordinary universes and rectangular lattices are supported')
     inventory(geometry.root_universe)
 
+    temperature_limits = {}
+
     def walk(universe, point, depth=0):
         if depth > 32:
             raise ValueError('Geometry recursion exceeds supported depth')
@@ -88,9 +107,10 @@ def inspect(payload):
                     temperature = cell.fill.temperature
                 if temperature is None:
                     temperature = default
-                if not np.isscalar(temperature) or not math.isfinite(float(temperature)):
-                    raise ValueError('Non-scalar or non-finite effective temperature')
-                leaves.append([None if cell.fill is None else cell.fill.id, float(temperature)])
+                temperature, cause = scalar_temperature(temperature)
+                if cause:
+                    temperature_limits[cell.id] = dict(cell_id=cell.id, cause=cause)
+                leaves.append([None if cell.fill is None else cell.fill.id, temperature])
             else:
                 local = np.array(point, copy=True)
                 if cell.translation is not None:
@@ -106,7 +126,8 @@ def inspect(payload):
     observations = [walk(geometry.root_universe, np.asarray(point)) for point in payload['points']]
     return {'status': 'inspected', 'openmc_version': openmc.__version__,
             'materials': records, 'nontransmission_surfaces': list(surfaces.values()),
-            'observations': observations}
+            'observations': observations,
+            'temperature_limitations': list(temperature_limits.values())}
 
 
 if __name__ == '__main__':
