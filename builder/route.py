@@ -42,9 +42,11 @@ CONDITIONS = {
     'boundaries': 'generic_coding_boundaries_v2',
     'guided_construction': 'generic_coding_guided_construction_v1',
     'guided_boundaries': 'generic_coding_guided_boundaries_v3',
+    'guided_boundaries_smoke': 'generic_coding_guided_boundaries_smoke_v1',
 }
-BOUNDARY_CONDITIONS = frozenset({'boundaries', 'guided_boundaries'})
-GUIDED_CONDITIONS = frozenset({'guided_construction', 'guided_boundaries'})
+SMOKE_CONDITIONS = frozenset({'guided_boundaries_smoke'})
+BOUNDARY_CONDITIONS = frozenset({'boundaries', 'guided_boundaries'}) | SMOKE_CONDITIONS
+GUIDED_CONDITIONS = frozenset({'guided_construction', 'guided_boundaries'}) | SMOKE_CONDITIONS
 CONSTRUCTION_POLICY = Path(__file__).with_name('guided_construction.md')
 GUIDED_POLICY = Path(__file__).with_name('guided_authoring.md')
 
@@ -52,17 +54,28 @@ GUIDED_POLICY = Path(__file__).with_name('guided_authoring.md')
 def condition_prompt(prompt, assistance):
     if assistance not in CONDITIONS:
         raise ValueError('Unknown assistance condition')
-    result = prompt + AUTHORING
+    environment=AUTHORING
+    if assistance in SMOKE_CONDITIONS:
+        environment=environment.replace('Native transport and nuclear data are not available during authoring.',
+            'Native transport is available only through the bounded smoke_openmc command in a separate container.\n'
+            'The coding container itself has no native solver or nuclear data.')
+    result = prompt + environment
     if assistance in GUIDED_CONDITIONS:
-        result += CONSTRUCTION_POLICY.read_text()
+        policy=CONSTRUCTION_POLICY.read_text()
+        if assistance in SMOKE_CONDITIONS:
+            policy=policy.replace('Never run native transport.',
+                'Use only the provided smoke_openmc command for bounded working-model transport.')
+        result += policy
     if assistance in BOUNDARY_CONDITIONS:
         from builder.boundary_tool import INSTRUCTION
         instruction = INSTRUCTION
-        if assistance == 'guided_boundaries':
+        if assistance in GUIDED_CONDITIONS:
             instruction = instruction.replace('You may inspect', 'Inspect')
             instruction = instruction.replace(
                 'Export\nXML locally if you want to use it. Tool availability does not require tool use.',
                 'Follow the required working-export sequence above.')
             instruction += '\n' + GUIDED_POLICY.read_text()
         result += instruction
+    if assistance in SMOKE_CONDITIONS:
+        result += '\n'+Path(__file__).with_name('guided_smoke.md').read_text()
     return result

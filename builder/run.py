@@ -15,7 +15,7 @@ import time
 import uuid
 
 from builder.context import request_inventory, sha256, write_json
-from builder.route import CONDITIONS, BOUNDARY_CONDITIONS
+from builder.route import CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS
 from builder import openmc_python
 from builder.relay import forward, load_auth, validate_request
 from prompts.prepare import CASE_FILES
@@ -105,7 +105,7 @@ def cleanup(name):
 def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='generic',
         mode='subscription', max_requests=8, wall_seconds=600, auth_path=None, responder=None,
         contract='openmc-model-factory-v1', execution_profile='factory-serial-v1',
-        evaluator_protocol=BOUNDARY_PROTOCOL):
+        evaluator_protocol=BOUNDARY_PROTOCOL, smoke_data_index=None):
     output = Path(output)
     if mode not in {'mock', 'subscription'} or (mode == 'mock') != (responder is not None):
         raise ValueError('A local responder is required only in mock mode')
@@ -117,6 +117,13 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
     prompt, assessment_route = prepare(case, contract, execution_profile, evaluator_protocol, prepared_input)
     prompt = condition_prompt(prompt, assistance)
     inspect_boundaries = assistance in BOUNDARY_CONDITIONS
+    smoke_enabled = assistance in SMOKE_CONDITIONS
+    if smoke_enabled != (smoke_data_index is not None):
+        raise ValueError('Smoke condition requires an explicit operator data index; other conditions cannot enable smoke')
+    if smoke_enabled:
+        from builder import smoke_tool
+        from evaluator.run import data_directory
+        smoke_data_index,_=data_directory(Path(smoke_data_index))
     if inspect_boundaries:
         from builder import boundary_tool
     image = IMAGE
@@ -155,10 +162,14 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                     base_task_prompt_sha256=assessment_route['prompt_sha256'])
     if inspect_boundaries:
         manifest['boundary_tool'] = boundary_tool.identity()
+    if smoke_enabled:
+        manifest['smoke_tool']=smoke_tool.identity()
+        manifest['smoke_data_index_sha256']=sha256(smoke_data_index.read_bytes())
     write_json(output / "manifest.json", manifest)
     lifecycle = {"container_name": name, "state": "creating"}
     write_json(output / "lifecycle.json", lifecycle)
     process, result, count, boundary_adapter = None, {"status": "failed"}, 0, None
+    smoke_adapter=None
     started = time.monotonic()
     deadline = started + wall_seconds
     try:
@@ -203,6 +214,8 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                     openmc_python.verify_probe(environment, True)
                     if inspect_boundaries:
                         boundary_adapter=boundary_tool.AttachedSession(container_id,output/'boundary-tool',events)
+                    if smoke_enabled:
+                        smoke_adapter=smoke_tool.AttachedSession(container_id,output/'smoke-tool',events,smoke_data_index)
                     ready = True
                     send(process, {"prompt": prompt, "model": model})
                 elif kind == "request":
@@ -237,6 +250,11 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                     boundary_adapter.handle(event['frame'],deadline-time.monotonic())
                 elif kind == 'boundary_tool_error':
                     raise RuntimeError('Boundary tool bridge failed')
+                elif kind == 'smoke_tool_request':
+                    if smoke_adapter is None or done:raise ValueError('Undeclared or late smoke request')
+                    smoke_adapter.handle(event['frame'],deadline-time.monotonic())
+                elif kind == 'smoke_tool_error':
+                    raise RuntimeError('Smoke tool bridge failed')
                 elif kind == "done":
                     if done or not ready or not count:
                         raise ValueError("Invalid completion lifecycle")
@@ -264,6 +282,10 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
         # Exceptions deliberately omit tokens, headers and upstream response bodies.
         result.update(error_type=type(error).__name__, error=str(error), request_count=count)
     finally:
+        if smoke_adapter is not None:
+            try:smoke_adapter.close()
+            except Exception as error:
+                result.update(status='failed',error_type=type(error).__name__,error='Smoke bridge cleanup failed')
         if boundary_adapter is not None:
             try:boundary_adapter.close()
             except Exception as error:
@@ -283,7 +305,8 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
             for pipe in (process.stdin, process.stdout, process.stderr):
                 pipe.close()
         result.update(elapsed_seconds=round(time.monotonic() - started, 3),
-                      cleanup_confirmed=lifecycle["state"] == "removed",
+                      cleanup_confirmed=lifecycle["state"] == "removed" and
+                          (smoke_adapter is None or smoke_adapter.session.cleanup_confirmed),
                       host_candidate_execution="not_run", evaluator_validation="not_run")
         write_json(output / "lifecycle.json", lifecycle)
         write_json(output / "result.json", result)
@@ -299,6 +322,7 @@ def main():
     parser.add_argument('--max-requests', type=int, default=8)
     parser.add_argument('--wall-seconds', type=int, default=600)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--smoke-data-index',type=Path)
     args = parser.parse_args()
     result = run(**vars(args))
     print(json.dumps(result, indent=2))
