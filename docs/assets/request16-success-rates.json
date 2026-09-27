@@ -1,0 +1,37 @@
+{
+  "source_report": "Completed request-16 A/B/C development study",
+  "source_section": "Primary and secondary contrasts",
+  "source_commit": "59f370f54c5edb3f6499af37259e3ae09d3e9ca7",
+  "protocol": "factory-assessment-boundaries-v7",
+  "authoring_profile": "authoring-requests-16-v1",
+  "metric": "Verified protocol success (%)",
+  "conditions": [
+    "A",
+    "B",
+    "C"
+  ],
+  "assignments_total": 150,
+  "tasks": 5,
+  "repeats_per_task": 5,
+  "assignments_per_setup_condition": 25,
+  "retries": 0,
+  "series": [
+    {
+      "setup": "GPT-5.6 Luna",
+      "percent": [
+        72,
+        68,
+        56
+      ]
+    },
+    {
+      "setup": "GPT-5.6 Sol",
+      "percent": [
+        92,
+        100,
+        84
+      ]
+    }
+  ],
+  "note": "Equal task weights. Incident 067 remains in the Sol/C denominator; its score is null. Descriptive rates, no significance claim."
+}
