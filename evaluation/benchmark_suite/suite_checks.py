@@ -1,5 +1,6 @@
 """Case-specific fidelity assessment from independently observed XML semantics."""
 from evaluation.scientific.records import close
+from evaluation.scientific import source_space, source_angle
 from evaluation.benchmark_suite.suite_cases import SPECS, probes, expected, check_materials
 
 
@@ -28,13 +29,21 @@ def settings_checks(case, root, sampling):
         source=sources[0]; space=source.find('space');kind=space.get('type') if space is not None else None
         check('source_type',source.get('type','independent'),'independent')
         check('source_particle',source.get('particle','neutron'),'neutron')
-        check('source_space',kind in ('box','fission') if sampling['source']=='uniform' else kind=='point',True)
-        check('source_parameters',None if space is None else numbers(space.findtext('parameters')),
-              spec['active'] if sampling['source']=='uniform' else spec['point'])
+        if sampling['source']=='uniform':
+            spatial = source_space.observe(space)
+            if len(source.findall('space')) != 1:
+                spatial['limitations'].append('missing_or_duplicate_spatial_description')
+            checks.extend(source_space.compare(spatial, spec['active']))
+        else:
+            check('source_space',kind=='point',True)
+            check('source_parameters',None if space is None else numbers(space.findtext('parameters')),spec['point'])
         check('source_fissionable',kind=='fission' or source.findtext('constraints/fissionable','false') in ('true','1'),True)
         check('source_rejection',source.findtext('constraints/rejection_strategy','resample'),'resample')
         angle,energy=source.find('angle'),source.find('energy')
-        check('source_angle','isotropic' if angle is None else angle.get('type'),'isotropic')
+        angular = source_angle.observe(angle)
+        if len(source.findall('angle')) > 1:
+            angular['limitations'].append('duplicate_angular_description')
+        checks.extend(source_angle.compare(angular))
         check('source_energy','watt' if energy is None else energy.get('type'),'watt')
         check('source_watt',[988000.,2.249e-6] if energy is None else numbers(energy.get('parameters')),[988000.,2.249e-6])
         unsupported.extend('source/'+c.tag for c in source if c.tag not in {'space','angle','energy','constraints','strength'})
@@ -54,8 +63,13 @@ def settings_checks(case, root, sampling):
         check('entropy_upper_right',upper,spec['active'][3:])
     statepoints=numbers(s.findtext('state_point/batches'))
     check('final_statepoint',statepoints is None or sampling['batches'] in statepoints,True)
-    return dict(status='discrepancy' if any(not c['passed'] for c in checks) else 'inconclusive' if unsupported else 'passed_checks',
-                checks=checks,unassessed_options=unsupported)
+    return dict(status='discrepancy' if any(c['passed'] is False for c in checks) else
+                'inconclusive' if unsupported or any(c['passed'] is None for c in checks) else 'passed_checks',
+                checks=checks,unassessed_options=unsupported,
+                angular_source=dict(comparison_version=source_angle.VERSION,
+                    observation=angular if len(sources)==1 else None),
+                spatial_source=dict(comparison_version=source_space.VERSION,
+                    observation=spatial if len(sources)==1 and sampling['source']=='uniform' else None))
 
 
 def assess(case, root, observation, sampling, *, boundary_result):

@@ -22,11 +22,15 @@ contract and independent assessment, alongside the agent itself.
 
 **Source versus study:** this lightweight public release implements the A/B
 construction/boundary workflow and the prospective
-`factory-assessment-boundaries-v4-temperature-v1` route. It ports only the
-qualified effective-temperature semantics from the experimental v7 evaluator:
-finite scalars and singleton lists/tuples are equivalent, wrong finite values
-still fail, and unsupported/non-finite/distributed values remain unresolved.
-This is not arbitrary temperature-distribution equivalence or complete v7 parity.
+`factory-assessment-boundaries-v4-temperature-source-v1` route. It ports bounded
+effective-temperature and source-distribution semantics from experimental v7:
+finite temperature scalars and singleton lists/tuples are equivalent, wrong
+finite values still fail, and unsupported/non-finite/distributed temperatures
+remain unresolved. Source checks recognize qualified uniform box/independent
+Cartesian encodings and isotropic/uniform mu–phi encodings. Known source
+mismatches remain visible beside unknowns; unresolved source properties leave
+the combined source score null. This is neither arbitrary distribution
+equivalence nor complete v7 parity.
 
 The completed study below used the later research implementation with v7
 assessment and C smoke assistance. Its historical results are unchanged; the
