@@ -98,9 +98,11 @@ workspace report supports detail reads without another smoke call. Full host
 logs and raw receipts remain operator evidence, not public-repository artifacts.
 
 Call completion and feedback availability do not prove that a later model
-request received or interpreted the feedback. This port retains raw call records,
-usage and availability, but adds no smoke trajectory/delivery reconstruction.
-Final assessment independently rebuilds the frozen submission under the unchanged
+request received or interpreted the feedback. The separate
+[P6 trajectory projection](TRAJECTORY.md) now reconstructs exact compact-feedback
+delivery from retained calls and subsequent request inputs, including delayed
+output. It reports missing or ambiguous delivery explicitly and never infers
+interpretation. Final assessment independently rebuilds the frozen submission under the unchanged
 `factory-assessment-boundaries-v4-temperature-source-v1` route. Historical
 results and grading are unchanged; full experimental v7 parity is not claimed.
 
