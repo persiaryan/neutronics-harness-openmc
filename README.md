@@ -17,11 +17,12 @@ contract and independent assessment, alongside the agent itself.
 - Frozen final submissions assessed by independent factory export, programmatic
   scientific checks and separate native transport. **No LLM judge** sets the grade.
 - Evidence/provenance binding between inputs, artifacts, execution and outcomes.
-- Repeated research comparisons, including optional native smoke feedback in the
-  later Request-16 study.
+- Repeated research comparisons, including an explicit bounded native smoke
+  diagnostic during authoring.
 
-**Source versus study:** this lightweight public release implements the A/B
-construction/boundary workflow and the prospective
+**Source versus study:** this lightweight public release implements guided
+construction (A), boundary assistance (B), and explicit bounded smoke assistance
+(C), with an 8-request/600-second authoring allowance and the prospective
 `factory-assessment-boundaries-v4-temperature-source-v1` route. It ports bounded
 effective-temperature and source-distribution semantics from experimental v7:
 finite temperature scalars and singleton lists/tuples are equivalent, wrong
@@ -36,8 +37,8 @@ builder reply and assigning no scientific credit.
 
 The completed study below used the later research implementation with v7
 assessment and C smoke assistance. Its historical results are unchanged; the
-public source does not include that study executor, smoke tool or private
-reference packages.
+public source now includes the bounded smoke tool, but does not include the
+Request-16 authoring profile, study executor or private reference packages.
 
 ## Architecture
 
@@ -62,10 +63,12 @@ flowchart LR
 
 The submission contract is `build_model() -> openmc.Model`. Working feedback
 supports authoring; final grading uses freshly inspected final artifacts, not
-builder claims. Smoke in the diagram refers to the later research study.
+builder claims. Smoke is an optional authoring diagnostic and never substitutes
+for final assessment.
 See [the architecture walkthrough](DESIGN.md),
 [boundary support](evaluation/scientific/BOUNDARIES.md),
-[the builder tool](builder/INSPECT_BOUNDARIES.md) and
+[the boundary tool](builder/INSPECT_BOUNDARIES.md),
+[bounded smoke assistance](builder/SMOKE.md) and
 [scoring](evaluation/benchmark_suite/SCORING.md).
 
 ## Experimental results
@@ -144,11 +147,14 @@ python3 -B -m experiments.run execute --output scratch/condition-A
 python3 -B -m experiments.run assess --output scratch/condition-A --data-index "$DATA_INDEX"
 ```
 
-Both conditions use the same evaluator. The default two-task usability plan has
+All three conditions use the same evaluator. The default two-task usability plan has
 8 requests and 600 authoring seconds per task; B permits at most two 120-second
 inspections inside that allowance. It includes a curved-cylinder task to exercise
 interpretation of unsupported observations, not to claim boundary conformity.
-The plan records phase budgets and the zero-retry policy.
+The plan records phase budgets and the zero-retry policy. C adds at most two
+60-second native smoke attempts inside the same authoring allowance, with a
+180-second admission reserve and explicit operator-selected data. Setup and
+cleanup add to the native-process limit. See [C preparation and its limits](builder/SMOKE.md).
 
 ## Evaluation philosophy
 
@@ -163,7 +169,7 @@ not universal physical correctness. Diagnostic partial scores remain secondary.
 
 | Path | Purpose |
 |---|---|
-| [builder/](builder/) | Isolated authoring, provider adapter and boundary feedback |
+| [builder/](builder/) | Isolated authoring, provider adapter, boundary and smoke feedback |
 | [prompts/](prompts/) | Allowlisted public task specifications and preparation |
 | [evaluator/](evaluator/) | Contained factory export and native transport |
 | [evaluation/](evaluation/) | Scientific observation, comparisons, scoring and evidence verification |

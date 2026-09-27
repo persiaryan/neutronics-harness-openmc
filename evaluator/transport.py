@@ -80,6 +80,18 @@ class PhaseFailure(Exception):
 
 
 def transport(export, output, *, index, image=IMAGE, wall_seconds=300):
+    return _transport(export, output, index=index, image=image, wall_seconds=wall_seconds)
+
+
+def smoke_xml(xml, output, *, index, provenance, wall_seconds=60):
+    """Candidate-session XML only; never fabricate an independent export receipt."""
+    if provenance.get('kind') != 'candidate-session-smoke-v1' or provenance.get('model_xml_sha256') != run.digest(xml):
+        raise ValueError('Invalid smoke input binding')
+    return _transport(None, output, index=index, image=IMAGE, wall_seconds=wall_seconds,
+                      smoke_input=(xml, provenance))
+
+
+def _transport(export, output, *, index, image, wall_seconds, smoke_input=None):
     if output.exists():
         raise FileExistsError('Refusing to overwrite transport evidence')
     if not 1 <= wall_seconds <= 1800:
@@ -104,7 +116,7 @@ def transport(export, output, *, index, image=IMAGE, wall_seconds=300):
         run.write_json(output / 'invocation.json', {'export': str(export), 'image': image,
                        'data_index': str(index), 'wall_seconds': wall_seconds})
         try:
-            xml, provenance = accepted_export(export)
+            xml, provenance = accepted_export(export) if smoke_input is None else smoke_input
             (output / 'model.xml').write_bytes(xml)
             run.write_json(output / 'export-provenance.json', provenance)
             profile = transport_profile(xml, index.name)
@@ -123,7 +135,7 @@ def transport(export, output, *, index, image=IMAGE, wall_seconds=300):
         name = 'neutronics-v5-transport-' + uuid.uuid4().hex[:16]
         lifecycle = {'container_name': name, 'volume_name': name + '-work', 'state': 'creating'}
         run.write_json(output / 'lifecycle.json', lifecycle)
-        manifest = {'format': 'isolated-xml-transport-v1', 'image_id': image_id,
+        manifest = {'format': 'isolated-xml-transport-v1' if smoke_input is None else 'candidate-smoke-transport-v1', 'image_id': image_id,
                     'native_dependency_image_id': NATIVE_ID, 'model_xml_sha256': run.digest(xml),
                     'candidate_sha256': provenance['candidate_sha256'],
                     'container_name': name, 'wall_seconds': wall_seconds, 'threads': 1,

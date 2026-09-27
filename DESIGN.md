@@ -11,13 +11,15 @@ and code-based graders.
    records task, model, assistance policy, prompt hashes and budgets.
 2. `experiments.run.execute()` calls `builder.run.run()` in a fresh container.
    `builder.route.condition_prompt()` selects the declared policy. The Codex relay
-   is an adapter, not a scientific dependency. Both conditions have coding tools.
+   is an adapter, not a scientific dependency. All conditions have coding tools.
 3. The builder attempts a working export. With assistance enabled,
    `builder.boundary_tool.Session.inspect_boundaries()` accepts authorized workspace
    artifacts and invokes a fresh XML-only observer. `builder.boundary_feedback`
    returns effective observations, coverage and limitations; the full response
    remains available for detail reads. No private expectations or scores enter
-   this loop. Instructions do not guarantee tool use.
+   this loop. C additionally routes candidate XML through
+   `builder.smoke_tool.Session.invoke()` to a separate bounded diagnostic
+   transport. Instructions do not guarantee tool use.
 4. `builder.submission.submission()` verifies delivered source and provenance.
    The source is frozen; the host never imports candidate Python.
 5. `evaluation.candidates.run.evaluate()` calls `evaluator.run.evaluate()` once.
@@ -140,6 +142,27 @@ assessment route, worker, comparator, budgets and historical records. The
 [portable controls](tests/test_boundary_failure_receipts.py) exercise actual
 controllers and verifiers with synthetic process/owner receipts, not live
 builders or transport. Full experimental v7 parity is not established.
+
+The prospective [P4 smoke port](builder/SMOKE.md) adds the explicit
+`guided_boundaries_smoke` condition under the same eight-request/600-second
+authoring budget. It reuses isolated transport with a separate
+`candidate-smoke-transport-v1` receipt and a diagnostic XML copy: 1,000 particles,
+8 batches, 2 inactive, one generation, seed/thread 1, final statepoint 8 and
+disabled separate source output. The operator selects and binds the data index.
+Only those sampling/output/data-index fields change; physical inputs and final
+assessment stay untouched. Two attempts, a 60-second native limit and a
+180-second remaining-time reserve bound access; refusals consume calls and no
+automatic retry occurs. Setup, hashing and cleanup are additional costs.
+
+Smoke process outcomes and bounded log excerpts are candidate diagnostics, never
+private comparisons or scientific credit. Missing/failed output validation or
+uncertain cleanup cannot establish completed smoke. The coding container still
+has no solver, nuclear data or reference access. Call records and usage do not
+prove downstream feedback delivery or interpretation. Request-16 budgets,
+trajectory extensions and the study executor remain outside this port.
+Portable smoke tests use local doubles only; native integration and efficacy are
+not qualified by these tests. The assessment route and all historical results
+retain their identities.
 
 Evidence binds task/prompt, model/adapter, budgets/protocol, code/environment/data,
 artifacts, process outcomes and justifications. Hashes identify bytes; they are

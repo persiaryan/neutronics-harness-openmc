@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 from builder import run as agent
 from builder.submission import submission
-from builder.route import CONDITIONS, GUIDED_CONDITIONS, BOUNDARY_CONDITIONS, condition_prompt
+from builder.route import CONDITIONS, GUIDED_CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS, condition_prompt
 from builder.trajectory import summarize as trajectory
 from builder.context import sha256
 from evaluator import run as exporter
@@ -17,6 +17,14 @@ from prompts.prepare import prepare as prepare_prompt, CASE_FILES
 
 BUDGETS = dict(model_requests=8, authoring_seconds=600, boundary_calls=2, boundary_seconds=120,
                export_seconds=60, automatic_retries=0)
+
+
+def budgets(assistance):
+    declared = dict(BUDGETS)
+    if assistance in SMOKE_CONDITIONS:
+        from evaluator.smoke import PROFILE
+        return dict(declared,smoke_calls=PROFILE['max_calls'],smoke_native_seconds=PROFILE['native_seconds'])
+    return declared
 
 
 def atomic_json(path, value):
@@ -34,21 +42,33 @@ def atomic_json(path, value):
         Path(temporary).unlink(missing_ok=True)
 
 
-def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_cell','moderated_cylinder')):
+def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_cell','moderated_cylinder'),smoke_data_index=None):
+    declared = budgets(assistance)
     if assistance not in CONDITIONS or not cases or len(set(cases)) != len(cases) or set(cases)-set(CASE_FILES):
         raise ValueError('Invalid condition or task inventory')
+    if (assistance in SMOKE_CONDITIONS)!=(smoke_data_index is not None):
+        raise ValueError('Declare smoke data only with the explicit smoke condition')
+    smoke_config=None
+    if smoke_data_index is not None:
+        from builder.smoke_tool import identity
+        index,_=exporter.data_directory(Path(smoke_data_index))
+        smoke_config=dict(adapter=identity(),data_index=str(index),data_index_sha256=sha256(index.read_bytes()))
     output = Path(output); output.mkdir(parents=True, exist_ok=False)
     prompts = {case: prepare_prompt(case, output/'inputs'/case) for case in cases}
     plan = dict(format='research-usability-pilot-v2', status='prepared_not_dispatched', model=model,
         adapter='codex_subscription', assistance=assistance, cases=list(cases), prompts=prompts,
         delivery_contract=FACTORY, execution_profile=PROFILE, evaluator_protocol=BOUNDARY_PROTOCOL,
-        budgets=BUDGETS, maximum_model_requests=len(cases)*BUDGETS['model_requests'],
+        budgets=declared, maximum_model_requests=len(cases)*declared['model_requests'],
         strict_tool_free_baseline=False, formal_efficacy_study=False, transport=False,
         resource_policy='Same authoring wall/request budgets. Inspection uses this wall budget plus its own call cap. No retries.',
         tool_use_policy='Optional and recorded, never rewarded. Unsupported cylinder tests interpretation of limits.')
     if assistance in GUIDED_CONDITIONS:
         plan['tool_use_policy'] = ('Guided working export; boundary inspection additionally instructed only in '
                                    'guided_boundaries. Workflow is not guaranteed or scientifically scored.')
+    if smoke_config:
+        plan.update(smoke=smoke_config,authoring_native_transport=True,
+            resource_policy='Same 8-request/600-second session, including boundary and smoke calls. Separate declared per-tool caps. No automatic retries.',
+            tool_use_policy='Guided export, boundary inspection and smoke execution; one smoke correction opportunity. Observed use is not scientific credit.')
     plan['condition'] = CONDITIONS[assistance]
     plan['authoring_prompt_sha256'] = {case: sha256(condition_prompt((output/'inputs'/case/'prompt.txt').read_text(), assistance).encode()) for case in cases}
     exporter.write_json(output/'plan.json', plan)
@@ -63,12 +83,22 @@ def execute(output, *, responder=None):
         raise ValueError('Authoring slot already consumed; retained submissions may only be reassessed')
     if plan.get('format') != 'research-usability-pilot-v2':
         raise ValueError('Prepare a new v2 plan; historical plans are not relabelled')
-    if plan['status'] != 'prepared_not_dispatched' or plan['budgets'] != BUDGETS or plan['execution_profile'] != PROFILE:
+    declared = budgets(plan['assistance'])
+    if plan['status'] != 'prepared_not_dispatched' or plan['budgets'] != declared or plan['execution_profile'] != PROFILE:
         raise ValueError('Pilot plan/budgets changed')
     if plan['delivery_contract'] != FACTORY or plan['evaluator_protocol'] != BOUNDARY_PROTOCOL or plan['transport'] is not False:
         raise ValueError('Unexpected pilot contract/protocol')
     if plan['assistance'] not in CONDITIONS:
         raise ValueError('Unknown assistance condition')
+    smoke_kwargs={}
+    if plan['assistance'] in SMOKE_CONDITIONS:
+        from builder.smoke_tool import identity
+        config=plan['smoke'];index=Path(config['data_index'])
+        if config['adapter']!=identity() or sha256(index.read_bytes())!=config['data_index_sha256']:
+            raise ValueError('Prepared smoke environment changed')
+        smoke_kwargs['smoke_data_index']=index
+    elif 'smoke' in plan:
+        raise ValueError('Undeclared smoke availability')
     expected = {case: sha256(condition_prompt((output/'inputs'/case/'prompt.txt').read_text(),
                 plan['assistance']).encode()) for case in plan['cases']}
     if plan.get('condition') != CONDITIONS[plan['assistance']] or plan.get('authoring_prompt_sha256') != expected:
@@ -76,12 +106,15 @@ def execute(output, *, responder=None):
     runs = output/'runs'; runs.mkdir(exist_ok=False)
     summary = dict(format='research-usability-result-v2', model=plan['model'], assistance=plan['assistance'],
                    plan='plan.json', transport='not_run', live_inference=responder is None, tasks=[])
+    if plan['assistance'] in SMOKE_CONDITIONS:
+        summary['authoring_smoke_enabled']=True
+        summary['transport_scope']='Independent final transport; authoring smoke outcomes are recorded per task'
     for case in plan['cases']:
         folder = runs/case; folder.mkdir()
         result = agent.run(folder/'builder', case=case, prepared_input=output/'inputs'/case,
             model=plan['model'], assistance=plan['assistance'], contract=plan['delivery_contract'],
-            execution_profile=plan['execution_profile']['id'], evaluator_protocol=plan['evaluator_protocol'], max_requests=BUDGETS['model_requests'],
-            wall_seconds=BUDGETS['authoring_seconds'], mode='mock' if responder else 'subscription', responder=responder)
+            execution_profile=plan['execution_profile']['id'], evaluator_protocol=plan['evaluator_protocol'], max_requests=declared['model_requests'],
+            wall_seconds=declared['authoring_seconds'], mode='mock' if responder else 'subscription', responder=responder,**smoke_kwargs)
         row = dict(case=case, builder_status=result['status'], builder=f'runs/{case}/builder',
                    requests=result.get('request_count',0), attempted_boundary_calls=0,
                    export_status='not_run', diagnostic_score=None, final_assessment='not_run')
@@ -89,6 +122,8 @@ def execute(output, *, responder=None):
         if usage.exists():
             row['boundary_usage'] = json.loads(usage.read_bytes())
             row['attempted_boundary_calls'] = row['boundary_usage']['attempted_calls']
+        usage=folder/'builder/smoke-tool/usage.json'
+        if usage.exists():row['smoke_usage']=json.loads(usage.read_bytes())
         if result['status'] == 'completed':
             source, provenance = submission(folder/'builder', case)
             (folder/'candidate.py').write_bytes(source)
@@ -98,6 +133,7 @@ def execute(output, *, responder=None):
         row['authoring']['condition'] = CONDITIONS[plan['assistance']]
         row['authoring']['boundary_tool_available'] = plan['assistance'] in BOUNDARY_CONDITIONS
         row['authoring']['guided_workflow_required'] = plan['assistance'] in GUIDED_CONDITIONS
+        if plan['assistance'] in SMOKE_CONDITIONS:row['authoring']['smoke_tool_available']=True
         row['delivery'] = dict(status='not_run', reason='Final validation belongs to independent assessment')
         row['overall_success'] = False
         row['overall_success_label'] = 'all implemented required checks passed within declared coverage'
@@ -206,6 +242,7 @@ def main():
     p.add_argument('--assistance', choices=tuple(CONDITIONS), required=True)
     p.add_argument('--model', default='gpt-5.6-luna')
     p.add_argument('--cases', nargs='+', choices=sorted(CASE_FILES), default=['reflective_pin_cell','moderated_cylinder'])
+    p.add_argument('--smoke-data-index',type=Path)
     p = sub.add_parser('execute')
     p.add_argument('--output', type=Path, required=True)
     p = sub.add_parser('assess', help='Separate independent evaluation; may run native transport')
