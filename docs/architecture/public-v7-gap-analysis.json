@@ -1,0 +1,1092 @@
+{
+  "format": "public-v7-capability-review-v1",
+  "review_date": "2026-09-27",
+  "scope": "Source review and proposal only; no implementation port or runtime qualification",
+  "baselines": {
+    "public_main": "c1853888192fd925cec89c3de2ac0535779cc44a",
+    "experimental_continuation": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+    "experimental_closeout": "59f370f54c5edb3f6499af37259e3ae09d3e9ca7",
+    "experimental_mechanistic": "19aa097455e8270ae1e5cfaa58f1a6f33e4b111e",
+    "public_protocol": "factory-assessment-boundaries-v4",
+    "experimental_protocol": "factory-assessment-boundaries-v7",
+    "experimental_authoring_profile": "authoring-requests-16-v1"
+  },
+  "classifications": {
+    "PUBLIC_EQUIVALENT": 5,
+    "PUBLIC_PARTIAL": 7,
+    "MISSING_SHOULD_PORT": 1,
+    "EXPERIMENTAL_ONLY_DO_NOT_PORT": 0,
+    "PUBLIC_OBSOLETE": 2,
+    "NEEDS_REDESIGN_BEFORE_PORT": 3,
+    "UNCLEAR": 0
+  },
+  "capabilities": [
+    {
+      "id": "A",
+      "capability": "Candidate contract",
+      "classification": "PUBLIC_EQUIVALENT",
+      "public_paths": [
+        "evaluator/contracts.py",
+        "evaluator/factory.py",
+        "builder/submission.py"
+      ],
+      "experimental_paths": [
+        "evaluator/contracts.py",
+        "evaluator/factory.py",
+        "builder/submission.py"
+      ]
+    },
+    {
+      "id": "B",
+      "capability": "Single authoritative final export",
+      "classification": "PUBLIC_EQUIVALENT",
+      "public_paths": [
+        "evaluation/candidates/run.py",
+        "evaluator/factory.py",
+        "evaluator/transport.py",
+        "evaluation/candidates/verify.py"
+      ],
+      "experimental_paths": [
+        "evaluation/candidates/run.py",
+        "evaluator/factory.py",
+        "evaluator/transport.py",
+        "evaluation/candidates/verify.py"
+      ]
+    },
+    {
+      "id": "C",
+      "capability": "Independent final assessment",
+      "classification": "PUBLIC_PARTIAL",
+      "public_paths": [
+        "evaluator/profiles.py",
+        "evaluation/candidates/run.py",
+        "evaluation/candidates/assessment.py",
+        "evaluation/scientific/inspection.py",
+        "evaluation/scientific/records.py"
+      ],
+      "experimental_paths": [
+        "evaluator/profiles.py",
+        "evaluation/candidates/run.py",
+        "evaluation/candidates/assessment.py",
+        "evaluation/scientific/inspection.py",
+        "evaluation/scientific/records.py"
+      ]
+    },
+    {
+      "id": "D",
+      "capability": "Geometry checks",
+      "classification": "PUBLIC_EQUIVALENT",
+      "public_paths": [
+        "evaluation/benchmark_suite/suite_cases.py",
+        "evaluation/scientific/worker.py",
+        "evaluation/candidates/assessment.py"
+      ],
+      "experimental_paths": [
+        "evaluation/benchmark_suite/suite_cases.py",
+        "evaluation/scientific/worker.py",
+        "evaluation/candidates/assessment.py"
+      ]
+    },
+    {
+      "id": "E",
+      "capability": "Boundary observer",
+      "classification": "PUBLIC_EQUIVALENT",
+      "public_paths": [
+        "evaluation/scientific/boundary_worker_v2.py",
+        "evaluation/scientific/boundary_scope.py",
+        "evaluation/scientific/boundaries.py",
+        "evaluation/candidates/boundary_assessment.py"
+      ],
+      "experimental_paths": [
+        "evaluation/scientific/boundary_worker_v2.py",
+        "evaluation/scientific/boundary_scope.py",
+        "evaluation/scientific/boundaries.py",
+        "evaluation/candidates/boundary_assessment.py"
+      ]
+    },
+    {
+      "id": "F",
+      "capability": "Builder boundary assistance",
+      "classification": "PUBLIC_PARTIAL",
+      "public_paths": [
+        "builder/boundary_tool.py",
+        "builder/boundary_feedback.py",
+        "builder/boundary_client.py",
+        "builder/boundary_bridge.py",
+        "builder/inspection_receipts.py",
+        "evaluation/scientific/boundaries.py"
+      ],
+      "experimental_paths": [
+        "builder/boundary_tool.py",
+        "builder/boundary_feedback.py",
+        "builder/boundary_client.py",
+        "builder/boundary_bridge.py",
+        "builder/inspection_receipts.py",
+        "evaluation/scientific/boundaries.py"
+      ]
+    },
+    {
+      "id": "G",
+      "capability": "Smoke assistance",
+      "classification": "MISSING_SHOULD_PORT",
+      "public_paths": [
+        "evaluator/transport.py",
+        "builder/route.py"
+      ],
+      "experimental_paths": [
+        "evaluator/smoke.py",
+        "builder/smoke_tool.py",
+        "builder/smoke_feedback.py",
+        "builder/guided_smoke.md",
+        "evaluator/transport.py"
+      ]
+    },
+    {
+      "id": "H",
+      "capability": "Spatial and angular source semantics",
+      "classification": "PUBLIC_OBSOLETE",
+      "public_paths": [
+        "evaluation/benchmark_suite/suite_checks.py",
+        "evaluation/candidates/assessment.py"
+      ],
+      "experimental_paths": [
+        "evaluation/scientific/source_space.py",
+        "evaluation/scientific/source_angle.py",
+        "evaluation/benchmark_suite/suite_checks.py",
+        "evaluation/candidates/assessment.py"
+      ]
+    },
+    {
+      "id": "I",
+      "capability": "Effective temperature semantics",
+      "classification": "PUBLIC_OBSOLETE",
+      "public_paths": [
+        "evaluation/scientific/worker.py",
+        "evaluation/scientific/inspection.py",
+        "evaluation/scientific/records.py",
+        "evaluation/benchmark_suite/suite_checks.py",
+        "evaluation/candidates/assessment.py"
+      ],
+      "experimental_paths": [
+        "evaluation/scientific/worker.py",
+        "evaluation/scientific/inspection.py",
+        "evaluation/scientific/records.py",
+        "evaluation/benchmark_suite/suite_checks.py",
+        "evaluation/candidates/assessment.py"
+      ]
+    },
+    {
+      "id": "J",
+      "capability": "Settings checks",
+      "classification": "PUBLIC_PARTIAL",
+      "public_paths": [
+        "evaluation/benchmark_suite/suite_checks.py",
+        "evaluation/candidates/assessment.py"
+      ],
+      "experimental_paths": [
+        "evaluation/benchmark_suite/suite_checks.py",
+        "evaluation/candidates/assessment.py"
+      ]
+    },
+    {
+      "id": "K",
+      "capability": "k-effective comparison",
+      "classification": "PUBLIC_EQUIVALENT",
+      "public_paths": [
+        "evaluation/benchmark_suite/numerics.py",
+        "evaluation/benchmark_suite/scoring.py",
+        "evaluation/benchmark_suite/scoring.json"
+      ],
+      "experimental_paths": [
+        "evaluation/benchmark_suite/numerics.py",
+        "evaluation/benchmark_suite/scoring.py",
+        "evaluation/benchmark_suite/scoring.json"
+      ]
+    },
+    {
+      "id": "L",
+      "capability": "Evidence and provenance",
+      "classification": "PUBLIC_PARTIAL",
+      "public_paths": [
+        "evaluation/candidates/receipts.py",
+        "evaluation/candidates/phase_evidence.py",
+        "evaluation/candidates/verify.py",
+        "builder/inspection_receipts.py",
+        "builder/context.py"
+      ],
+      "experimental_paths": [
+        "evaluation/candidates/receipts.py",
+        "evaluation/candidates/phase_evidence.py",
+        "evaluation/candidates/verify.py",
+        "builder/inspection_receipts.py",
+        "builder/context.py",
+        "experiments/study_evidence.py"
+      ]
+    },
+    {
+      "id": "M",
+      "capability": "Trajectory reconstruction",
+      "classification": "PUBLIC_PARTIAL",
+      "public_paths": [
+        "builder/trajectory.py",
+        "experiments/run.py"
+      ],
+      "experimental_paths": [
+        "builder/trajectory.py",
+        "experiments/study_evidence.py",
+        "analysis_tools/request16_mechanistic/analyze.py",
+        "analysis_tools/request16_mechanistic/interpret.py",
+        "analysis_tools/request16_mechanistic/METHOD.md"
+      ]
+    },
+    {
+      "id": "N",
+      "capability": "Request budgets and authoring profiles",
+      "classification": "PUBLIC_PARTIAL",
+      "public_paths": [
+        "builder/route.py",
+        "builder/run.py",
+        "experiments/run.py",
+        "builder/boundary_tool.py"
+      ],
+      "experimental_paths": [
+        "builder/route.py",
+        "builder/run.py",
+        "experiments/run.py",
+        "builder/boundary_tool.py",
+        "evaluator/smoke.py"
+      ]
+    },
+    {
+      "id": "O",
+      "capability": "Controlled assistance conditions",
+      "classification": "PUBLIC_PARTIAL",
+      "public_paths": [
+        "builder/route.py",
+        "experiments/run.py"
+      ],
+      "experimental_paths": [
+        "builder/route.py",
+        "experiments/run.py",
+        "experiments/abc_plan.py"
+      ]
+    },
+    {
+      "id": "P",
+      "capability": "Manifest and preregistration",
+      "classification": "NEEDS_REDESIGN_BEFORE_PORT",
+      "public_paths": [
+        "experiments/run.py"
+      ],
+      "experimental_paths": [
+        "experiments/abc_plan.py",
+        "experiments/ABC_STUDY.md",
+        "experiments/abc_temperature_amendment.py"
+      ]
+    },
+    {
+      "id": "Q",
+      "capability": "Serial runner and reconciliation",
+      "classification": "NEEDS_REDESIGN_BEFORE_PORT",
+      "public_paths": [
+        "experiments/run.py"
+      ],
+      "experimental_paths": [
+        "experiments/abc_execute.py",
+        "experiments/abc_reconcile.py",
+        "experiments/abc_plan.py"
+      ]
+    },
+    {
+      "id": "R",
+      "capability": "Descriptive analysis",
+      "classification": "NEEDS_REDESIGN_BEFORE_PORT",
+      "public_paths": [
+        "experiments/run.py",
+        "builder/trajectory.py"
+      ],
+      "experimental_paths": [
+        "experiments/abc_analysis.py",
+        "experiments/study_evidence.py",
+        "analysis_tools/request16_mechanistic/analyze.py",
+        "analysis_tools/request16_mechanistic/interpret.py"
+      ]
+    }
+  ],
+  "reviewed_sources": {
+    "public": [
+      {
+        "path": "AGENTS.md",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "f46a0c6680540b7c2358bd274bb8a9c4e2a5142a704968e96239643341511f86",
+        "bytes": 2468
+      },
+      {
+        "path": "DESIGN.md",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "06b0fe588c5a9c2454d9b40b00f9ff308ce656c8d21d363b8f68c3af68ffbb01",
+        "bytes": 5192
+      },
+      {
+        "path": "README.md",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "8b704fbc7bd9bb4b543631c3235b9328f61b66ea22068d6059c5ff84737ade75",
+        "bytes": 9817
+      },
+      {
+        "path": "builder/boundary_bridge.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "ed6dd65510f2676333dbcf8d73ac1c087e0eb48ba17558e748589fe41f4fb453",
+        "bytes": 1216
+      },
+      {
+        "path": "builder/boundary_client.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "74f10db1067af089664ebfdf8a044c69588ca0277fd6d6b23e28fde15fcd421d",
+        "bytes": 3525
+      },
+      {
+        "path": "builder/boundary_feedback.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "8e1a7dcd9610c039503a8bbb8793ac9673c150495db86c8f9c6994aa2d5dc6cc",
+        "bytes": 4695
+      },
+      {
+        "path": "builder/boundary_tool.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "ce12cf8272e257f9b26f08be75d37af801f734ae1743c7ef1e51b3e349958e41",
+        "bytes": 11588
+      },
+      {
+        "path": "builder/context.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "03ddb71886a67172fb460cfcc032fbd47bd6ef50a491181d1cf7a3a2c4265b52",
+        "bytes": 2792
+      },
+      {
+        "path": "builder/inspection_receipts.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "cf5ebee4e5688206ea57c58c03b1461bf8df4276ad9a484dbed9ea148009ac92",
+        "bytes": 4804
+      },
+      {
+        "path": "builder/relay.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "c34c0b281fadc545269329fd4100b54972efca306a3d90c1116c3aa8778dc040",
+        "bytes": 16619
+      },
+      {
+        "path": "builder/route.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "5bd8e414d559722527f4363255b4014d39b5b49985832bf6fd309fa5e6f108c4",
+        "bytes": 3317
+      },
+      {
+        "path": "builder/run.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "fb794a2ae0f1664c97a23d3d7e1dff0fda84ddf8726b3aaa1bb15f1c9bba0812",
+        "bytes": 16287
+      },
+      {
+        "path": "builder/submission.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "c5b624e678d729c901aab9be6d493c3e6a87da9bdff7ba6546e1606f8b91700d",
+        "bytes": 3933
+      },
+      {
+        "path": "builder/trajectory.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "86eb4885954e22f847b83706dc657f3908d407f580d2d97c59d54a6a334ec7e0",
+        "bytes": 13615
+      },
+      {
+        "path": "evaluation/benchmark_suite/numerics.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "b7b6231c371505753cd55b960555fae8233af58dcf069bf312d22ec948e8eeef",
+        "bytes": 897
+      },
+      {
+        "path": "evaluation/benchmark_suite/references.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "e6e4abd8705315efb3f507eb08841d126799eeb4e8f347ccfdde780eaa4049e7",
+        "bytes": 4533
+      },
+      {
+        "path": "evaluation/benchmark_suite/scoring.json",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "c7c7be041942d4b93fdf247dabc363c519e9ca28bfa883de50e7542e945f0650",
+        "bytes": 2044
+      },
+      {
+        "path": "evaluation/benchmark_suite/scoring.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "98782fcd0c857bb45c63e002c672b6746b6f6d437858eb4e525f838929e43b18",
+        "bytes": 3465
+      },
+      {
+        "path": "evaluation/benchmark_suite/suite_cases.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "ccec9ee658b5cd4f71a262f4a72e0e3b240a979c7a484db3a63c515afbe2bcdc",
+        "bytes": 6728
+      },
+      {
+        "path": "evaluation/benchmark_suite/suite_checks.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "408ca566cf02fc6c049a399d38040dbe720fe8fe0ee4581ee029b0f8b3dde7f9",
+        "bytes": 6798
+      },
+      {
+        "path": "evaluation/candidates/assessment.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "ee0cac358def961a475a1acc8fc6ea9eb679828c962e6b5bb7504914a69dc68c",
+        "bytes": 6941
+      },
+      {
+        "path": "evaluation/candidates/boundary_assessment.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "3f127820a27f2c2024a411310525e79b22743ca420193da7535a456ff86ef5a8",
+        "bytes": 1422
+      },
+      {
+        "path": "evaluation/candidates/phase_evidence.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "a6ed9e5db3cacf675364e87d986a446a3485efb3d93e91430b49fce34520b9b1",
+        "bytes": 13464
+      },
+      {
+        "path": "evaluation/candidates/receipts.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "c3dab91d0d29b2e6f207360ae20fbd9ab17249fc6869829a7a32dea05f9ddb2c",
+        "bytes": 5880
+      },
+      {
+        "path": "evaluation/candidates/run.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "199879080c86db950c04f0d413788783fc593fbf37071f755ea2efe1d08597b1",
+        "bytes": 18099
+      },
+      {
+        "path": "evaluation/candidates/verify.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "1b1ac91fcf9f9252a58a49493155c02252f7475842a15d055cf9eeca9395f892",
+        "bytes": 17098
+      },
+      {
+        "path": "evaluation/scientific/boundaries.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "9f38d5bb1b1304844514c6cc531a2c902b1a00e6e9045c3449f7d82d98703bfa",
+        "bytes": 8231
+      },
+      {
+        "path": "evaluation/scientific/boundary_requirements_v1.json",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "d0b6149de4eb869c8278680914bc358054534d65e2039aad79b715f2a508c99b",
+        "bytes": 3006
+      },
+      {
+        "path": "evaluation/scientific/boundary_scope.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "284c759fcfa593c32a51bbacff7ee132e68babb698b6744aeb0da00bbb7f5a18",
+        "bytes": 2202
+      },
+      {
+        "path": "evaluation/scientific/boundary_worker_v2.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "9a5f65540d6d979b9c86e9ecfb5957a29f601e382dced75b2f44a8b128ca316f",
+        "bytes": 15578
+      },
+      {
+        "path": "evaluation/scientific/inspection.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "944fa36c88ef9970b4d607e672c2be107de392f27f435724ab872dfb207220ba",
+        "bytes": 7959
+      },
+      {
+        "path": "evaluation/scientific/records.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "357f86866cb9c3104e39523b7f25b71a55a878e235aee9dab288a407ae25b913",
+        "bytes": 5754
+      },
+      {
+        "path": "evaluation/scientific/worker.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "03b099752ae21c847801fedde4da357587114649173ff4d6e5dd51dc6c3df5ca",
+        "bytes": 6349
+      },
+      {
+        "path": "evaluator/contracts.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "d2f1131495cafe5a085b15b2ffed794f5f3c80899b9eb1f17a2513b67ab4f7f7",
+        "bytes": 379
+      },
+      {
+        "path": "evaluator/factory.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "74c757c175706d1bd23f30f2be6e8a999b7a03a6c958c429e67986ed4337bbba",
+        "bytes": 4152
+      },
+      {
+        "path": "evaluator/profiles.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "0a14cd7649157bc01986a9cf7cf6e5ee5bdacedb3afbe83761e42ff9f35ea6e7",
+        "bytes": 1273
+      },
+      {
+        "path": "evaluator/transport.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "63235c26d34cd2b6ad42ac4a1a7c1114091cfc563bf2a2f95dcebc09071263fb",
+        "bytes": 15278
+      },
+      {
+        "path": "evaluator/transport_input.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "c17cf8d70c8d137e0a1e330691357bc238a4fda4d9fdef04bc8ffd2035eca364",
+        "bytes": 7935
+      },
+      {
+        "path": "experiments/run.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "4c24af7f25d7547007c1b3992568e8827200f76b1f5430052a89265c9100a8bd",
+        "bytes": 14168
+      },
+      {
+        "path": "prompts/prepare.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "6d35f8c1b68a03f4a6ba5b98822a366d3d2563f21a2c719fb3199339568d5270",
+        "bytes": 4106
+      },
+      {
+        "path": "tests/__init__.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "tests/fixtures/__init__.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "tests/fixtures/responses.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "00356c3ea56265d005082ba8f5bc2023ed653052cd2edb800231b4915fd7aca6",
+        "bytes": 2753
+      },
+      {
+        "path": "tests/test_boundaries.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "2780144697695624b83658c29bbf2b810ae46b06a20a6d2254ba0a2f0eacdd15",
+        "bytes": 3507
+      },
+      {
+        "path": "tests/test_boundary_adapter.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "d50f7334b8a3ca9ea8e8a5e85e3827a834a8e537a2573634cdcfd4415491e918",
+        "bytes": 3773
+      },
+      {
+        "path": "tests/test_boundary_reduction.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "614e37ff5aca044b21c5b1e9d866997b4af60ab46e1438863628f6ca215344fb",
+        "bytes": 2935
+      },
+      {
+        "path": "tests/test_builder_environment.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "a80fe4dee3b3baa1a7e21d629c29dbf9a68c2ef2106d3cba52767a77ce442b49",
+        "bytes": 2435
+      },
+      {
+        "path": "tests/test_builder_prompts.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "22f46cf1d8d3d9916894b7bf4a9f9ae7bcfa6f152cb8417d61df91f06989ea47",
+        "bytes": 5275
+      },
+      {
+        "path": "tests/test_evaluator.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "1c01cf3db26ac7287c70e94b7a05527a5c7d4012853919598ff223636700e93d",
+        "bytes": 13693
+      },
+      {
+        "path": "tests/test_guided_authoring.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "58b85fc62ba0f0465418130f667d3facbcf0e20cffb4e1633dc27b21c07cd8b6",
+        "bytes": 4593
+      },
+      {
+        "path": "tests/test_isolated_builder.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "0c5decee007b61fdfa5a74a12272986058158e8b6616eb2d10b4947e0ea54d2d",
+        "bytes": 18413
+      },
+      {
+        "path": "tests/test_model_factory.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "31e264448f339bb1eab74dcc98350ac12b4465995aab20a59016dceae8327caa",
+        "bytes": 5834
+      },
+      {
+        "path": "tests/test_response_reader.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "957f65514ea69a93d24550915296640beaf67922dcfdda9cfe512d7545c31fa2",
+        "bytes": 13245
+      },
+      {
+        "path": "tests/test_transport.py",
+        "commit": "c1853888192fd925cec89c3de2ac0535779cc44a",
+        "sha256": "91f1a2af0a1589dce9e03406ac0d1cec62383de92a41af9c857048166b77e585",
+        "bytes": 17795
+      }
+    ],
+    "experimental": [
+      {
+        "path": "analysis_tools/request16_mechanistic/METHOD.md",
+        "commit": "19aa097455e8270ae1e5cfaa58f1a6f33e4b111e",
+        "sha256": "3a55dfc76db2908970b7c3322d09814a260d474a2c6a59c88f7f75214ba9beaf",
+        "bytes": 3446
+      },
+      {
+        "path": "analysis_tools/request16_mechanistic/analyze.py",
+        "commit": "19aa097455e8270ae1e5cfaa58f1a6f33e4b111e",
+        "sha256": "eb287195688744e698dfacf6f123d7606122d2c821f6d8361bc013f35cfae8e3",
+        "bytes": 23787
+      },
+      {
+        "path": "analysis_tools/request16_mechanistic/interpret.py",
+        "commit": "19aa097455e8270ae1e5cfaa58f1a6f33e4b111e",
+        "sha256": "950e3623047b8e09b13ee5608288f8b003f4260b3bfe21766d6787650f8a2663",
+        "bytes": 36213
+      },
+      {
+        "path": "builder/boundary_bridge.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "ed6dd65510f2676333dbcf8d73ac1c087e0eb48ba17558e748589fe41f4fb453",
+        "bytes": 1216
+      },
+      {
+        "path": "builder/boundary_client.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "74f10db1067af089664ebfdf8a044c69588ca0277fd6d6b23e28fde15fcd421d",
+        "bytes": 3525
+      },
+      {
+        "path": "builder/boundary_feedback.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "8e1a7dcd9610c039503a8bbb8793ac9673c150495db86c8f9c6994aa2d5dc6cc",
+        "bytes": 4695
+      },
+      {
+        "path": "builder/boundary_tool.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "ce12cf8272e257f9b26f08be75d37af801f734ae1743c7ef1e51b3e349958e41",
+        "bytes": 11588
+      },
+      {
+        "path": "builder/context.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "9a9ea8d5d41dc994a23e69ea5493ffa84e35677d8165dae841c41e668b6e273e",
+        "bytes": 3645
+      },
+      {
+        "path": "builder/guided_smoke.md",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "d23121ef499edc2cf1997808e5d4f7daa892c5233ab2d41db4f2e568476d4742",
+        "bytes": 2349
+      },
+      {
+        "path": "builder/inspection_receipts.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "3e3c445eb2037116091184a1e8a4c05c01f3419198b76f82ed0c087f486bc688",
+        "bytes": 5631
+      },
+      {
+        "path": "builder/relay.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "c34c0b281fadc545269329fd4100b54972efca306a3d90c1116c3aa8778dc040",
+        "bytes": 16619
+      },
+      {
+        "path": "builder/repair_input.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "d1d6cd2122c2a83a967810f307e3dec89ba348a47d67bbab01d76d9a6c4ce371",
+        "bytes": 1165
+      },
+      {
+        "path": "builder/route.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "e47398b7c1f31b50e417560a72e653bd4d347273d2b77aa97a246fce924f8e8d",
+        "bytes": 4784
+      },
+      {
+        "path": "builder/run.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "e4da54d0a9e4da7a07da0e6d4a23b6d2eb57fdf758604f68b9ed0adf831bf06b",
+        "bytes": 19323
+      },
+      {
+        "path": "builder/smoke_feedback.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "222cbe0544cecdb6367ddc5b1a6795c687fab0f865899dd8a8c0645e1ec65782",
+        "bytes": 2130
+      },
+      {
+        "path": "builder/smoke_tool.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "9c8a2aed6f3db379ef144150f05c49293f5a5e772883ba163f7355569eaaea1e",
+        "bytes": 7482
+      },
+      {
+        "path": "builder/submission.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "766144369a8bae317603f07d220570ac97ff8a2cd0970cea2b04b2c4b744cb00",
+        "bytes": 5342
+      },
+      {
+        "path": "builder/trajectory.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "d07bde61c6a43612d691d475defc45ad91aa2d7f065d68e5c43ea25e4f2b0218",
+        "bytes": 16174
+      },
+      {
+        "path": "evaluation/benchmark_suite/numerics.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "b7b6231c371505753cd55b960555fae8233af58dcf069bf312d22ec948e8eeef",
+        "bytes": 897
+      },
+      {
+        "path": "evaluation/benchmark_suite/references.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "e6e4abd8705315efb3f507eb08841d126799eeb4e8f347ccfdde780eaa4049e7",
+        "bytes": 4533
+      },
+      {
+        "path": "evaluation/benchmark_suite/scoring.json",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "c7c7be041942d4b93fdf247dabc363c519e9ca28bfa883de50e7542e945f0650",
+        "bytes": 2044
+      },
+      {
+        "path": "evaluation/benchmark_suite/scoring.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "98782fcd0c857bb45c63e002c672b6746b6f6d437858eb4e525f838929e43b18",
+        "bytes": 3465
+      },
+      {
+        "path": "evaluation/benchmark_suite/suite_cases.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "ccec9ee658b5cd4f71a262f4a72e0e3b240a979c7a484db3a63c515afbe2bcdc",
+        "bytes": 6728
+      },
+      {
+        "path": "evaluation/benchmark_suite/suite_checks.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "fa2032c34a7ecd395ade069e516518101cf8fb243c29bb0d1f25d743f869e789",
+        "bytes": 8002
+      },
+      {
+        "path": "evaluation/candidates/assessment.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "3f68d6849a9cf5db1f79f9e67219fce45fd2d50e0c84fe4b79e9bb624ae091bb",
+        "bytes": 7032
+      },
+      {
+        "path": "evaluation/candidates/boundary_assessment.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "3f127820a27f2c2024a411310525e79b22743ca420193da7535a456ff86ef5a8",
+        "bytes": 1422
+      },
+      {
+        "path": "evaluation/candidates/phase_evidence.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "a6ed9e5db3cacf675364e87d986a446a3485efb3d93e91430b49fce34520b9b1",
+        "bytes": 13464
+      },
+      {
+        "path": "evaluation/candidates/receipts.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "c3dab91d0d29b2e6f207360ae20fbd9ab17249fc6869829a7a32dea05f9ddb2c",
+        "bytes": 5880
+      },
+      {
+        "path": "evaluation/candidates/run.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "199879080c86db950c04f0d413788783fc593fbf37071f755ea2efe1d08597b1",
+        "bytes": 18099
+      },
+      {
+        "path": "evaluation/candidates/verify.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "1b1ac91fcf9f9252a58a49493155c02252f7475842a15d055cf9eeca9395f892",
+        "bytes": 17098
+      },
+      {
+        "path": "evaluation/scientific/boundaries.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "edc9ee7e40a27baf9b7a4cf8296d633e10609843b4d87bbff93ae140769cc0cd",
+        "bytes": 9764
+      },
+      {
+        "path": "evaluation/scientific/boundary_requirements_v1.json",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "d0b6149de4eb869c8278680914bc358054534d65e2039aad79b715f2a508c99b",
+        "bytes": 3006
+      },
+      {
+        "path": "evaluation/scientific/boundary_scope.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "284c759fcfa593c32a51bbacff7ee132e68babb698b6744aeb0da00bbb7f5a18",
+        "bytes": 2202
+      },
+      {
+        "path": "evaluation/scientific/boundary_worker_v2.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "9a5f65540d6d979b9c86e9ecfb5957a29f601e382dced75b2f44a8b128ca316f",
+        "bytes": 15578
+      },
+      {
+        "path": "evaluation/scientific/inspection.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "9f03043d9cac211db4e4124aaec2db290bac60bf2685d61842ae337e54d635c6",
+        "bytes": 7959
+      },
+      {
+        "path": "evaluation/scientific/records.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "a51eca2911fa29faa31aaa6291ff3605be8572e5e76aa7cd46e4858f8fcc2e52",
+        "bytes": 5754
+      },
+      {
+        "path": "evaluation/scientific/source_angle.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "3283e825b747f1824cd93a2f404305d6e812cc6eb9633eb434cb2855e5a37121",
+        "bytes": 5414
+      },
+      {
+        "path": "evaluation/scientific/source_space.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "5cba79b781693c2e48bb6ac02220065dc023308ee3846454272151c98b43eb82",
+        "bytes": 4119
+      },
+      {
+        "path": "evaluation/scientific/worker.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "2e9a8579e227a25ffa11dc9599cbc3936036e60cc98b67138aac2dba9cf849e9",
+        "bytes": 7060
+      },
+      {
+        "path": "evaluator/contracts.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "d2f1131495cafe5a085b15b2ffed794f5f3c80899b9eb1f17a2513b67ab4f7f7",
+        "bytes": 379
+      },
+      {
+        "path": "evaluator/factory.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "74c757c175706d1bd23f30f2be6e8a999b7a03a6c958c429e67986ed4337bbba",
+        "bytes": 4152
+      },
+      {
+        "path": "evaluator/profiles.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "62c2c3c94763470470f7516aaa391b0027e14cb3ebe1f83c8e9871607ec42a34",
+        "bytes": 1273
+      },
+      {
+        "path": "evaluator/smoke.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "0d38b6803e2d106eeb810cb4e2985af799af92b2070f7c0105b10dd2169e0d8d",
+        "bytes": 5810
+      },
+      {
+        "path": "evaluator/transport.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "72c10ac445d3c1d2ceb00354709e015c6281ef02ee9f2a5ace1ba8010a9278ce",
+        "bytes": 16023
+      },
+      {
+        "path": "evaluator/transport_input.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "c17cf8d70c8d137e0a1e330691357bc238a4fda4d9fdef04bc8ffd2035eca364",
+        "bytes": 7935
+      },
+      {
+        "path": "experiments/ABC_STUDY.md",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "2c0e2d12fc0aad6e5e6a9446c82ce36736e7e5ffe4ae56743650eb41de56fec7",
+        "bytes": 14035
+      },
+      {
+        "path": "experiments/abc_analysis.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "fb4f303ebf2c2276d162471c4d99fd23e70ff2fe08da9631ed64237273b6e3dd",
+        "bytes": 18489
+      },
+      {
+        "path": "experiments/abc_execute.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "c8262030ec3ae56d4ff6de2bb26e822416a6938b52c315d54dbc12faced045e4",
+        "bytes": 15572
+      },
+      {
+        "path": "experiments/abc_plan.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "024cb4cf62c65487192a8c7e4f9d432437d62038291594197de9fd852fdfa0c6",
+        "bytes": 16549
+      },
+      {
+        "path": "experiments/abc_reconcile.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "c45c6c8c8b7be64f73d4b67d3973fc0dc49cdc33526cf46c001d2d451e2f462c",
+        "bytes": 9711
+      },
+      {
+        "path": "experiments/abc_temperature_amendment.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "b75506ce4b15574ad856ca42a46811ad6a376fc8927a4f69c592dbb1e4d00f03",
+        "bytes": 8665
+      },
+      {
+        "path": "experiments/budget_pilot.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "95172ba988261eb6272ae80450c654785a8702925ad03e777e47a106044ece5b",
+        "bytes": 12448
+      },
+      {
+        "path": "experiments/continuation.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "4275e349b8635f82c22dd8b7b7d2e53d3d680eda2afb9977fddb505f01425ea1",
+        "bytes": 13696
+      },
+      {
+        "path": "experiments/run.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "fbf998d36c0bee68a16544c74dc22088d21a3693d61e0810d444ca8388c3bccc",
+        "bytes": 17074
+      },
+      {
+        "path": "experiments/study.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "58423ae764073a80f2d2d3a5c46c81ea4b1c0bf3a67001dbc6a46acd8c62448a",
+        "bytes": 27871
+      },
+      {
+        "path": "experiments/study_evidence.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "d2b7045cfa0391ad93ecd35d5cc51c4714b32d4a35569a89ecd67c9f902e6f79",
+        "bytes": 14492
+      },
+      {
+        "path": "tests/abc_route_control.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "be6c2199896410036d8d44e561cf0053311f4ec3218842d1988c6356f0282d8e",
+        "bytes": 6251
+      },
+      {
+        "path": "tests/temperature_controls.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "e9bac8b696bad545af4e7482b461db2652c4ed32ba99ec60552accac4ed23ab2",
+        "bytes": 4656
+      },
+      {
+        "path": "tests/test_abc_analysis.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "cb227e18032aa9fe5f9259b9e69356f37ed6af8e0cfbf21013e1d9a143c432a8",
+        "bytes": 10987
+      },
+      {
+        "path": "tests/test_abc_execute.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "13b6047f6b82e8954e3c31ea73516a29d9a2c8da2467fdbadce039ece8fc1b1c",
+        "bytes": 12022
+      },
+      {
+        "path": "tests/test_abc_plan.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "2af746b29fc590b053de9f44c5f3776506a955c2b1c4f55cc6336b260a79ae61",
+        "bytes": 6799
+      },
+      {
+        "path": "tests/test_abc_reconcile.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "34c90f96487555744c9897cfe5d14e8246da765bd6b610d0ca50b707fed65cd2",
+        "bytes": 10314
+      },
+      {
+        "path": "tests/test_boundary_load_failure.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "3ec486a14db4d29dd32feb4b73dc08bc8024b782c7c9dccf7af27f2aa7dd1154",
+        "bytes": 7783
+      },
+      {
+        "path": "tests/test_boundary_v2_evidence.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "9c4177477398a6f0df329160afc353aadb9c323a266385a9540b66c7beb1f382",
+        "bytes": 1786
+      },
+      {
+        "path": "tests/test_effective_temperature.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "e6599350a8826d521b0830b1d2e91a932ef9d9b4e49ec27d335610520d74c121",
+        "bytes": 3204
+      },
+      {
+        "path": "tests/test_smoke.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "31e51945789aacef49a0d08a6e00f52740b8ff00f22af4e93fcf15e9bc01b365",
+        "bytes": 11340
+      },
+      {
+        "path": "tests/test_source_angle.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "bf2d6cc0c2d054774c1016d9d6d007075a39cc7e8d55d8b257cd2651995ac8b3",
+        "bytes": 5334
+      },
+      {
+        "path": "tests/test_source_space.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "8632fb0dff19f9c66a9c0909a4e28d8da4b53d3a612db2581626088f846813e6",
+        "bytes": 9375
+      },
+      {
+        "path": "tests/test_trajectory_events.py",
+        "commit": "1c2e805edf1303c0ebf0cfb84b2e226bf1917976",
+        "sha256": "0a9172ff4f26873be8c099df7a261abb2ea4408e1db4692d10f511eb41dcb109",
+        "bytes": 5568
+      }
+    ]
+  },
+  "tests": {
+    "command": "python3 -B -m unittest discover -s tests -p 'test_*.py' -v",
+    "passed": 115,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "live_model_calls": 0,
+    "native_transport_runs": 0,
+    "archive_tests": "inspected_not_executed"
+  },
+  "exclusions": "Historical evidence, private packages, provider payloads and host paths are not included. See report section 7.",
+  "first_slice": "P1: qualified effective-temperature semantics and evidence propagation only",
+  "verification": {
+    "status": "passed",
+    "public_local_links": 14,
+    "source_byte_commit_bindings": 123,
+    "mermaid": "parsed_rendered_visually_inspected",
+    "external_diagram_requests": 0,
+    "sensitive_pattern_findings": 0,
+    "raw_evidence_copied": false,
+    "public_implementation_changed": false,
+    "experimental_preservation": {
+      "head": "19aa097455e8270ae1e5cfaa58f1a6f33e4b111e",
+      "tracked_count": 57267,
+      "tracked_bytes": 1216786893,
+      "tracked_digest": "4354ab7784772160ef1f33a067a0c012ee375ef072acd27dd1c1cba115f891bc",
+      "untracked_count": 458,
+      "untracked_inventory_digest": "1e2e37dae867062afc0a0354685526b9062ec5a70595a5fa8c3e454a2d23b11e",
+      "status_digest": "d92f9a22013dfb2468b3c308bc94125aaf6525f6d5082a2e42ff0ad42b8fc90a"
+    },
+    "experimental_preservation_scope": "All tracked bytes; nonignored untracked path/mode/size/mtime metadata and Git status. Ignored files and untracked binary contents not audited."
+  }
+}
