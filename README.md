@@ -1,36 +1,97 @@
 # Neutronics Harness
 
-A research prototype for evaluating LLM-assisted OpenMC model construction.
-An agent turns a public physical specification into Python, can inspect its working
-model, and submits `build_model() -> openmc.Model` for independent assessment.
+An evaluation and tool-use framework for studying AI agents that build and
+validate OpenMC neutronics models.
 
-The research question is whether scientific inspection helps an LLM produce more
-faithful neutronics models, and eventually whether it narrows differences between
-models. **The current project does not establish either effect.**
+## Why this project exists
 
-## What is implemented
+When do domain-specific scientific tools improve—or fail to improve—an agent's
+ability to construct correct models from engineering specifications? This project
+studies harness design: the construction environment, feedback, submission
+contract and independent assessment, alongside the agent itself.
 
-```text
-public task -> isolated builder -> working export / optional scientific feedback
-            -> frozen Python submission
-            -> one independent factory export -> admitted model.xml
-            -> fresh XML-only inspection -> separate native OpenMC transport
-            -> code-based assessment and evidence verification
+## What the harness provides
+
+- An isolated OpenMC construction environment with generic programming tools.
+- Boundary observations with explicit coverage and indeterminate outcomes.
+- Frozen final submissions assessed by independent factory export, programmatic
+  scientific checks and separate native transport. **No LLM judge** sets the grade.
+- Evidence/provenance binding between inputs, artifacts, execution and outcomes.
+- Repeated research comparisons, including optional native smoke feedback in the
+  later Request-16 study.
+
+**Source versus study:** this lightweight public release implements the earlier
+A/B construction/boundary workflow and v4 assessment route. The completed study
+below used a later research implementation with v7 assessment and C smoke
+assistance. This documentation update does not add that implementation or its
+private executor and reference packages.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph authoring["Authoring: tools and guidance"]
+        direction TB
+        P["Public specification"] --> B["Agent / builder"]
+        B --> W["Working OpenMC model"]
+        W --> F["Optional observations: boundaries / smoke"]
+        F --> B
+    end
+    subgraph assessment["Independent final assessment"]
+        direction TB
+        S["Frozen candidate.py"] --> X["Factory export"]
+        X --> XML["Final XML"]
+        XML --> V["Deterministic inspections + native transport"]
+        V --> O["Verified outcome + evidence"]
+    end
+    authoring --> assessment
 ```
 
-- A provider-neutral scientific core with a working Codex subscription adapter.
-- Matched conditions: guided construction with generic coding tools, or the same
-  setup plus guided boundary inspection. Neither is tool-free.
-- Effective boundary observations, including albedo and domain participation,
-  with explicit support limits and indeterminate results.
-- Contained candidate execution, bounded artifact retrieval and evidence verification.
-- Independent physical and numerical checks. Tool invocation earns no points;
-  builder-reported observations never determine the final score.
+The submission contract is `build_model() -> openmc.Model`. Working feedback
+supports authoring; final grading uses freshly inspected final artifacts, not
+builder claims. Smoke in the diagram refers to the later research study.
+See [the architecture walkthrough](DESIGN.md),
+[boundary support](evaluation/scientific/BOUNDARIES.md),
+[the builder tool](builder/INSPECT_BOUNDARIES.md) and
+[scoring](evaluation/benchmark_suite/SCORING.md).
 
-See [the architecture walkthrough](DESIGN.md), [boundary support](evaluation/scientific/BOUNDARIES.md),
-[the builder tool](builder/INSPECT_BOUNDARIES.md), and [scoring](evaluation/benchmark_suite/SCORING.md).
+## Experimental results
 
-## Try the public source without model calls
+**150 sessions · 2 agent setups · 3 conditions · 5 OpenMC tasks · 5 repeats · zero retries**
+
+A is guided construction with coding tools, a required export attempt and bounded
+repair; B adds guided boundary observations; C adds guided short native smoke
+feedback to B. A is not tool-free. Rates use equal task weights.
+
+| Agent setup | A | B | C | C−A |
+|---|---:|---:|---:|---:|
+| GPT-5.6 Luna | 72% | 68% | 56% | −16 pp |
+| GPT-5.6 Sol | 92% | 100% | 84% | −8 pp |
+
+![Verified protocol success in the Request-16 development study](docs/assets/request16-success-rates.svg)
+
+In this bounded development study, the combined boundary + smoke assistance
+package did not improve verified protocol success relative to guided construction.
+Observed differences varied by setup and task.
+
+- B−A was −4 pp for Luna and +8 pp for Sol; access and guidance changed together.
+- C−B was −12 pp and −16 pp respectively, with boundary assistance present.
+- These are development observations on reused tasks, not holdout confirmation
+  or a general causal claim. Sol/C retains one unscored incident; its unresolved
+  success bounds are 84–88%.
+
+**Exploratory mechanism.** Retrospective trajectory analysis found that 12 of the
+15 C non-successes already contained their final defect before smoke. Successful
+smoke execution did not certify task-level conformity. Runtime-error feedback
+could still support useful repairs. The analysis does not establish that smoke
+caused the aggregate performance difference.
+
+Read [RESULTS.md](RESULTS.md), the
+[development study](docs/experiments/request16-development-study-v1.md) and the
+[mechanistic follow-up](docs/experiments/request16-mechanistic-analysis-v1.md) for
+task variation, the v6-to-v7 amendment, outcome categories and evidence limits.
+
+## Quick start
 
 Run from the extracted repository with Python 3.12 or newer. Host code uses the
 standard library; these commands need no OpenMC installation, Docker, nuclear
@@ -48,7 +109,7 @@ task/prompt bundles and budgeted plans. They do not execute an agent or transpor
 The public tests are a portable subset using synthetic inputs and local doubles;
 they do not replace native integration or scientific qualification.
 
-## Native execution prerequisites
+### Native execution prerequisites
 
 The operational environment is pinned to OpenMC 0.15.3 and Linux ARM64 containers.
 Live authoring also needs the pinned Codex image and subscription authentication.
@@ -76,23 +137,63 @@ inspections inside that allowance. It includes a curved-cylinder task to exercis
 interpretation of unsupported observations, not to claim boundary conformity.
 The plan records phase budgets and the zero-retry policy.
 
-## Scope and research status
+## Evaluation philosophy
 
-The observer supports specified root-box boundary representations; it is not a
-general CSG proof system. Finite probes do not establish global overlap freedom.
-Unsupported coverage remains unresolved even when numerical agreement is good.
-The diagnostic score uses hard gates and 70 applicable points normalized to 100;
-execution evidence is mandatory but earns no scientific points.
+Final assessment is independent of the builder. Deterministic/programmatic rules
+check scientific properties and bind results to execution evidence; Monte Carlo
+transport and stochastic authoring still require explicit experimental controls.
+Unknown does not mean pass, and calling a tool earns no points. Verified protocol
+success means all implemented required checks passed within declared coverage,
+not universal physical correctness. Diagnostic partial scores remain secondary.
 
-Reference review, Monte Carlo scoring calibration and untouched repeated multi-model
-comparisons remain open work. The current ±150 pcm equivalence margin is a frozen
-internal design choice with unresolved calibration. No formal harness-improvement
-result is claimed here.
+## Repository structure
 
-Private benchmark answers, reference implementations, model conversations, study
-results and nuclear data are excluded from this public source snapshot. Complete
-research records remain in a separate private repository. Publishing the harness
-does not give a candidate session access to that repository.
+| Path | Purpose |
+|---|---|
+| [builder/](builder/) | Isolated authoring, provider adapter and boundary feedback |
+| [prompts/](prompts/) | Allowlisted public task specifications and preparation |
+| [evaluator/](evaluator/) | Contained factory export and native transport |
+| [evaluation/](evaluation/) | Scientific observation, comparisons, scoring and evidence verification |
+| [experiments/](experiments/) | Public prepare/execute/assess workflow |
+| [tests/](tests/) | Portable synthetic and local-double regressions |
+| [docs/](docs/) | Public study summaries and reproducible figure |
+| [RESULTS.md](RESULTS.md) | Results and prospective research questions |
+
+## Limitations
+
+The study used five reused development tasks and different model-specific agent
+setups. It is not an untouched holdout or a model-weight isolation experiment.
+Boundary/geometry coverage is bounded; finite probes do not prove global overlap
+freedom. The native seed was fixed, so repeats vary authoring rather than
+independently reseeded transport. The ±150 pcm margin remains an uncalibrated
+internal design choice. Scientific reference review and numerical calibration
+remain future work. No universal OpenMC correctness claim is made.
+
+## Roadmap
+
+Prospective questions, not validated improvements: final-submission identity and
+last-export consistency; explicit public-settings verification; conditional
+versus routinely guided smoke; untouched holdout tasks; and broader reference
+and measurement qualification. The
+[mechanistic report](docs/experiments/request16-mechanistic-analysis-v1.md#three-prospective-interventions)
+explains the first three and their trade-offs.
+
+## Reproducibility and study provenance
+
+The summaries identify frozen records in the separate experimental research
+archive:
+
+- Study closeout: `59f370f54c5edb3f6499af37259e3ae09d3e9ca7`.
+- Mechanistic report: `19aa097455e8270ae1e5cfaa58f1a6f33e4b111e`.
+- Protocol: `factory-assessment-boundaries-v7`.
+- Authoring: `authoring-requests-16-v1`.
+
+Full raw retained artifacts, private reference answers, model conversations and
+nuclear data are intentionally not vendored here. These identities are not public
+commit links, and the summaries alone do not permit independent reconstruction
+of the study. The [provenance ledger](docs/experiments/request16-development-study-v1.md#provenance)
+maps tables to source reports and explains how to reproduce the SVG from its
+small public data file.
 
 ## License
 
