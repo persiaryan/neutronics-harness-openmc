@@ -30,7 +30,9 @@ remain unresolved. Source checks recognize qualified uniform box/independent
 Cartesian encodings and isotropic/uniform mu–phi encodings. Known source
 mismatches remain visible beside unknowns; unresolved source properties leave
 the combined source score null. This is neither arbitrary distribution
-equivalence nor complete v7 parity.
+equivalence nor complete v7 parity. Operator verification also qualifies one
+XML-proven missing-material loading failure, while retaining an indeterminate
+builder reply and assigning no scientific credit.
 
 The completed study below used the later research implementation with v7
 assessment and C smoke assistance. Its historical results are unchanged; the

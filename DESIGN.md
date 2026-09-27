@@ -128,6 +128,19 @@ supported encodings, wrong/unknown aggregation, unchanged constraints and
 rejection of tampered comparison records or historical route identities. They
 neither run neutron transport nor establish full experimental v7 parity.
 
+Operator-side [boundary receipt verification](builder/INSPECT_BOUNDARIES.md)
+also ports v7's narrow failed-call qualification. A completed, contained and
+cleaned-up worker execution is distinct from a usable boundary observation.
+A missing cell-material reference must be demonstrated by the retained XML and
+a matching worker KeyError. It produces an operator failure record with no
+observation or scientific credit; the builder's indeterminate reply and compact
+feedback remain unchanged. Other failures stay insufficient. This additive
+read-only verification uses the existing v2 receipts and preserves the current
+assessment route, worker, comparator, budgets and historical records. The
+[portable controls](tests/test_boundary_failure_receipts.py) exercise actual
+controllers and verifiers with synthetic process/owner receipts, not live
+builders or transport. Full experimental v7 parity is not established.
+
 Evidence binds task/prompt, model/adapter, budgets/protocol, code/environment/data,
 artifacts, process outcomes and justifications. Hashes identify bytes; they are
 neither scientific proof nor protection against an operator rewriting all records.
