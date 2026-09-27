@@ -81,6 +81,41 @@ The [development-study report](docs/experiments/request16-development-study-v1.m
 contains assessment rules, numerical and effort summaries, the evaluator amendment,
 incident handling, uncertainty and provenance.
 
+## Mechanistic follow-up
+
+**Exploratory retrospective analysis.** All 50 C sessions were examined, alongside
+all 150 final outcome/effort records. Among the 15 C non-successes, 12 already
+contained their final demonstrated defect before smoke, one showed a
+final-submission regression after completed smoke, and two never reached smoke.
+Strong property-specific pre/post evidence exists for 13/15.
+
+Retained evidence supports three bounded observations: completed smoke can coexist
+with task-conformity defects, runtime feedback has limited specification coverage,
+and pre-existing defects often persist. The evidence for broad over-editing or
+trajectory complexity as a cause is mixed; harmful workspace over-editing is not
+supported as a general account. Universal benefit or harm from smoke is unsupported.
+Internal confidence, misunderstanding and attention are not testable here.
+
+C used more requests and time, but not more mean working exports or completed
+workspace writes. Successful post-smoke corrections exist. The
+[mechanistic report](docs/experiments/request16-mechanistic-analysis-v1.md)
+distinguishes these repairs from the final-submission regression and explains why
+none establishes the cause of the aggregate C−A difference.
+
+## Next experiments
+
+Prospective questions, not validated improvements:
+
+- Does enforcing final-source consistency with the last successful export prevent
+  submission-only regressions within the same budget?
+- Does an explicit check of public task settings after smoke reduce persistent
+  specification mismatches?
+- When does conditional smoke use offer a better trade-off than routinely guided
+  smoke, including the risk of missing hidden runtime defects?
+
+Untouched holdout tasks and broader scientific reference/calibration work remain
+necessary for stronger generalization claims.
+
 ## Reading these results
 
 The current public source snapshot provides the earlier A/B construction and
