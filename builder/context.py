@@ -8,6 +8,21 @@ def sha256(data):
 def write_json(path, value):
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
 
+def tool_declarations(body):
+    # Only the session-generated additional_tools ID is nonsemantic.
+    return dict(tools=body.get('tools', []), additional_tools=[
+        {k:v for k,v in item.items() if k!='id'} for item in body.get('input', [])
+        if item.get('type')=='additional_tools'])
+
+def request_setup(body):
+    """Effective adapter setup, excluding task text and session-generated IDs."""
+    inventory = request_inventory(body)
+    return dict(request_configuration={k: body.get(k) for k in (
+        'tool_choice', 'parallel_tool_calls', 'reasoning', 'store', 'stream', 'include', 'text')},
+        generic_tools_sha256=sha256(json.dumps(tool_declarations(body), sort_keys=True).encode()),
+        instruction_messages=inventory['instruction_messages'],
+        top_level_instructions_sha256=inventory['top_level_instructions_sha256'])
+
 def request_inventory(body):
     """Inspect both legacy top-level tools and newer input additional_tools.
 

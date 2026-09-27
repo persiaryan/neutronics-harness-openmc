@@ -51,7 +51,17 @@ CONSTRUCTION_POLICY = Path(__file__).with_name('guided_construction.md')
 GUIDED_POLICY = Path(__file__).with_name('guided_authoring.md')
 
 
-def condition_prompt(prompt, assistance):
+EXTENDED_REQUEST_BUDGET = 'authoring-requests-16-v1'
+
+
+def request_limit(profile=None):
+    if profile not in (None, EXTENDED_REQUEST_BUDGET):
+        raise ValueError('Unknown authoring request-budget profile')
+    return 16 if profile else 8
+
+
+def condition_prompt(prompt, assistance, *, request_budget=None):
+    limit = request_limit(request_budget)
     if assistance not in CONDITIONS:
         raise ValueError('Unknown assistance condition')
     environment=AUTHORING
@@ -78,4 +88,8 @@ def condition_prompt(prompt, assistance):
         result += instruction
     if assistance in SMOKE_CONDITIONS:
         result += '\n'+Path(__file__).with_name('guided_smoke.md').read_text()
+    if limit == 16:
+        # Change only existing budget declarations in guidance, never public physics.
+        guidance = result[len(prompt):].replace('eight-request', 'sixteen-request').replace('8-request', '16-request')
+        result = prompt + guidance
     return result

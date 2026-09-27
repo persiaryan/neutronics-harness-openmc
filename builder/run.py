@@ -14,7 +14,7 @@ import threading
 import time
 import uuid
 
-from builder.context import request_inventory, sha256, write_json
+from builder.context import request_inventory, request_setup as observed_setup, sha256, write_json
 from builder.route import CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS
 from builder import openmc_python
 from builder.relay import forward, load_auth, validate_request
@@ -105,17 +105,18 @@ def cleanup(name):
 def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='generic',
         mode='subscription', max_requests=8, wall_seconds=600, auth_path=None, responder=None,
         contract='openmc-model-factory-v1', execution_profile='factory-serial-v1',
-        evaluator_protocol=BOUNDARY_PROTOCOL, smoke_data_index=None):
+        evaluator_protocol=BOUNDARY_PROTOCOL, smoke_data_index=None, request_setup=None, request_budget=None):
     output = Path(output)
     if mode not in {'mock', 'subscription'} or (mode == 'mock') != (responder is not None):
         raise ValueError('A local responder is required only in mock mode')
-    if not 1 <= max_requests <= 8 or not 10 <= wall_seconds <= 600:
-        raise ValueError('Budgets must be 1-8 requests and 10-600 seconds')
+    from builder.route import request_limit
+    if type(max_requests) is not int or not 1 <= max_requests <= request_limit(request_budget) or not 10 <= wall_seconds <= 600:
+        raise ValueError('Budget exceeds the declared request profile or 10-600 seconds')
     if output.exists():
         raise FileExistsError('Refusing to overwrite an existing run directory')
     from builder.route import prepare, condition_prompt
     prompt, assessment_route = prepare(case, contract, execution_profile, evaluator_protocol, prepared_input)
-    prompt = condition_prompt(prompt, assistance)
+    prompt = condition_prompt(prompt, assistance, request_budget=request_budget)
     inspect_boundaries = assistance in BOUNDARY_CONDITIONS
     smoke_enabled = assistance in SMOKE_CONDITIONS
     if smoke_enabled != (smoke_data_index is not None):
@@ -165,6 +166,10 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
     if smoke_enabled:
         manifest['smoke_tool']=smoke_tool.identity()
         manifest['smoke_data_index_sha256']=sha256(smoke_data_index.read_bytes())
+    if request_setup is not None:
+        manifest['required_request_setup'] = request_setup
+    if request_budget is not None:
+        manifest['request_budget_profile'] = request_budget
     write_json(output / "manifest.json", manifest)
     lifecycle = {"container_name": name, "state": "creating"}
     write_json(output / "lifecycle.json", lifecycle)
@@ -234,6 +239,12 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                         raise ValueError("First request contains unexpected context or a changed task")
                     write_json(output / f"request-{count:02d}.json", body)
                     write_json(output / f"inventory-{count:02d}.json", inventory)
+                    if request_setup is not None:
+                        matched = observed_setup(body) == request_setup
+                        write_json(output / f"setup-{count:02d}.json", dict(matched=matched,
+                            expected_sha256=sha256(json.dumps(request_setup, sort_keys=True).encode())))
+                        if not matched:
+                            raise ValueError('Prepared request setup changed; request not forwarded')
                     if mode == "subscription":
                         diagnostics = {}
                         try:
@@ -319,6 +330,8 @@ def main():
     parser.add_argument('--prepared-input', required=True, type=Path)
     parser.add_argument('--assistance', choices=tuple(CONDITIONS), required=True)
     parser.add_argument('--model', default='gpt-5.6-luna')
+    from builder.route import EXTENDED_REQUEST_BUDGET
+    parser.add_argument('--request-budget', choices=(EXTENDED_REQUEST_BUDGET,))
     parser.add_argument('--max-requests', type=int, default=8)
     parser.add_argument('--wall-seconds', type=int, default=600)
     parser.add_argument('--output', type=Path, required=True)

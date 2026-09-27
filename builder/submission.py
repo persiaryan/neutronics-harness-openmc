@@ -2,8 +2,8 @@
 import json
 from pathlib import Path
 from builder import openmc_python, boundary_tool
-from builder.context import sha256, request_inventory
-from builder.route import condition_prompt, CONDITIONS, BOUNDARY_CONDITIONS
+from builder.context import sha256, request_inventory, request_setup
+from builder.route import condition_prompt, CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS, request_limit
 from builder.run import verify_container
 from evaluator.contracts import FACTORY
 from evaluator.profiles import assessment_route, FACTORY_PROFILE, BOUNDARY_PROTOCOL
@@ -29,11 +29,13 @@ def submission(directory, case, *, recorded_protocol=None):
         route['evaluator_protocol'] = recorded_protocol
     route['prompt_sha256'] = sha256(base.encode())
     assistance = manifest['assistance']
-    expected = condition_prompt(base, assistance).encode()
+    expected_prompt = condition_prompt(base, assistance, request_budget=manifest.get('request_budget_profile'))
+    expected_condition = CONDITIONS[assistance]
+    expected = expected_prompt.encode()
     require(manifest['delivery_contract'] == FACTORY and manifest['assessment_route'] == route,
             'Builder delivery contract/profile/protocol changed')
     require(manifest['case'] == case and manifest['mode'] in ('mock','subscription'), 'Builder assignment changed')
-    require(manifest['condition'] == CONDITIONS[assistance],
+    require(manifest['condition'] == expected_condition,
             'Builder condition changed')
     require(manifest['image_id'] == openmc_python.IMAGE_ID and manifest['authoring_environment'] == openmc_python.ENVIRONMENT,
             'Authoring environment changed')
@@ -48,9 +50,31 @@ def submission(directory, case, *, recorded_protocol=None):
     require(('boundary_tool' in manifest) == (assistance in BOUNDARY_CONDITIONS), 'Tool availability changed')
     if assistance in BOUNDARY_CONDITIONS:
         require(manifest['boundary_tool'] == boundary_tool.identity(), 'Boundary adapter changed')
+    require(('smoke_tool' in manifest)==(assistance in SMOKE_CONDITIONS),'Smoke availability changed')
+    if assistance in SMOKE_CONDITIONS:
+        from builder.smoke_tool import identity
+        require(manifest['smoke_tool']==identity(),'Smoke adapter changed')
+    limit, count = manifest['max_requests'], result['request_count']
+    require(type(limit) is int and 1 <= limit <= request_limit(manifest.get('request_budget_profile')),
+            'Declared request budget changed')
+    require(type(count) is int and 1 <= count <= limit, 'Recorded request count exceeds declared budget')
+    require(10 <= manifest['wall_seconds'] <= 600, 'Authoring wall budget changed')
+    require({p.name for p in directory.glob('request-*.json')} ==
+            {f'request-{n:02d}.json' for n in range(1, count+1)}, 'Request evidence/count changed')
+    setup_files = {p.name for p in directory.glob('setup-*.json')}
+    expected_setup_files = ({f'setup-{n:02d}.json' for n in range(1, count+1)}
+                            if 'required_request_setup' in manifest else set())
+    require(setup_files == expected_setup_files, 'Request setup declaration or receipts changed')
     for number in range(1, result['request_count'] + 1):
         request = read(f'request-{number:02d}.json')
+        require(request.get('model') == manifest['model'], 'Requested model changed')
         require(request_inventory(request) == read(f'inventory-{number:02d}.json'), 'Request inventory changed')
+        if 'required_request_setup' in manifest:
+            expected_setup = manifest['required_request_setup']
+            require(request_setup(request) == expected_setup and
+                    read(f'setup-{number:02d}.json') == dict(matched=True,
+                        expected_sha256=sha256(json.dumps(expected_setup, sort_keys=True).encode())),
+                    'Prepared request setup or its validation receipt changed')
     source = read_regular(directory/'candidate.py', limit=1_000_000)
     require(source == read_regular(directory/'answer.txt') and sha256(source) == result['answer_sha256']
             and len(source) == result['answer_bytes'], 'Builder answer/source identity mismatch')
