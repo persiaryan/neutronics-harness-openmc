@@ -64,10 +64,12 @@ visible. Model identity is checked separately. It does not copy authentication
 fields or raw tool schemas.
 
 The API caller must provide the expected descriptor explicitly; it is not
-learned from the first dispatched request. It is bound in the builder manifest,
-not yet in a prospective study manifest or CLI setup file. Omitting it makes no
-matched-configuration claim. Do not adopt an unreviewed request merely to bypass
-a mismatch.
+learned from the first dispatched request. It is bound in the builder manifest.
+The separate [prospective manifest](../experiments/MANIFEST.md) can freeze the
+descriptor file by hash through a private local binding; it does not dispatch.
+The existing authoring CLI still has no setup-file flag. Omitting the expected
+descriptor from the authoring API makes no matched-configuration claim. Do not
+adopt an unreviewed request merely to bypass a mismatch.
 
 Every request is compared before forwarding. A first or later mismatch retains
 the request and a failed `setup-NN.json` receipt, stops the session and makes
@@ -94,7 +96,7 @@ tampering, A/B/C routing and unchanged resource limits without credentials,
 model calls or native OpenMC execution. Mock inference alone does not disable
 native tools; those are separately doubled in these tests.
 
-No live client/provider qualification, new study, trajectory reconstruction or
-study-manifest framework is included. The scientific route remains
+The P5 authoring-profile feature adds no live client/provider qualification,
+new study, trajectory reconstruction or study-manifest framework. The scientific route remains
 `factory-assessment-boundaries-v4-temperature-source-v1`; historical results
 are unchanged and full experimental v7 parity is not claimed.

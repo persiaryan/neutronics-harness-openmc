@@ -204,6 +204,23 @@ evidence references, excluding raw commands, transcripts, logs and error text.
 It is descriptive metadata, not an evidence verifier or automatic publication.
 No evaluator, prompt, tool, budget, historical result or execution route changes.
 
+The prospective [P7 manifest](experiments/MANIFEST.md) is a separate
+`prospective-study-manifest-v1` prepare/verify interface. An operator supplies
+the task/setup/arm/repetition inventory and exact assignment order. The package
+freezes those declarations, per-setup matched request profiles, prompt and tool
+identities, budgets, source closure, data/reference/setup bindings and explicit
+analysis contrasts. It imports no historical schedule, consumed prefix or
+authorization. Unknown, missing, duplicate or changed declarations are rejected.
+
+Local paths stay in a separate resolver file. Data libraries are hashed in full;
+existing sealed-reference verification checks bytes without activating grading.
+Only resource IDs and compact hash/count bindings enter the manifest. Optional
+expected-hash and committed-HEAD checks provide stronger external bindings than
+a colocated seal alone. Preparation and verification do not dispatch, assess,
+authenticate, qualify native dependencies or authorize a run. Analysis policy is
+declared, not computed. The serial executor and descriptive analyzer remain
+separate future slices; scientific acceptance and historical results are unchanged.
+
 Evidence binds task/prompt, model/adapter, budgets/protocol, code/environment/data,
 artifacts, process outcomes and justifications. Hashes identify bytes; they are
 neither scientific proof nor protection against an operator rewriting all records.

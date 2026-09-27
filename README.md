@@ -41,7 +41,9 @@ assessment and C smoke assistance. Its historical results are unchanged; the
 public source now includes bounded smoke and the optional Request-16 authoring
 profile. Read-only trajectory projection separates smoke completion from
 demonstrated feedback delivery and provides an allowlisted metadata view.
-The study executor and private reference packages are not included.
+Prospective manifests can freeze explicit study declarations and verify their
+dependencies without dispatch. The study executor and private reference packages
+are not included.
 
 ## Architecture
 
@@ -73,7 +75,8 @@ See [the architecture walkthrough](DESIGN.md),
 [the boundary tool](builder/INSPECT_BOUNDARIES.md),
 [bounded smoke assistance](builder/SMOKE.md),
 [authoring request profiles](builder/AUTHORING_PROFILES.md),
-[trajectory projection](builder/TRAJECTORY.md) and
+[trajectory projection](builder/TRAJECTORY.md),
+[prospective manifests](experiments/MANIFEST.md) and
 [scoring](evaluation/benchmark_suite/SCORING.md).
 
 ## Experimental results
@@ -185,7 +188,7 @@ not universal physical correctness. Diagnostic partial scores remain secondary.
 | [prompts/](prompts/) | Allowlisted public task specifications and preparation |
 | [evaluator/](evaluator/) | Contained factory export and native transport |
 | [evaluation/](evaluation/) | Scientific observation, comparisons, scoring and evidence verification |
-| [experiments/](experiments/) | Public prepare/execute/assess workflow |
+| [experiments/](experiments/) | Public prepare/execute/assess workflow and non-dispatching study manifests |
 | [tests/](tests/) | Portable synthetic and local-double regressions |
 | [docs/](docs/) | Public study summaries and reproducible figure |
 | [RESULTS.md](RESULTS.md) | Results and prospective research questions |
