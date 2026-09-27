@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 from builder import run as agent
 from builder.submission import submission
-from builder.route import CONDITIONS, GUIDED_CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS, condition_prompt
+from builder.route import CONDITIONS, GUIDED_CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS, condition_prompt, request_limit, EXTENDED_REQUEST_BUDGET
 from builder.trajectory import summarize as trajectory
 from builder.context import sha256
 from evaluator import run as exporter
@@ -19,8 +19,8 @@ BUDGETS = dict(model_requests=8, authoring_seconds=600, boundary_calls=2, bounda
                export_seconds=60, automatic_retries=0)
 
 
-def budgets(assistance):
-    declared = dict(BUDGETS)
+def budgets(assistance, request_budget=None):
+    declared = dict(BUDGETS, model_requests=request_limit(request_budget))
     if assistance in SMOKE_CONDITIONS:
         from evaluator.smoke import PROFILE
         return dict(declared,smoke_calls=PROFILE['max_calls'],smoke_native_seconds=PROFILE['native_seconds'])
@@ -42,8 +42,9 @@ def atomic_json(path, value):
         Path(temporary).unlink(missing_ok=True)
 
 
-def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_cell','moderated_cylinder'),smoke_data_index=None):
-    declared = budgets(assistance)
+def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_cell','moderated_cylinder'),smoke_data_index=None,
+            request_budget=None):
+    declared = budgets(assistance, request_budget)
     if assistance not in CONDITIONS or not cases or len(set(cases)) != len(cases) or set(cases)-set(CASE_FILES):
         raise ValueError('Invalid condition or task inventory')
     if (assistance in SMOKE_CONDITIONS)!=(smoke_data_index is not None):
@@ -70,20 +71,28 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
             resource_policy='Same 8-request/600-second session, including boundary and smoke calls. Separate declared per-tool caps. No automatic retries.',
             tool_use_policy='Guided export, boundary inspection and smoke execution; one smoke correction opportunity. Observed use is not scientific credit.')
     plan['condition'] = CONDITIONS[assistance]
-    plan['authoring_prompt_sha256'] = {case: sha256(condition_prompt((output/'inputs'/case/'prompt.txt').read_text(), assistance).encode()) for case in cases}
+    if request_budget is not None:
+        plan['request_budget_profile'] = request_budget
+        plan['resource_policy'] = plan['resource_policy'].replace('8-request', str(declared['model_requests'])+'-request')
+    plan['authoring_prompt_sha256'] = {case: sha256(condition_prompt((output/'inputs'/case/'prompt.txt').read_text(), assistance,
+        request_budget=request_budget).encode()) for case in cases}
     exporter.write_json(output/'plan.json', plan)
     exporter.write_json(output/'support-matrix.json', task_matrix())
     return plan
 
 
-def execute(output, *, responder=None):
+def execute(output, *, responder=None, request_setup=None):
     output = Path(output)
     plan = json.loads((output/'plan.json').read_bytes())
     if plan.get('authoring_allowed') is False:
         raise ValueError('Authoring slot already consumed; retained submissions may only be reassessed')
     if plan.get('format') != 'research-usability-pilot-v2':
         raise ValueError('Prepare a new v2 plan; historical plans are not relabelled')
-    declared = budgets(plan['assistance'])
+    request_budget = plan.get('request_budget_profile')
+    declared = budgets(plan['assistance'], request_budget)
+    total_requests = plan['maximum_model_requests']
+    if type(total_requests) is not int or total_requests != len(plan['cases'])*declared['model_requests']:
+        raise ValueError('Prepared total request budget changed')
     if plan['status'] != 'prepared_not_dispatched' or plan['budgets'] != declared or plan['execution_profile'] != PROFILE:
         raise ValueError('Pilot plan/budgets changed')
     if plan['delivery_contract'] != FACTORY or plan['evaluator_protocol'] != BOUNDARY_PROTOCOL or plan['transport'] is not False:
@@ -99,8 +108,12 @@ def execute(output, *, responder=None):
         smoke_kwargs['smoke_data_index']=index
     elif 'smoke' in plan:
         raise ValueError('Undeclared smoke availability')
+    if request_setup is not None:
+        smoke_kwargs['request_setup'] = request_setup
+    if request_budget is not None:
+        smoke_kwargs['request_budget'] = request_budget
     expected = {case: sha256(condition_prompt((output/'inputs'/case/'prompt.txt').read_text(),
-                plan['assistance']).encode()) for case in plan['cases']}
+                plan['assistance'], request_budget=request_budget).encode()) for case in plan['cases']}
     if plan.get('condition') != CONDITIONS[plan['assistance']] or plan.get('authoring_prompt_sha256') != expected:
         raise ValueError('Prepared guided policy/prompt changed; prepare a new run')
     runs = output/'runs'; runs.mkdir(exist_ok=False)
@@ -243,6 +256,7 @@ def main():
     p.add_argument('--model', default='gpt-5.6-luna')
     p.add_argument('--cases', nargs='+', choices=sorted(CASE_FILES), default=['reflective_pin_cell','moderated_cylinder'])
     p.add_argument('--smoke-data-index',type=Path)
+    p.add_argument('--request-budget',choices=(EXTENDED_REQUEST_BUDGET,))
     p = sub.add_parser('execute')
     p.add_argument('--output', type=Path, required=True)
     p = sub.add_parser('assess', help='Separate independent evaluation; may run native transport')

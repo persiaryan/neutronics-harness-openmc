@@ -28,9 +28,11 @@ data-index hash, adapter identity or prompt blocks dispatch. A/B reject a smoke
 data index; C requires one. The lower-level builder also accepts
 `--smoke-data-index` only with the declared C condition.
 
-The request budget remains **8 requests and 600 authoring seconds per task**.
-The Request-16 profile is not part of this port. Smoke consumes this authoring
-time and its separate call allowance. Mock inference replaces only the provider;
+The default remains **8 requests and 600 authoring seconds per task**.
+P5 adds the explicit [Request-16 authoring profile](AUTHORING_PROFILES.md);
+it changes only the request cap and corresponding guidance, keeping the same
+600 seconds and smoke allowances. Smoke consumes this authoring time and its
+separate call allowance. Mock inference replaces only the provider;
 it does not disable native smoke. Portable tests explicitly substitute local
 process doubles as well.
 

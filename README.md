@@ -22,7 +22,8 @@ contract and independent assessment, alongside the agent itself.
 
 **Source versus study:** this lightweight public release implements guided
 construction (A), boundary assistance (B), and explicit bounded smoke assistance
-(C), with an 8-request/600-second authoring allowance and the prospective
+(C), with a default 8-request/600-second authoring allowance, an explicit
+optional 16-request profile, and the prospective
 `factory-assessment-boundaries-v4-temperature-source-v1` route. It ports bounded
 effective-temperature and source-distribution semantics from experimental v7:
 finite temperature scalars and singleton lists/tuples are equivalent, wrong
@@ -37,8 +38,8 @@ builder reply and assigning no scientific credit.
 
 The completed study below used the later research implementation with v7
 assessment and C smoke assistance. Its historical results are unchanged; the
-public source now includes the bounded smoke tool, but does not include the
-Request-16 authoring profile, study executor or private reference packages.
+public source now includes bounded smoke and the optional Request-16 authoring
+profile. The study executor and private reference packages are not included.
 
 ## Architecture
 
@@ -68,7 +69,8 @@ for final assessment.
 See [the architecture walkthrough](DESIGN.md),
 [boundary support](evaluation/scientific/BOUNDARIES.md),
 [the boundary tool](builder/INSPECT_BOUNDARIES.md),
-[bounded smoke assistance](builder/SMOKE.md) and
+[bounded smoke assistance](builder/SMOKE.md),
+[authoring request profiles](builder/AUTHORING_PROFILES.md) and
 [scoring](evaluation/benchmark_suite/SCORING.md).
 
 ## Experimental results
@@ -155,6 +157,13 @@ The plan records phase budgets and the zero-retry policy. C adds at most two
 60-second native smoke attempts inside the same authoring allowance, with a
 180-second admission reserve and explicit operator-selected data. Setup and
 cleanup add to the native-process limit. See [C preparation and its limits](builder/SMOKE.md).
+
+The optional `--request-budget authoring-requests-16-v1` preparation flag selects
+16 requests per task, keeping the same 600 seconds, tool limits and zero retries.
+For matched comparisons, explicitly use the same profile and generic request
+configuration within each setup. The Python API can check a reviewed expected
+configuration on every request before forwarding; retained submission review
+checks its receipts again. See [profile preparation and verification](builder/AUTHORING_PROFILES.md).
 
 ## Evaluation philosophy
 

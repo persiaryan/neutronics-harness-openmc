@@ -158,11 +158,31 @@ Smoke process outcomes and bounded log excerpts are candidate diagnostics, never
 private comparisons or scientific credit. Missing/failed output validation or
 uncertain cleanup cannot establish completed smoke. The coding container still
 has no solver, nuclear data or reference access. Call records and usage do not
-prove downstream feedback delivery or interpretation. Request-16 budgets,
-trajectory extensions and the study executor remain outside this port.
+prove downstream feedback delivery or interpretation. Request-16 was outside
+P4; the P5 addition is described below. Trajectory extensions and the study
+executor remain outside these ports.
 Portable smoke tests use local doubles only; native integration and efficacy are
 not qualified by these tests. The assessment route and all historical results
 retain their identities.
+
+The prospective [P5 authoring profile](builder/AUTHORING_PROFILES.md) ports
+`authoring-requests-16-v1` and request-setup comparison from the same frozen
+continuation. Eight requests remain the default; 16 requires explicit opt-in.
+Only the budget wording in appended guidance changes. Public task text,
+A/B/C tool access, 600 authoring seconds, tool limits and zero retries stay fixed.
+A caller may supply a reviewed expected request setup: configuration fields,
+generic tool-declaration hash and adapter instruction inventory/hashes. Every
+request must match before forwarding; the requested model is checked separately.
+Session-generated top-level additional-tool IDs and task/history content are
+excluded from that comparison. Setup checking is explicit, not automatic
+adoption of the first request, and is not a study-manifest framework.
+
+Public integration also checks integer request caps, prepared total request
+budgets, retained request counts/file inventories and declared setup receipts.
+Submission review binds C's smoke adapter identity as well. These are operational
+checks, with no scientific score or assessment-route change. Portable controls
+use synthetic request bodies and local process doubles; they do not qualify
+live provider configuration, native execution or full experimental v7 parity.
 
 Evidence binds task/prompt, model/adapter, budgets/protocol, code/environment/data,
 artifacts, process outcomes and justifications. Hashes identify bytes; they are
