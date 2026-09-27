@@ -53,9 +53,29 @@ An unsupported sphere returns `status=observed` with
 unavailable evidence, timeout/cleanup uncertainty or exhausted allowance instead
 produce an indeterminate operation reply. A missing observation never means pass.
 All causes and candidate bytes remain in operator-side evidence. Unexpected
-exceptions are sanitized in the public reply. The operator verifier currently
-qualifies successful observations and the explicit over-budget refusal; other
-retained failure causes remain insufficient for that stronger verification claim.
+exceptions are sanitized in the public reply. The operator verifier qualifies
+successful observations, the explicit over-budget refusal, and one narrowly
+supported loading failure: a cell references a material ID absent from the
+retained XML and the completed worker reports the matching string-key
+`KeyError`. Other retained failure causes remain insufficient.
+
+`boundaries.execution_record()` verifies the pinned worker, artifact/input hashes,
+containment, normal external completion and confirmed cleanup before interpreting
+any output. `record()` still accepts only a valid boundary observation.
+`missing_material_failure()` separately reconstructs the missing IDs from the
+same XML; an exception alone is not sufficient. Changed IDs/errors, missing or
+inconsistent receipts, interruption and uncertain cleanup cannot qualify.
+
+For a qualified failure, the unchanged builder reply remains
+`status=indeterminate`, `cause=inspection_evidence_incomplete`, `observations=null`.
+No raw error, operator classification, task verdict or score is added to feedback.
+The operator verification result records `failed_inspections` with
+`observation_status=unavailable` and `scientific_credit=none`; `inspections`
+counts usable observations, while `started_inspections` includes qualified failed
+calls. Failed attempts still consume the existing allowance and never trigger an
+automatic retry. This is additional read-only receipt verification, not a new
+observation, grading rule, feedback format or assessment protocol. Original
+receipts, replies and historical grades are not rewritten.
 
 Surface and cell IDs are traceability references only. The adapter does not compare
 them to a private model. It reports effective loaded values and XML provenance;

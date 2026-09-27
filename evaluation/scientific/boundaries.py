@@ -23,7 +23,11 @@ def observe(xml, output, *, wall_seconds=120):
     return inspection.inspect_xml(xml, [], output, wall_seconds=wall_seconds, capability='effective-boundary-v2')
 
 
-def record(directory, xml):
+def execution_record(directory, xml):
+    """Bind worker output to an externally completed, cleaned-up XML inspection.
+
+    A failed worker response is execution evidence, never a boundary observation.
+    """
     directory = Path(directory)
     read = lambda n: json.loads(read_regular(directory/n))
     manifest=read('manifest.json'); payload=read_regular(directory/'input.json'); worker=WORKER.read_bytes()
@@ -39,12 +43,39 @@ def record(directory, xml):
     require(inspection.verify(read('container-inspect.json'))==read('container-checks.json'), 'Boundary containment changed')
     require(read('execution.json')==dict(exit_code=0,stop_reason=None), 'Boundary observer execution incomplete')
     result,stdout=read('result.json'),read('stdout.json')
-    if result['cleanup_confirmed'] is not True or result['status']!='inspected':
+    if result['cleanup_confirmed'] is not True:
         raise InsufficientEvidence('Boundary observer did not complete with confirmed cleanup')
-    require(all(result.get(k)==v for k,v in stdout.items()) and stdout['status']=='inspected', 'Boundary result changed')
+    require(all(result.get(k)==v for k,v in stdout.items()), 'Boundary result changed')
+    return stdout
+
+
+def record(directory, xml):
+    stdout=execution_record(directory, xml)
+    if stdout.get('status')!='inspected':
+        raise InsufficientEvidence('Boundary observer did not complete with confirmed cleanup')
     require(stdout['observer_version']==VERSION and stdout['openmc_version']=='0.15.3' and
             stdout['model_xml_sha256']==digest(xml), 'Boundary semantic identity changed')
     return stdout
+
+
+def missing_material_failure(directory, xml):
+    """Narrow receipt qualification; no repair, conformity verdict or final grade.
+
+    OpenMC's geometry loader resolves each non-void cell material through the
+    loaded material map. An absent entry explains this qualified loading failure.
+    Other worker errors remain unresolved and must not be treated as model zero.
+    """
+    import xml.etree.ElementTree as ET
+    stdout=execution_record(directory, xml)
+    root=ET.fromstring(xml)
+    defined={m.get('id') for m in root.findall('./materials/material')}
+    missing=sorted({m for c in root.findall('./geometry/cell')
+                    for m in c.get('material','').split() if m!='void' and m not in defined})
+    if not (missing and stdout.get('status')=='unsupported_or_invalid' and
+            stdout.get('error_type')=='KeyError' and stdout.get('error') in {repr(m) for m in missing}):
+        raise InsufficientEvidence('Unqualified boundary inspection failure; cause unresolved')
+    return dict(cause='undefined_cell_material_reference',missing_material_ids=missing,
+                artifact_sha256=digest(xml),observation_status='unavailable',scientific_credit='none')
 
 
 def requirements(case):
