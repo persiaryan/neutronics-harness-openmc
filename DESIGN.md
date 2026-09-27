@@ -40,7 +40,7 @@ and code-based graders.
 ## Contracts and limits
 
 Current route: `openmc-model-factory-v1`, `factory-serial-v1`,
-`factory-assessment-boundaries-v4-temperature-v1`, boundary observer v2. There
+`factory-assessment-boundaries-v4-temperature-source-v1`, boundary observer v2. There
 is one independent final export, not a repeat-build stability grader. Working exports are authoring
 activity and never replace final evaluation.
 
@@ -71,14 +71,18 @@ or distributed-instance selection is performed. A demonstrated mismatch remains
 false alongside unknown observations; an otherwise complete assessment with
 unknown-only temperature evidence stays unscored under the unchanged rubric.
 
-The prospective scientific inspection receipt is
-`private-scientific-inspection-v3` (formerly v2); boundary inspection remains
-`private-boundary-inspection-v2`. The new assessment route names this
-temperature-only change rather than claiming `factory-assessment-boundaries-v7`.
-Current verification rejects old route/inspection versions and binds the worker
-bytes. Review historical evidence with its original verifier; do not relabel or
-rescore archived receipts automatically. Source checks, scientific acceptance
-criteria, authoring budgets and assistance conditions are unchanged.
+The scientific inspection receipt remains `private-scientific-inspection-v3`
+(introduced by the temperature port); boundary inspection remains
+`private-boundary-inspection-v2`. Source comparisons operate on the already
+admitted final XML and do not change either inspector worker or receipt schema.
+The prospective route advances from
+`factory-assessment-boundaries-v4-temperature-v1` to
+`factory-assessment-boundaries-v4-temperature-source-v1`. It identifies these
+bounded ports without claiming `factory-assessment-boundaries-v7`. Current
+verification rejects previous routes/inspection versions and binds worker bytes.
+Review historical evidence with its original verifier; do not relabel or rescore
+archived receipts automatically. Required physics, score weights, authoring
+budgets and assistance conditions are unchanged.
 
 The temperature delta is ported from experimental continuation
 `1c2e805edf1303c0ebf0cfb84b2e226bf1917976`; its worker and receipt changes are
@@ -87,6 +91,42 @@ unchanged in the final v7 archive. The portable
 worker functions with loaded-value doubles and synthetic execution receipts.
 They check extraction, precedence, assessment/scoring and historical/tampered
 evidence rejection without importing OpenMC or running native transport.
+
+Source comparison preserves the qualified v7 rules through two small admitted-XML
+observers/comparators: [source_space.py](evaluation/scientific/source_space.py)
+(`uniform-box-source-comparison-v1`) and
+[source_angle.py](evaluation/scientific/source_angle.py)
+(`isotropic-source-comparison-v1`). They never import candidate Python or load
+private reference packages. The settings assessment retains their observations,
+limitation reasons and comparison versions in `export-fidelity.json`; retained
+evidence review reconstructs these values from the accepted final XML.
+
+- Spatial: a finite ordered box or independent Cartesian Uniform marginals must
+  match each required axis interval. Missing/duplicate axes, nonuniform or
+  unsupported descriptions remain unresolved. Fissionability and rejection
+  strategy remain separate requirements; the existing point-source path is
+  unchanged.
+- Angular: default/explicit isotropy or qualified independent Uniform mu in
+  [-1, 1] and phi over one full 2π interval in a supported orthonormal frame.
+  Directional/finite-atomic laws and demonstrated incorrect support fail.
+  Unqualified frames, malformed/unsupported descriptions and multiple-turn
+  azimuthal support remain unresolved. This is not a general distribution
+  equivalence engine.
+- A known mismatch remains a false detailed assertion and sets the settings
+  status to discrepancy even beside unknown assertions. As in v7, the unchanged
+  assessment aggregation leaves the combined source check null if any required
+  source property is unresolved, so an otherwise complete assessment remains
+  unscored. Energy/Watt, particle, source constraints and other settings checks
+  retain their existing rules and numeric tolerance.
+
+The source helpers and settings integration match the same frozen v7 continuation
+identified above. Portable [spatial](tests/test_source_space.py),
+[angular](tests/test_source_angle.py) and
+[evidence](tests/test_source_evidence.py) controls use synthetic public XML;
+execution/reference providers in evidence controls are doubles. They cover
+supported encodings, wrong/unknown aggregation, unchanged constraints and
+rejection of tampered comparison records or historical route identities. They
+neither run neutron transport nor establish full experimental v7 parity.
 
 Evidence binds task/prompt, model/adapter, budgets/protocol, code/environment/data,
 artifacts, process outcomes and justifications. Hashes identify bytes; they are

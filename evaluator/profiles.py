@@ -3,7 +3,7 @@ from copy import deepcopy
 from evaluator.contracts import FACTORY
 
 FACTORY_PROFILE = 'factory-serial-v1'
-BOUNDARY_PROTOCOL = 'factory-assessment-boundaries-v4-temperature-v1'
+BOUNDARY_PROTOCOL = 'factory-assessment-boundaries-v4-temperature-source-v1'
 PROFILE = dict(id=FACTORY_PROFILE, delivery_contract=FACTORY,
     budgets=dict(export=60, inspection=120, transport=1800, automatic_retries=0),
     observer_completion_grace=10, export_prerequisite_seconds=30, retrieval_seconds=30,

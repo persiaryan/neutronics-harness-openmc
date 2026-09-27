@@ -28,7 +28,7 @@ XML = (b'<model><materials><material id="1"><density units="sum"/>'
        b'<nuclide name="H1" ao="0.02"/></material></materials>'
        b'<geometry><cell id="1" material="1" universe="1"/></geometry>'
        b'<settings/></model>')
-NEW_PROTOCOL = 'factory-assessment-boundaries-v4-temperature-v1'
+NEW_PROTOCOL = 'factory-assessment-boundaries-v4-temperature-source-v1'
 
 # As in the v7 control, exercise the actual trusted worker functions without
 # importing OpenMC or executing candidate Python on the host.
@@ -301,11 +301,12 @@ class TemperatureEvidence(unittest.TestCase):
         self.assertEqual(json.loads((self.directory / 'manifest.json').read_bytes())['format'],
                          'private-boundary-inspection-v2')
 
-    def test_public_route_is_explicit_temperature_only(self):
+    def test_public_route_retains_temperature_semantics(self):
         self.assertEqual(BOUNDARY_PROTOCOL, NEW_PROTOCOL)
         self.assertEqual(assessment_route(FACTORY, FACTORY_PROFILE, NEW_PROTOCOL)['evaluator_protocol'],
                          NEW_PROTOCOL)
-        for old in ('factory-assessment-boundaries-v4', 'factory-assessment-boundaries-v7'):
+        for old in ('factory-assessment-boundaries-v4', 'factory-assessment-boundaries-v4-temperature-v1',
+                    'factory-assessment-boundaries-v7'):
             with self.assertRaisesRegex(ValueError, 'Unsupported evaluator protocol'):
                 assessment_route(FACTORY, FACTORY_PROFILE, old)
 
