@@ -1,0 +1,17 @@
+{
+  "attempt": 1,
+  "availability_recheck": {
+    "content_length": 9661406540,
+    "http_status": 200,
+    "source_url": "https://anl.app.box.com/public/static/6qr7jezzihkj9p9esl5jn19qgpujyjyz.xz"
+  },
+  "exception": "TimeoutError",
+  "exit_code": 1,
+  "format": "public-data-acquisition-incident-v1",
+  "log_sha256": "12a5c77c3f510fc7cb05331ca4a4b694a57ac83540dc017fd349d0bc28cfc111",
+  "retained_data_files": 0,
+  "retry": "Explicit new directory, unchanged acquisition code and expected archive/subset hashes; macOS caffeinate wrapper prevents sleep.",
+  "root_cause": "not_established",
+  "success_receipt_created": false,
+  "symptom": "HTTP response body read timed out"
+}

@@ -78,5 +78,62 @@ Portable development suite: **313 tests passed**, no skipped tests.
 authoring and historical-result files. The scalar/partial score is not a new
 rubric and official grading activation remains disabled.
 
-Same-runtime repeat and second fresh-checkout validation are recorded separately
-when complete. Do not infer those results from the initial development run.
+## Same-runtime repeat and fresh GitHub checkout
+
+The [same-runtime repeat](repeat-check.json) passed with identical candidate/XML,
+k-effective, histories, scientific checks and verdicts. Times and raw statepoint
+bytes are not part of the equality claim.
+
+The mandatory second checkout was cloned anonymously from public GitHub at
+`908f34210672c2ff846bb3383ff1c949f85b3f70`, with no prior scratch directory.
+It remained clean before and after validation. See the
+[executed command record](FRESH_COMMANDS.md) and these results:
+
+| Check | Observed result |
+|---|---|
+| Portable suite | 313 passed, 0 failed, 0 skipped |
+| Prompt preparation | Passed; zero model calls |
+| Public runtime | Both stages rebuilt with no cache and public source/base dependencies |
+| New runtime identities | Export and transport image IDs differ from development; native binaries and package inventory match |
+| Public data | Complete 9,661,406,540-byte archive reacquired; all ten tables and index match the published receipt |
+| Native example | Exit 0; coherent independent verification; verified protocol success |
+| Rebuilt-runtime comparison | XML, k-effective, histories, named checks and diagnostic score match development |
+| Timing | 301.232 seconds for native phase; 309.367 seconds total |
+| Docker preservation | All original 81 images, 82 tags, zero containers and seven volumes preserved |
+
+Machine-readable records: [portable](fresh-portable.json),
+[runtime](fresh-runtime.json), [data](fresh-data.json),
+[native comparison](fresh-native.json), and
+[final Docker object preservation](docker-preservation.json).
+The [full allowlisted JSON report](fresh-report.json) and
+[human-readable report](fresh-report.md) contain the scientific outcome and
+identities. The diagnostic score is 100/100 over the 70 applicable weighted
+points; grading activation remains disabled.
+
+The first fresh data acquisition failed during an HTTP response read and created
+no successful receipt. The [retained timeout record](fresh-data-timeout.json)
+does not assign a cause. An explicit retry in a new directory, with unchanged
+code/hashes and macOS sleep prevention, succeeded. This is a data acquisition
+retry, not a candidate retry. All candidate assessments were separate declared
+validation runs in new output directories.
+
+## Limits and final scope
+
+Validation used an Apple Silicon host with Python 3.14.6 and a native Linux ARM64
+Docker engine. The fresh checkout shared the Docker daemon with development.
+Source-only `--no-cache --pull` builds and the recorded new image IDs establish
+independence from preloaded project images; they do not constitute a separate
+clean-machine VM or x86_64 qualification. This milestone does not promise
+hermetic builds or cross-machine bitwise Monte Carlo output.
+
+The fresh candidate, like the public reference, emitted:
+`WARNING: Negative value(s) found on probability table for nuclide Zr96 at 294K`.
+The pinned solver/data were preserved and the existing assessment passed.
+The warning's numerical impact is unquantified; agreement between computations
+using the same data does not validate that data or establish physical accuracy.
+
+The last commit after the validated source SHA adds documentation and evidence
+only. No scientific scoring, task physics, authoring prompts/budgets, historical
+results or study infrastructure changed. No model call or Request-16 replay ran.
+PR #8 remains closed. The reference and finite checks remain bounded public
+computational demonstration evidence, not an independently certified benchmark.

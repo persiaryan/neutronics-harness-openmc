@@ -104,6 +104,11 @@ negative sampled elastic, fission or capture cross sections to zero; see
 The data and this behavior were not changed. Its numerical impact is not
 quantified here: shared-data agreement is not validation of the data library.
 
+Long downloads can fail or time out; partial output is retained and there is no
+automatic retry. If retrying after checking the connection, use a new data
+directory and receipt name. On macOS, an optional `caffeinate -dimsu` prefix
+keeps the machine awake during preparation or native execution.
+
 A changed upstream archive fails verification. Never silently substitute another
 library or temperature processing.
 

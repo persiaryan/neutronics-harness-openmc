@@ -172,7 +172,9 @@ criterion. Neither establishes experimental validation or universal correctness.
 
 See [the complete reproduction guide](docs/reproducibility-v1.md) for dependency
 pins, lawful upstream data acquisition, reference provenance, identity checks,
-rerun controls and limitations.
+rerun controls and limitations. A [fresh public GitHub checkout](docs/reproducibility-v1/VALIDATION.md)
+passed 313 portable tests and the complete native example with newly built
+images and freshly acquired public data.
 
 | Reproducibility level | Status |
 |---|---|

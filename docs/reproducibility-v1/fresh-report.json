@@ -1,0 +1,331 @@
+{
+  "format": "public-native-example-report-v1",
+  "repository_commit": "908f34210672c2ff846bb3383ff1c949f85b3f70",
+  "tracked_worktree_dirty": false,
+  "protocol": "factory-assessment-boundaries-v4-temperature-source-v1",
+  "case": "reflective_pin_cell",
+  "fixture": "handwritten_not_historical_llm_trial",
+  "runtime": {
+    "export_image": "sha256:89a53ab4e2242c35b89d3eef8c2a7489fb45f2b6eeb42d19adefe78135af9be7",
+    "format": "public-runtime-binding-v1",
+    "native_identity": {
+      "solver_files": {
+        "/opt/openmc/bin/openmc": "81d99b22b466116abc5069645dd85310cf98c5a2d4914900c6029c9c3821f634",
+        "/opt/openmc/lib/libopenmc.so": "4df23e8387afe6667f698498d360f201e013ee11751c7ac1f2c402ea4977bfc6"
+      },
+      "worker_sha256": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445"
+    },
+    "semantic": {
+      "id": "public-openmc-0.15.3-arm64-v1",
+      "mpi": false,
+      "native_threads": 1,
+      "openmc": "0.15.3",
+      "openmc_commit": "27e38e894697bb32a1dac7848d2618818b6b8daf",
+      "platform": "linux/arm64",
+      "recipe_sha256": {
+        "evaluator/runtime/idle.py": "3c5109830f965bcd2bf9726dd4c99de3a5c28ef21b2475ed0a12e3dc1188713e",
+        "evaluator/runtime/probe.py": "6b6b7897b199a65cff5b9018d28271aed97137773ca45788c3ce0497eca50024",
+        "evaluator/runtime/transport_worker.py": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445",
+        "reproducibility/runtime/Dockerfile": "332d98cf39815854b812b009f06192c16eecf570d68b8e1a6cd568bbbe436830",
+        "reproducibility/runtime/requirements.txt": "b401002f1f493822a70265e14c5b5703272a11e67f6a42fa9866f1cfb044475b"
+      }
+    },
+    "transport_image": "sha256:f94378e26f67a49c87232c27a740512736ae9c21315f37362f5615eb0d1c4e4d"
+  },
+  "data": {
+    "files": {
+      "H1.h5": {
+        "bytes": 327696,
+        "sha256": "5252b5e931c7d5aa6bab34867e77b158b9d3dafbf99ecd5c6758379955eebe2b",
+        "tables": [
+          [
+            "neutron",
+            "H1"
+          ]
+        ]
+      },
+      "O16.h5": {
+        "bytes": 8748896,
+        "sha256": "6e321e89a0050722f45711b220a4d49f9fbb5ec91ba41e240c0492c7c45025a5",
+        "tables": [
+          [
+            "neutron",
+            "O16"
+          ]
+        ]
+      },
+      "U235.h5": {
+        "bytes": 168040840,
+        "sha256": "c8588197fb3135bf51e95451548e829ff734a2279cc9df4b9541daa1e7df6d60",
+        "tables": [
+          [
+            "neutron",
+            "U235"
+          ]
+        ]
+      },
+      "U238.h5": {
+        "bytes": 119489136,
+        "sha256": "d6e8d35ec3812dbb44b063594a2d3fd84fd84d9f668bec8dfaeecc2abf1c3f8e",
+        "tables": [
+          [
+            "neutron",
+            "U238"
+          ]
+        ]
+      },
+      "Zr90.h5": {
+        "bytes": 7333872,
+        "sha256": "cde7bf3f29552606b23f308df4d4c9c74aa45aea7a1e1242cb936b706d1e2685",
+        "tables": [
+          [
+            "neutron",
+            "Zr90"
+          ]
+        ]
+      },
+      "Zr91.h5": {
+        "bytes": 16150128,
+        "sha256": "874ec8bd95a4768b4cfd7f63189a5ca2c0501e5589e6c7a544eaa10c03cd5ef9",
+        "tables": [
+          [
+            "neutron",
+            "Zr91"
+          ]
+        ]
+      },
+      "Zr92.h5": {
+        "bytes": 8195536,
+        "sha256": "f1eb825052b7023e354cb2bd2c3fdbd066f8ea42eb6d2e47a8fdf8101a2762f3",
+        "tables": [
+          [
+            "neutron",
+            "Zr92"
+          ]
+        ]
+      },
+      "Zr94.h5": {
+        "bytes": 7656384,
+        "sha256": "e976618e62bfb217791b2cb505793102082572d48014d8595ce24060f20c9600",
+        "tables": [
+          [
+            "neutron",
+            "Zr94"
+          ]
+        ]
+      },
+      "Zr96.h5": {
+        "bytes": 4785112,
+        "sha256": "5dfca31688a28f156ccb443ef195aa1923821532728ba12b5e7002b2746c6ba7",
+        "tables": [
+          [
+            "neutron",
+            "Zr96"
+          ]
+        ]
+      },
+      "c_H_in_H2O.h5": {
+        "bytes": 2634154032,
+        "sha256": "52d106ff05b03257eb184a61b6ab01d7aac550017a8ef98a83d3a7ea30f98253",
+        "tables": [
+          [
+            "thermal",
+            "c_H_in_H2O"
+          ]
+        ]
+      }
+    },
+    "index_sha256": "34abcff5361eda11798e4e4da51efa7d824159065837c8677c12ac576fbc185c",
+    "snapshot": "read_only_host_mount_with_before_after_hash_checks"
+  },
+  "reference": {
+    "kind": "public-pin-cell-demo-reference-v1",
+    "manifest_sha256": "921fceb53b8f3ad4afb16ae682e6e5ba1eb5643df4f4c8b319458adf34cbd2dd",
+    "primary_mean": {
+      "mean": 1.4488925454032306,
+      "std_dev": 0.00016175366894689348,
+      "uncertainty": "one sigma"
+    },
+    "scientific_review": "public_demo_only",
+    "historical_reference": false
+  },
+  "candidate_sha256": "2f32763c53f49ab0c140f8803829d6375eed2dc492d5c775a3cfb8af6cad1e32",
+  "final_model": {
+    "path": "export/artifacts/model.xml",
+    "sha256": "7111a76153e486871cc0df4f5954bbd9661e0d1dc8953b3e6d327d4fd1463011",
+    "bytes": 2843
+  },
+  "status": "assessed",
+  "contract_status": true,
+  "gates": {
+    "model_builds": {
+      "passed": true,
+      "cause": null
+    },
+    "openmc_runs": {
+      "passed": true,
+      "cause": null
+    },
+    "valid_geometry": {
+      "passed": true,
+      "cause": null
+    },
+    "required_data": {
+      "passed": true,
+      "cause": null
+    },
+    "finite_statepoint": {
+      "passed": true,
+      "cause": null
+    },
+    "required_observables": {
+      "passed": true,
+      "cause": null
+    }
+  },
+  "checks": {
+    "geometry": {
+      "interfaces": true,
+      "extent_and_map": true,
+      "domain": true,
+      "boundaries": true
+    },
+    "materials": {
+      "composition": true,
+      "density": true,
+      "thermal_scattering": true,
+      "temperature": true
+    },
+    "physics_settings": {
+      "physics": true,
+      "sampling": true,
+      "source": true,
+      "entropy_mesh_and_output": true
+    },
+    "keff": {
+      "equivalence_demonstrated": true
+    },
+    "statistical_quality": {
+      "precision": true,
+      "entropy_screen": true
+    },
+    "engineering_consistency": {
+      "leakage_probability": true,
+      "leakage_boundary_consistency": true
+    }
+  },
+  "native_completion": true,
+  "native_execution": {
+    "status": "calculated_unreviewed",
+    "elapsed_seconds": 301.232,
+    "sampling": {
+      "particles": 10000,
+      "batches": 400,
+      "inactive": 100,
+      "generations_per_batch": 2,
+      "seed": 1
+    }
+  },
+  "candidate_keff": {
+    "mean": 1.4481972350919354,
+    "std_dev": 0.0003414972628200393,
+    "uncertainty": "one sigma"
+  },
+  "reference_keff": {
+    "mean": 1.4488925454032306,
+    "std_dev": 0.00016175366894689348,
+    "uncertainty": "one sigma"
+  },
+  "comparison": {
+    "delta_pcm": -69.53103112952164,
+    "combined_sigma_pcm": 37.78685352491792,
+    "standardized_difference": -1.8400852318563792,
+    "interval_pcm": [
+      -143.59326403836076,
+      4.531201779317485
+    ],
+    "margin_pcm": 150.0,
+    "status": "agreement"
+  },
+  "diagnostic_score": {
+    "format": "weighted-keff-score-v2",
+    "applicable_points": 70,
+    "not_applicable": {
+      "flux_spectrum": 10,
+      "reaction_rate_power": 10,
+      "other_observables": 5
+    },
+    "grading_enabled": false,
+    "strict_correct": true,
+    "status": "scored",
+    "score": 100.0,
+    "earned_points": 70.0,
+    "categories": {
+      "geometry": {
+        "fraction": 1.0,
+        "earned_points": 20.0,
+        "checks": {
+          "interfaces": true,
+          "extent_and_map": true,
+          "domain": true,
+          "boundaries": true
+        }
+      },
+      "materials": {
+        "fraction": 1.0,
+        "earned_points": 15.0,
+        "checks": {
+          "composition": true,
+          "density": true,
+          "thermal_scattering": true,
+          "temperature": true
+        }
+      },
+      "physics_settings": {
+        "fraction": 1.0,
+        "earned_points": 10.0,
+        "checks": {
+          "physics": true,
+          "sampling": true,
+          "source": true,
+          "entropy_mesh_and_output": true
+        }
+      },
+      "keff": {
+        "fraction": 1.0,
+        "earned_points": 15.0,
+        "checks": {
+          "equivalence_demonstrated": true
+        }
+      },
+      "statistical_quality": {
+        "fraction": 1.0,
+        "earned_points": 5.0,
+        "checks": {
+          "precision": true,
+          "entropy_screen": true
+        }
+      },
+      "engineering_consistency": {
+        "fraction": 1.0,
+        "earned_points": 5.0,
+        "checks": {
+          "leakage_probability": true,
+          "leakage_boundary_consistency": true
+        }
+      }
+    }
+  },
+  "verification_status": "coherent",
+  "verified_protocol_success": true,
+  "elapsed_seconds": 309.367,
+  "cleanup_confirmed": true,
+  "limitations": [
+    "One public handwritten computational example; no LLM invocation or historical study replay.",
+    "Same existing scoring and uncalibrated +/-150 pcm criterion; grading activation remains disabled.",
+    "Finite geometry/boundary observations; shared model/data biases and unproven convergence remain.",
+    "The public reference emitted a Zr96 probability-table warning at 294 K; its shared-data bias is not quantified.",
+    "Exact numerical reruns are only claimed for the same local runtime, data and seed after testing.",
+    "Raw local assessment receipts can contain host paths; share report.json/report.md only."
+  ]
+}

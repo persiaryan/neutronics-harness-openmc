@@ -1,0 +1,66 @@
+{
+  "all_phases_used_new_explicit_public_images": true,
+  "candidate_keff": {
+    "mean": 1.4481972350919354,
+    "std_dev": 0.0003414972628200393,
+    "uncertainty": "one sigma"
+  },
+  "comparison": {
+    "combined_sigma_pcm": 37.78685352491792,
+    "delta_pcm": -69.53103112952164,
+    "interval_pcm": [
+      -143.59326403836076,
+      4.531201779317485
+    ],
+    "margin_pcm": 150.0,
+    "standardized_difference": -1.8400852318563792,
+    "status": "agreement"
+  },
+  "diagnostic_score": 100.0,
+  "equal_to_development_repeat": {
+    "candidate_keff": true,
+    "candidate_sha256": true,
+    "checks": true,
+    "cleanup_confirmed": true,
+    "comparison": true,
+    "contract_status": true,
+    "convergence_csv_bytes": true,
+    "data": true,
+    "diagnostic_score": true,
+    "final_model": true,
+    "gates": true,
+    "native_completion": true,
+    "reference": true,
+    "reference_keff": true,
+    "status": true,
+    "verification_status": true,
+    "verified_protocol_success": true
+  },
+  "exit_code": 0,
+  "format": "fresh-native-validation-v1",
+  "grading_enabled": false,
+  "limitations": [
+    "One shared host and Docker daemon; not a separate clean-machine VM.",
+    "Fresh source-only no-cache builds and new data acquisition; no preloaded project image or private reference used.",
+    "No cross-machine, x86_64, hermetic-build or raw statepoint byte-equivalence claim.",
+    "No model calls or historical study replay."
+  ],
+  "native_elapsed_seconds": 301.232,
+  "phase_image_ids": {
+    "export": "sha256:89a53ab4e2242c35b89d3eef8c2a7489fb45f2b6eeb42d19adefe78135af9be7",
+    "export-boundaries": "sha256:89a53ab4e2242c35b89d3eef8c2a7489fb45f2b6eeb42d19adefe78135af9be7",
+    "export-inspection": "sha256:89a53ab4e2242c35b89d3eef8c2a7489fb45f2b6eeb42d19adefe78135af9be7",
+    "transport": "sha256:f94378e26f67a49c87232c27a740512736ae9c21315f37362f5615eb0d1c4e4d"
+  },
+  "report_sha256": "ae1fef75dbc0f67608aeb7f3021520a5bbc8af9039edf4a1426c7eb7882cb974",
+  "review_sha256": "c837bc079804e989a152b095b9d44ca93ad5334b9cb73db7338170eb47d2dcc0",
+  "source": "anonymous HTTPS GitHub clone",
+  "source_commit": "908f34210672c2ff846bb3383ff1c949f85b3f70",
+  "status": "assessed",
+  "total_elapsed_seconds": 309.367,
+  "tracked_tree_clean_before_and_after": true,
+  "verification_status": "coherent",
+  "verified_protocol_success": true,
+  "warning": "WARNING: Negative value(s) found on probability table for nuclide Zr96 at 294K",
+  "warning_impact": "unquantified"
+}
