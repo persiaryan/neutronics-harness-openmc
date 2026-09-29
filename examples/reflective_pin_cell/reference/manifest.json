@@ -1,0 +1,330 @@
+{
+  "format": "public-pin-cell-demo-reference-v1",
+  "case": "reflective_pin_cell",
+  "grading_enabled": false,
+  "historical_reference": false,
+  "scope": "computational_reproduction_fixture_not_experimental_validation",
+  "created_utc": "2026-09-29T20:05:32.665387+00:00",
+  "public_task_sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+  "source_sha256": {
+    "examples/reflective_pin_cell/reference_model.py": "9e6b1b3959e08673ea9497a07151164fe28d15c5cf5b844c80945936b297aec7",
+    "reproducibility/reference.py": "7fab2bde73781e7fc707aa139ebd3c95d80c590a0b1c7470df6aea6dfef03900"
+  },
+  "runtime_semantic": {
+    "id": "public-openmc-0.15.3-arm64-v1",
+    "openmc": "0.15.3",
+    "platform": "linux/arm64",
+    "openmc_commit": "27e38e894697bb32a1dac7848d2618818b6b8daf",
+    "native_threads": 1,
+    "mpi": false,
+    "recipe_sha256": {
+      "reproducibility/runtime/Dockerfile": "332d98cf39815854b812b009f06192c16eecf570d68b8e1a6cd568bbbe436830",
+      "reproducibility/runtime/requirements.txt": "b401002f1f493822a70265e14c5b5703272a11e67f6a42fa9866f1cfb044475b",
+      "evaluator/runtime/idle.py": "3c5109830f965bcd2bf9726dd4c99de3a5c28ef21b2475ed0a12e3dc1188713e",
+      "evaluator/runtime/probe.py": "6b6b7897b199a65cff5b9018d28271aed97137773ca45788c3ce0497eca50024",
+      "evaluator/runtime/transport_worker.py": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445"
+    }
+  },
+  "generation_runtime": {
+    "export_image": "sha256:7c3b896d9744cf39e71eec5efb618f66542ab5a2a47b132056294ca39ec212bc",
+    "format": "public-runtime-binding-v1",
+    "native_identity": {
+      "solver_files": {
+        "/opt/openmc/bin/openmc": "81d99b22b466116abc5069645dd85310cf98c5a2d4914900c6029c9c3821f634",
+        "/opt/openmc/lib/libopenmc.so": "4df23e8387afe6667f698498d360f201e013ee11751c7ac1f2c402ea4977bfc6"
+      },
+      "worker_sha256": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445"
+    },
+    "semantic": {
+      "id": "public-openmc-0.15.3-arm64-v1",
+      "mpi": false,
+      "native_threads": 1,
+      "openmc": "0.15.3",
+      "openmc_commit": "27e38e894697bb32a1dac7848d2618818b6b8daf",
+      "platform": "linux/arm64",
+      "recipe_sha256": {
+        "evaluator/runtime/idle.py": "3c5109830f965bcd2bf9726dd4c99de3a5c28ef21b2475ed0a12e3dc1188713e",
+        "evaluator/runtime/probe.py": "6b6b7897b199a65cff5b9018d28271aed97137773ca45788c3ce0497eca50024",
+        "evaluator/runtime/transport_worker.py": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445",
+        "reproducibility/runtime/Dockerfile": "332d98cf39815854b812b009f06192c16eecf570d68b8e1a6cd568bbbe436830",
+        "reproducibility/runtime/requirements.txt": "b401002f1f493822a70265e14c5b5703272a11e67f6a42fa9866f1cfb044475b"
+      }
+    },
+    "transport_image": "sha256:66f6511f0cf0ab8dbae07440ad3ff23b5abc43e7d4e6451e98717e2e49222609"
+  },
+  "data": {
+    "files": {
+      "H1.h5": {
+        "bytes": 327696,
+        "sha256": "5252b5e931c7d5aa6bab34867e77b158b9d3dafbf99ecd5c6758379955eebe2b",
+        "tables": [
+          [
+            "neutron",
+            "H1"
+          ]
+        ]
+      },
+      "O16.h5": {
+        "bytes": 8748896,
+        "sha256": "6e321e89a0050722f45711b220a4d49f9fbb5ec91ba41e240c0492c7c45025a5",
+        "tables": [
+          [
+            "neutron",
+            "O16"
+          ]
+        ]
+      },
+      "U235.h5": {
+        "bytes": 168040840,
+        "sha256": "c8588197fb3135bf51e95451548e829ff734a2279cc9df4b9541daa1e7df6d60",
+        "tables": [
+          [
+            "neutron",
+            "U235"
+          ]
+        ]
+      },
+      "U238.h5": {
+        "bytes": 119489136,
+        "sha256": "d6e8d35ec3812dbb44b063594a2d3fd84fd84d9f668bec8dfaeecc2abf1c3f8e",
+        "tables": [
+          [
+            "neutron",
+            "U238"
+          ]
+        ]
+      },
+      "Zr90.h5": {
+        "bytes": 7333872,
+        "sha256": "cde7bf3f29552606b23f308df4d4c9c74aa45aea7a1e1242cb936b706d1e2685",
+        "tables": [
+          [
+            "neutron",
+            "Zr90"
+          ]
+        ]
+      },
+      "Zr91.h5": {
+        "bytes": 16150128,
+        "sha256": "874ec8bd95a4768b4cfd7f63189a5ca2c0501e5589e6c7a544eaa10c03cd5ef9",
+        "tables": [
+          [
+            "neutron",
+            "Zr91"
+          ]
+        ]
+      },
+      "Zr92.h5": {
+        "bytes": 8195536,
+        "sha256": "f1eb825052b7023e354cb2bd2c3fdbd066f8ea42eb6d2e47a8fdf8101a2762f3",
+        "tables": [
+          [
+            "neutron",
+            "Zr92"
+          ]
+        ]
+      },
+      "Zr94.h5": {
+        "bytes": 7656384,
+        "sha256": "e976618e62bfb217791b2cb505793102082572d48014d8595ce24060f20c9600",
+        "tables": [
+          [
+            "neutron",
+            "Zr94"
+          ]
+        ]
+      },
+      "Zr96.h5": {
+        "bytes": 4785112,
+        "sha256": "5dfca31688a28f156ccb443ef195aa1923821532728ba12b5e7002b2746c6ba7",
+        "tables": [
+          [
+            "neutron",
+            "Zr96"
+          ]
+        ]
+      },
+      "c_H_in_H2O.h5": {
+        "bytes": 2634154032,
+        "sha256": "52d106ff05b03257eb184a61b6ab01d7aac550017a8ef98a83d3a7ea30f98253",
+        "tables": [
+          [
+            "thermal",
+            "c_H_in_H2O"
+          ]
+        ]
+      }
+    },
+    "index_sha256": "34abcff5361eda11798e4e4da51efa7d824159065837c8677c12ac576fbc185c",
+    "snapshot": "read_only_host_mount_with_before_after_hash_checks"
+  },
+  "data_acquisition": {
+    "archive_bytes": 9661406540,
+    "archive_sha256": "b7ad59cb4a3d76d8a291326093a98507f8d24b6e6af629116d3f7dc85f83c4cb",
+    "data": {
+      "files": {
+        "H1.h5": {
+          "bytes": 327696,
+          "sha256": "5252b5e931c7d5aa6bab34867e77b158b9d3dafbf99ecd5c6758379955eebe2b",
+          "tables": [
+            [
+              "neutron",
+              "H1"
+            ]
+          ]
+        },
+        "O16.h5": {
+          "bytes": 8748896,
+          "sha256": "6e321e89a0050722f45711b220a4d49f9fbb5ec91ba41e240c0492c7c45025a5",
+          "tables": [
+            [
+              "neutron",
+              "O16"
+            ]
+          ]
+        },
+        "U235.h5": {
+          "bytes": 168040840,
+          "sha256": "c8588197fb3135bf51e95451548e829ff734a2279cc9df4b9541daa1e7df6d60",
+          "tables": [
+            [
+              "neutron",
+              "U235"
+            ]
+          ]
+        },
+        "U238.h5": {
+          "bytes": 119489136,
+          "sha256": "d6e8d35ec3812dbb44b063594a2d3fd84fd84d9f668bec8dfaeecc2abf1c3f8e",
+          "tables": [
+            [
+              "neutron",
+              "U238"
+            ]
+          ]
+        },
+        "Zr90.h5": {
+          "bytes": 7333872,
+          "sha256": "cde7bf3f29552606b23f308df4d4c9c74aa45aea7a1e1242cb936b706d1e2685",
+          "tables": [
+            [
+              "neutron",
+              "Zr90"
+            ]
+          ]
+        },
+        "Zr91.h5": {
+          "bytes": 16150128,
+          "sha256": "874ec8bd95a4768b4cfd7f63189a5ca2c0501e5589e6c7a544eaa10c03cd5ef9",
+          "tables": [
+            [
+              "neutron",
+              "Zr91"
+            ]
+          ]
+        },
+        "Zr92.h5": {
+          "bytes": 8195536,
+          "sha256": "f1eb825052b7023e354cb2bd2c3fdbd066f8ea42eb6d2e47a8fdf8101a2762f3",
+          "tables": [
+            [
+              "neutron",
+              "Zr92"
+            ]
+          ]
+        },
+        "Zr94.h5": {
+          "bytes": 7656384,
+          "sha256": "e976618e62bfb217791b2cb505793102082572d48014d8595ce24060f20c9600",
+          "tables": [
+            [
+              "neutron",
+              "Zr94"
+            ]
+          ]
+        },
+        "Zr96.h5": {
+          "bytes": 4785112,
+          "sha256": "5dfca31688a28f156ccb443ef195aa1923821532728ba12b5e7002b2746c6ba7",
+          "tables": [
+            [
+              "neutron",
+              "Zr96"
+            ]
+          ]
+        },
+        "c_H_in_H2O.h5": {
+          "bytes": 2634154032,
+          "sha256": "52d106ff05b03257eb184a61b6ab01d7aac550017a8ef98a83d3a7ea30f98253",
+          "tables": [
+            [
+              "thermal",
+              "c_H_in_H2O"
+            ]
+          ]
+        }
+      },
+      "index_sha256": "34abcff5361eda11798e4e4da51efa7d824159065837c8677c12ac576fbc185c",
+      "snapshot": "read_only_host_mount_with_before_after_hash_checks"
+    },
+    "dataset": "ENDF/B-VIII.1",
+    "processor": "NJOY2016.78",
+    "source_url": "https://anl.app.box.com/public/static/6qr7jezzihkj9p9esl5jn19qgpujyjyz.xz"
+  },
+  "rubric": {
+    "format": "private-weighted-keff-rubric-v2",
+    "sha256": "c7c7be041942d4b93fdf247dabc363c519e9ca28bfa883de50e7542e945f0650",
+    "applicable_points": 70
+  },
+  "sampling": {
+    "particles": 25000,
+    "batches": 800,
+    "inactive": 200,
+    "generations_per_batch": 2,
+    "seed": 19,
+    "source": "uniform"
+  },
+  "threads": 1,
+  "keff": {
+    "mean": 1.4488925454032306,
+    "std_dev": 0.00016175366894689348,
+    "uncertainty": "one sigma"
+  },
+  "convergence": {
+    "statistics": {
+      "entropy_bits": {
+        "second_minus_first": -0.0003487683432386035
+      }
+    },
+    "entropy_status": "produced"
+  },
+  "command": "python3 -B -m reproducibility.reference --runtime \"$RUNTIME\" --data-index \"$DATA_INDEX\" --data-receipt \"$DATA_RECEIPT\" --output \"$REFERENCE_EVIDENCE\" --package \"$REFERENCE_PACKAGE\"",
+  "files": {
+    "calculation.json": {
+      "sha256": "e260bcd68ead745ed1c36ac2bc0422d3395058b5bc4f9857b9d7aec40749f150",
+      "bytes": 1307
+    },
+    "convergence.csv": {
+      "sha256": "99f5d46b1bc42f4ddc45ae6044441b95d5a97a9cbee13bdc0ab8a38300b764f4",
+      "bytes": 75728
+    },
+    "data-acquisition.json": {
+      "sha256": "b983f129714277250f7d177b98419db97c970009bff3c84911bf174d42b9362f",
+      "bytes": 2843
+    },
+    "fidelity.json": {
+      "sha256": "d6cd52c517bd3554339a0a9b794fc8bfbab18267ff88129bc3ba998c6476b1dc",
+      "bytes": 35856
+    },
+    "model.xml": {
+      "sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+      "bytes": 2838
+    }
+  },
+  "limitations": [
+    "Separate public-specification transcription; no historical private reference bytes.",
+    "Computational reproduction fixture, not experimental validation or independent physics certification.",
+    "Stronger sampling and a different seed from candidate; shared OpenMC/data/model bias remains.",
+    "Finite geometry probes and entropy drift screen do not prove global geometry validity or convergence."
+  ]
+}

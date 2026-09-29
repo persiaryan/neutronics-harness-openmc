@@ -38,14 +38,14 @@ def artifact_inventory(folder):
     return result
 
 
-def export_outcome(folder, image, index, source_hash):
+def export_outcome(folder, image, index, source_hash, *, runtime=None):
     folder = Path(folder)
     value = receipts.container_phase(folder, image, index, source_hash)
     manifest = receipts.read(folder / 'manifest.json')
     contract = export_contract(manifest)
     if 'execution_profile' in manifest:
         from evaluator.profiles import execution_profile
-        profile = execution_profile(manifest['execution_profile']['id'], contract)
+        profile = execution_profile(manifest['execution_profile']['id'], contract, runtime=runtime)
         require(manifest['execution_profile'] == profile and manifest['wall_seconds'] == profile['budgets']['export']
                 and image == profile['export_image'], 'Export execution profile changed')
         timing = receipts.read(folder / 'host-timings.json')
