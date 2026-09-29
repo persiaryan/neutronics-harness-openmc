@@ -1,0 +1,65 @@
+{
+  "convergence": {
+    "entropy_status": "produced",
+    "statistics": {
+      "entropy_bits": {
+        "second_minus_first": -0.0003487683432386035
+      }
+    }
+  },
+  "descriptive_history_windows": {
+    "active_first_half": {
+      "entropy_bits": 5.295086351759358,
+      "k_generation": 1.449397581708486
+    },
+    "active_second_half": {
+      "entropy_bits": 5.294737583416119,
+      "k_generation": 1.4491489733571001
+    },
+    "inactive_first_half": {
+      "entropy_bits": 5.295202548523438,
+      "k_generation": 1.447173232682235
+    },
+    "inactive_second_half": {
+      "entropy_bits": 5.294896966161617,
+      "k_generation": 1.448552992672913
+    }
+  },
+  "execution_receipt_hashes": {
+    "data-after.json": "a5fe21b1680dccfd8e14b46da61a1ef341c4dd246054ac93ab146d2b57f3ad42",
+    "data-before.json": "a5fe21b1680dccfd8e14b46da61a1ef341c4dd246054ac93ab146d2b57f3ad42",
+    "openmc-process.json": "2c550be17d91f2e203a9b1fb6c3efe8e3e3c025de9c01426fef1e861a090d8ad",
+    "openmc-stderr.txt": "9eeaea7a27a1acf84481bfead9cc1200f81a0fa743f35613617f04eef00d8288",
+    "openmc-stdout.txt": "32c0174f08e0f15d608f59d4ed91608e35011007d0367f39026e01c177582140",
+    "result.json": "91388ef546d7e6d50df8c999d95584978ec41e11cbf694dba466fc5dad9bcacb",
+    "runtime-identity.json": "6ff497c9130d7dca4746be495d4cf8fb411c244a321b774d33357e4809ce78bc"
+  },
+  "history_limit": "Window means and existing entropy screen are descriptive checks, not a convergence proof or calibrated cross-section uncertainty.",
+  "native_warning": "WARNING: Negative value(s) found on probability table for nuclide Zr96 at 294K",
+  "reference_manifest_sha256": "921fceb53b8f3ad4afb16ae682e6e5ba1eb5643df4f4c8b319458adf34cbd2dd",
+  "result": {
+    "cleanup_confirmed": true,
+    "convergence_assessment": "not_performed",
+    "elapsed_seconds": 1382.61,
+    "keff": {
+      "mean": 1.4488925454032306,
+      "std_dev": 0.00016175366894689348,
+      "uncertainty": "one sigma"
+    },
+    "reference_comparison": "not_run",
+    "sampling": {
+      "batches": 800,
+      "generations_per_batch": 2,
+      "inactive": 200,
+      "particles": 25000,
+      "seed": 19
+    },
+    "scientific_fidelity": "not_checked",
+    "statepoint_validation": "passed",
+    "status": "calculated_unreviewed",
+    "transport": "completed",
+    "xml_load": "passed"
+  },
+  "source": "https://github.com/openmc-dev/openmc/blob/27e38e894697bb32a1dac7848d2618818b6b8daf/src/nuclide.cpp#L898",
+  "warning_review": "Pinned upstream loader detects negative URR table entries; sampled negative elastic/fission/capture cross sections are clipped in upstream code. No data or solver behavior was changed. Impact is unquantified; reference is computational reproduction only."
+}

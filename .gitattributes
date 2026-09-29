@@ -34,3 +34,8 @@ tests/fixtures -export-ignore
 tests/fixtures/* export-ignore
 tests/fixtures/__init__.py -export-ignore
 tests/fixtures/responses.py -export-ignore
+
+# Preserve the separately generated public reference's sealed bytes (CSV uses CRLF).
+examples/reflective_pin_cell/reference/** -text -whitespace
+tests/test_public_reproducibility.py -export-ignore
+tests/fixtures/boundary_receipts.py -export-ignore

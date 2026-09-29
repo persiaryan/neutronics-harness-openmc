@@ -130,17 +130,69 @@ task/prompt bundles and budgeted plans. They do not execute an agent or transpor
 The public tests are a portable subset using synthetic inputs and local doubles;
 they do not replace native integration or scientific qualification.
 
-### Native execution prerequisites
+### One public native example
 
-The operational environment is pinned to OpenMC 0.15.3 and Linux ARM64 containers.
-Live authoring also needs the pinned Codex image and subscription authentication.
-Credentials stay in the host relay. The adapter is version-specific; compatibility
-with arbitrary CLI versions or providers has not been established.
+The handwritten `reflective_pin_cell` fixture can be assessed through the real
+isolated factory, scientific inspector, boundary observer, OpenMC transport and
+retained-evidence verifier. This is a separate computational demonstration with
+a public reference, not a historical LLM submission.
 
-**This source release is not a self-contained native benchmark distribution.**
-Reviewed dependency images, nuclear data and sealed reference packages are not
-distributed here. Existing build commands wrap pinned local source images; they
-are not clean-machine dependency acquisition recipes. See [execution profiles](evaluator/profiles.py),
+Supported: **native Linux ARM64 Docker**, including Docker Desktop on Apple
+Silicon, host Python 3.12+, and OpenMC 0.15.3 built from public source. x86_64 and
+emulation are not qualified. Allow 8 GB Docker memory, 12 GB free Docker disk,
+a 9.7 GB upstream download and 3 GB retained nuclear data. No provider account,
+private reference or host OpenMC installation is needed.
+
+From a fresh clone containing this milestone (before merge, add
+`--branch feat/reproducibility-v1` to `git clone`):
+
+```sh
+git clone https://github.com/persiaryan/neutronics-harness-openmc.git
+cd neutronics-harness-openmc
+
+python3 -B -m unittest discover -s tests -p 'test_*.py' -v
+python3 -B -m prompts.prepare --case reflective_pin_cell --output scratch/public-prompt
+python3 -B -m reproducibility.build_runtime --no-cache --output scratch/public-runtime.json
+
+DATA_DIR="$(mktemp -d "${TMPDIR:-/tmp}/nh-public-data.XXXXXX")/tables"
+python3 -B -m reproducibility.data --source download --output "$DATA_DIR" \
+  --expected examples/reflective_pin_cell/reference/data-acquisition.json \
+  --receipt scratch/public-data-receipt.json
+DATA_INDEX="$DATA_DIR/cross_sections.xml"
+
+python3 -B -m examples.reproduce_reflective_pin_cell \
+  --runtime scratch/public-runtime.json --data-index "$DATA_INDEX" \
+  --output scratch/public-example
+```
+
+Read `scratch/public-example/report.json` and `report.md`. Exit zero requires
+coherent evidence and verified protocol success, not merely completed transport.
+The reference and example preserve existing scoring and the uncalibrated ±150 pcm
+criterion. Neither establishes experimental validation or universal correctness.
+
+See [the complete reproduction guide](docs/reproducibility-v1.md) for dependency
+pins, lawful upstream data acquisition, reference provenance, identity checks,
+rerun controls and limitations.
+
+| Reproducibility level | Status |
+|---|---|
+| Portable code/tests | Public, standard-library workflow |
+| Prompt/plan preparation | Public, no model calls |
+| One native public evaluator example | ARM64/OpenMC 0.15.3 fixture above |
+| Live LLM authoring | External provider authentication and separate runtime required |
+| Historical Request-16 replay | Not publicly reproducible |
+
+### Live authoring and historical assessment
+
+Live authoring still needs the pinned Codex image and subscription
+authentication. Credentials stay in the host relay; arbitrary CLI/provider
+compatibility is not established. The public runtime above is for the
+demonstration evaluator, not an authoring-image replacement.
+
+**The full historical benchmark is not a self-contained public distribution.**
+Historical dependency images, nuclear data and sealed grading references are
+not distributed here. Older build commands wrap pinned local source images.
+See [execution profiles](evaluator/profiles.py),
 [factory execution](evaluator/MODEL_FACTORY.md) and [transport](evaluator/TRANSPORT.md).
 
 With those dependencies supplied privately, the existing entry points are:
@@ -186,6 +238,8 @@ not universal physical correctness. Diagnostic partial scores remain secondary.
 | [evaluator/](evaluator/) | Contained factory export and native transport |
 | [evaluation/](evaluation/) | Scientific observation, comparisons, scoring and evidence verification |
 | [experiments/](experiments/) | Public prepare/execute/assess workflow |
+| [reproducibility/](reproducibility/) | Public runtime build, data acquisition and demonstration reference generation |
+| [examples/](examples/) | Handwritten native fixture, public reference and assessment runner |
 | [tests/](tests/) | Portable synthetic and local-double regressions |
 | [docs/](docs/) | Public study summaries and reproducible figure |
 | [RESULTS.md](RESULTS.md) | Results and prospective research questions |

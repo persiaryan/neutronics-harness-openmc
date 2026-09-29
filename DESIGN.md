@@ -217,8 +217,22 @@ policy and portable synthetic regressions. Private: reference implementations an
 answers, campaigns, raw model traces, native qualification evidence and external
 runtime/data artifacts. Private-data tests and study-specific continuation commands
 are excluded from the public snapshot, not deleted from research history.
-Reference-based assessment cannot complete without private packages; missing data
-must never be replaced with fabricated expectations or bypassed verification.
+Historical reference-based assessment cannot complete without its private packages.
+The separately selected [public pin-cell demonstration](docs/reproducibility-v1.md)
+uses a newly generated public reference; it never substitutes for a missing private
+package. Missing data must never be replaced with fabricated expectations or
+bypassed verification.
+
+For that one example, an explicit `runtime` binding supplies locally built immutable
+export/transport image IDs, native binary identities and the pinned public recipe.
+`evaluation.candidates.run.evaluate()` and `verify.review_assessment()` receive
+both `reference` and `runtime`; defaults retain the historical private route.
+The same factory, XML admission, observer workers, comparators, transport, rubric
+and verifier run with those explicit dependencies. Rebuilding an image does not
+remove receipt checks: the local image IDs must still agree throughout execution
+and review. The binding is operator-owned configuration, not signed attestation.
+The public demonstration reference is inspectable by users, so it is unsuitable
+as a hidden grading answer for an agent study.
 
 The private historical test count is not the public test count. Passing local
 doubles does not imply native transport, calibrated uncertainty, independent
