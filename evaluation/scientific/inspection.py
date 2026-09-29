@@ -48,17 +48,17 @@ def admit(xml):
     return root
 
 
-def create_args(name):
+def create_args(name, image=IMAGE):
     return ['create','--name',name,'--label',LABEL+'='+name,'--network','none',
             '--read-only','--cap-drop','ALL','--security-opt','no-new-privileges=true',
             '--user','1000:1000','--pids-limit','128','--memory','1g','--cpus','2',
-            '--init','--log-driver','none','--tmpfs','/tmp:'+TMPFS['/tmp'], IMAGE]
+            '--init','--log-driver','none','--tmpfs','/tmp:'+TMPFS['/tmp'], image]
 
 
-def verify(info):
+def verify(info, image=IMAGE):
     h,c = info['HostConfig'], info['Config']
     checks = {
-        'pinned_image': info['Image'] == IMAGE,
+        'pinned_image': info['Image'] == image,
         'no_mounts': not info['Mounts'] and not h.get('Binds'),
         'network_none': h['NetworkMode'] == 'none',
         'readonly_root': h['ReadonlyRootfs'] is True,
@@ -77,7 +77,7 @@ def verify(info):
     return checks
 
 
-def inspect_xml(xml, points, output, *, wall_seconds=60, capability='legacy'):
+def inspect_xml(xml, points, output, *, wall_seconds=60, capability='legacy', image=IMAGE):
     """No retries. Preserve the failed run and refuse leftovers before a new run."""
     output = Path(output)
     if capability not in ('legacy', 'effective-boundary-v2') or capability != 'legacy' and points:
@@ -98,20 +98,20 @@ def inspect_xml(xml, points, output, *, wall_seconds=60, capability='legacy'):
         (output/'input.json').write_bytes(payload)
         (output/'worker.py').write_bytes(worker)
         write_json(output/'manifest.json', {'format':('private-scientific-inspection-v3' if capability=='legacy'
-                                                     else 'private-boundary-inspection-v2'),'image_id':IMAGE,
+                                                     else 'private-boundary-inspection-v2'),'image_id':image,
             'model_xml_sha256':digest(xml),'worker_sha256':digest(worker),'input_sha256':digest(payload),
             'points':len(points),'wall_seconds':wall_seconds,'candidate_python_access':False,
             'nuclear_data_access':False,'host_mounts':False,'native_transport':'not_run'})
         if docker('ps','-aq','--filter','label='+LABEL):
             raise RuntimeError('Unreconciled scientific inspector container exists')
-        image = json.loads(docker('image','inspect',IMAGE))[0]
-        if image['Id'] != IMAGE:
+        image_info = json.loads(docker('image','inspect',image))[0]
+        if image_info['Id'] != image:
             raise RuntimeError('Inspector image mismatch')
         attempted = True
-        docker(*create_args(name))
+        docker(*create_args(name, image))
         info = json.loads(docker('inspect',name))[0]
         write_json(output/'container-inspect.json',info)
-        write_json(output/'container-checks.json',verify(info))
+        write_json(output/'container-checks.json',verify(info, image))
         docker('start',name)
         execution = bounded(['docker','exec','-i',name,'python','-I','-B','-c',worker.decode()],
                             timeout=wall_seconds, limit=2_000_000, data=payload)

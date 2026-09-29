@@ -79,8 +79,13 @@ class PhaseFailure(Exception):
     pass
 
 
-def transport(export, output, *, index, image=IMAGE, wall_seconds=300):
-    return _transport(export, output, index=index, image=image, wall_seconds=wall_seconds)
+def transport(export, output, *, index, image=IMAGE, wall_seconds=300, runtime=None):
+    if runtime is not None:
+        from evaluator.public_runtime import validate
+        validate(runtime)
+        if image != runtime['transport_image']:
+            raise ValueError('Transport image differs from explicit runtime binding')
+    return _transport(export, output, index=index, image=image, wall_seconds=wall_seconds, runtime=runtime)
 
 
 def smoke_xml(xml, output, *, index, provenance, wall_seconds=60):
@@ -91,7 +96,7 @@ def smoke_xml(xml, output, *, index, provenance, wall_seconds=60):
                       smoke_input=(xml, provenance))
 
 
-def _transport(export, output, *, index, image, wall_seconds, smoke_input=None):
+def _transport(export, output, *, index, image, wall_seconds, smoke_input=None, runtime=None):
     if output.exists():
         raise FileExistsError('Refusing to overwrite transport evidence')
     if not 1 <= wall_seconds <= 1800:
@@ -136,7 +141,7 @@ def _transport(export, output, *, index, image, wall_seconds, smoke_input=None):
         lifecycle = {'container_name': name, 'volume_name': name + '-work', 'state': 'creating'}
         run.write_json(output / 'lifecycle.json', lifecycle)
         manifest = {'format': 'isolated-xml-transport-v1' if smoke_input is None else 'candidate-smoke-transport-v1', 'image_id': image_id,
-                    'native_dependency_image_id': NATIVE_ID, 'model_xml_sha256': run.digest(xml),
+                    'native_dependency_image_id': NATIVE_ID if runtime is None else None, 'model_xml_sha256': run.digest(xml),
                     'candidate_sha256': provenance['candidate_sha256'],
                     'container_name': name, 'wall_seconds': wall_seconds, 'threads': 1,
                     'memory_bytes': MEMORY, 'work_bytes': 268435456,
