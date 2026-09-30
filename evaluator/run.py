@@ -234,12 +234,12 @@ def cleanup(name):
         raise RuntimeError('Evaluator workspace volume remains')
 
 
-def evaluate(candidate, output, *, index, contract='openmc-model-factory-v1', image=IMAGE, wall_seconds=None, execution_profile='factory-serial-v1'):
+def evaluate(candidate, output, *, index, contract='openmc-model-factory-v1', image=IMAGE, wall_seconds=None, execution_profile='factory-serial-v1', runtime=None):
     from evaluator.contracts import CONTRACTS, FACTORY
     if contract not in CONTRACTS:
         raise ValueError('Explicit supported delivery contract is required')
     from evaluator.profiles import execution_profile as resolve_profile
-    profile = resolve_profile(execution_profile, contract)
+    profile = resolve_profile(execution_profile, contract, runtime=runtime)
     if wall_seconds not in (None, profile['budgets']['export']):
         raise ValueError('Export budget differs from selected execution profile')
     wall_seconds = profile['budgets']['export']
@@ -263,7 +263,7 @@ def evaluate(candidate, output, *, index, contract='openmc-model-factory-v1', im
     for file in ('run.py', 'inspect.py', 'build.py', 'process.py', 'contracts.py', 'factory.py'):
         (output / ('evaluator-' + file)).write_bytes((Path(__file__).parent / file).read_bytes())
     manifest = {'format': 'isolated-export-evaluation-v2', 'candidate_sha256': digest(source),
-        'image_id': image_id, 'dependency_image_id': DEPENDENCY_ID, 'container_name': name,
+        'image_id': image_id, 'dependency_image_id': DEPENDENCY_ID if runtime is None else None, 'container_name': name,
         'wall_seconds': wall_seconds, 'data_directory': str(index.parent),
         'host_candidate_execution': 'not_run', 'scope': 'model_factory_and_xml_envelope',
         'reference_access': False, 'automatic_repair': False, 'transport': 'not_run',

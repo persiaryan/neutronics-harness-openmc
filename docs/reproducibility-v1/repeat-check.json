@@ -1,0 +1,78 @@
+{
+  "candidate_sha256": "2f32763c53f49ab0c140f8803829d6375eed2dc492d5c775a3cfb8af6cad1e32",
+  "comparison": {
+    "combined_sigma_pcm": 37.78685352491792,
+    "delta_pcm": -69.53103112952164,
+    "interval_pcm": [
+      -143.59326403836076,
+      4.531201779317485
+    ],
+    "margin_pcm": 150.0,
+    "standardized_difference": -1.8400852318563792,
+    "status": "agreement"
+  },
+  "elapsed_seconds": [
+    317.367,
+    344.027
+  ],
+  "equal": {
+    "candidate_keff": true,
+    "candidate_sha256": true,
+    "checks": true,
+    "cleanup_confirmed": true,
+    "comparison": true,
+    "contract_status": true,
+    "convergence_csv_bytes": true,
+    "data": true,
+    "diagnostic_score": true,
+    "final_model": true,
+    "gates": true,
+    "native_completion": true,
+    "reference": true,
+    "reference_keff": true,
+    "runtime": true,
+    "status": true,
+    "verification_status": true,
+    "verified_protocol_success": true
+  },
+  "final_xml_sha256": "7111a76153e486871cc0df4f5954bbd9661e0d1dc8953b3e6d327d4fd1463011",
+  "format": "same-local-runtime-repeat-v1",
+  "keff": {
+    "mean": 1.4481972350919354,
+    "std_dev": 0.0003414972628200393,
+    "uncertainty": "one sigma"
+  },
+  "report_sha256": {
+    "example-01": "2238569b338da3711c30d8e0f3e1d30fce6942ab75373b3ee4e0f1bdce07401a",
+    "example-02": "277fddec32773fcad7950202db6d95e12c30d2fa4b84f6cbddd1f6e79fb08c8e"
+  },
+  "runtime": {
+    "export_image": "sha256:7c3b896d9744cf39e71eec5efb618f66542ab5a2a47b132056294ca39ec212bc",
+    "format": "public-runtime-binding-v1",
+    "native_identity": {
+      "solver_files": {
+        "/opt/openmc/bin/openmc": "81d99b22b466116abc5069645dd85310cf98c5a2d4914900c6029c9c3821f634",
+        "/opt/openmc/lib/libopenmc.so": "4df23e8387afe6667f698498d360f201e013ee11751c7ac1f2c402ea4977bfc6"
+      },
+      "worker_sha256": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445"
+    },
+    "semantic": {
+      "id": "public-openmc-0.15.3-arm64-v1",
+      "mpi": false,
+      "native_threads": 1,
+      "openmc": "0.15.3",
+      "openmc_commit": "27e38e894697bb32a1dac7848d2618818b6b8daf",
+      "platform": "linux/arm64",
+      "recipe_sha256": {
+        "evaluator/runtime/idle.py": "3c5109830f965bcd2bf9726dd4c99de3a5c28ef21b2475ed0a12e3dc1188713e",
+        "evaluator/runtime/probe.py": "6b6b7897b199a65cff5b9018d28271aed97137773ca45788c3ce0497eca50024",
+        "evaluator/runtime/transport_worker.py": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445",
+        "reproducibility/runtime/Dockerfile": "332d98cf39815854b812b009f06192c16eecf570d68b8e1a6cd568bbbe436830",
+        "reproducibility/runtime/requirements.txt": "b401002f1f493822a70265e14c5b5703272a11e67f6a42fa9866f1cfb044475b"
+      }
+    },
+    "transport_image": "sha256:66f6511f0cf0ab8dbae07440ad3ff23b5abc43e7d4e6451e98717e2e49222609"
+  },
+  "scope": "Two fresh factory/inspection/transport runs, same local image IDs, data, source and seed. Development runs; commits/documentation were finalized during this period. No cross-machine or statepoint-byte equivalence claim.",
+  "score": 100.0
+}

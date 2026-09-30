@@ -1,0 +1,1386 @@
+{
+  "materials": {
+    "status": "passed_checks",
+    "checks": [
+      {
+        "field": "composition",
+        "material_id": 1,
+        "passed": true,
+        "actual": {
+          "U235": 0.013333333333333334,
+          "U238": 0.32,
+          "O16": 0.6666666666666666
+        },
+        "role": "fuel"
+      },
+      {
+        "field": "density",
+        "material_id": 1,
+        "actual": 10.400000000000004,
+        "expected": 10.4,
+        "passed": true
+      },
+      {
+        "field": "thermal_scattering",
+        "material_id": 1,
+        "actual": [],
+        "expected": [],
+        "passed": true
+      },
+      {
+        "field": "forced_isotropic",
+        "material_id": 1,
+        "actual": [],
+        "expected": [],
+        "passed": true
+      },
+      {
+        "field": "composition",
+        "material_id": 2,
+        "passed": true,
+        "actual": {
+          "Zr90": 0.5145,
+          "Zr91": 0.1122,
+          "Zr92": 0.1715,
+          "Zr94": 0.1738,
+          "Zr96": 0.028
+        },
+        "role": "zirconium"
+      },
+      {
+        "field": "density",
+        "material_id": 2,
+        "actual": 6.55,
+        "expected": 6.55,
+        "passed": true
+      },
+      {
+        "field": "thermal_scattering",
+        "material_id": 2,
+        "actual": [],
+        "expected": [],
+        "passed": true
+      },
+      {
+        "field": "forced_isotropic",
+        "material_id": 2,
+        "actual": [],
+        "expected": [],
+        "passed": true
+      },
+      {
+        "field": "composition",
+        "material_id": 3,
+        "passed": true,
+        "actual": {
+          "H1": 0.6666666666666667,
+          "O16": 0.33333333333333337
+        },
+        "role": "water"
+      },
+      {
+        "field": "density",
+        "material_id": 3,
+        "actual": 0.9969999999999999,
+        "expected": 0.997,
+        "passed": true
+      },
+      {
+        "field": "thermal_scattering",
+        "material_id": 3,
+        "actual": [
+          [
+            "c_H_in_H2O",
+            1.0
+          ]
+        ],
+        "expected": [
+          [
+            "c_H_in_H2O",
+            1.0
+          ]
+        ],
+        "passed": true
+      },
+      {
+        "field": "forced_isotropic",
+        "material_id": 3,
+        "actual": [],
+        "expected": [],
+        "passed": true
+      },
+      {
+        "field": "required_material_roles",
+        "passed": true,
+        "actual": [
+          "fuel",
+          "water",
+          "zirconium"
+        ],
+        "expected": [
+          "fuel",
+          "water",
+          "zirconium"
+        ]
+      }
+    ],
+    "temperature_failures": 0,
+    "temperature_unresolved": 0
+  },
+  "geometry": {
+    "status": "passed_checks",
+    "probes": 1561,
+    "groups": {
+      "interfaces": {
+        "probes": 132,
+        "failures": 0
+      },
+      "axial_ends": {
+        "probes": 2,
+        "failures": 0
+      },
+      "material_map": {
+        "probes": 3,
+        "failures": 0
+      },
+      "outer_faces": {
+        "probes": 24,
+        "failures": 0
+      },
+      "domain_samples": {
+        "probes": 1400,
+        "failures": 0
+      }
+    },
+    "invalid_geometry": 0,
+    "first_discrepancies": []
+  },
+  "boundaries": {
+    "format": "effective-boundary-comparison-v1",
+    "requirements_sha256": "3b065b17b657a5e21ff283600dede930a17b5776cb9be656f567bb4b2b51724e",
+    "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+    "verdicts": [
+      {
+        "requirement_id": "outer.0.lower.coordinate_cm",
+        "property": "coordinate_cm",
+        "expected": -0.63,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 0,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_coordinate_cm"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:0:lower",
+          "surface:4"
+        ],
+        "actual": [
+          -0.63
+        ]
+      },
+      {
+        "requirement_id": "outer.0.lower.boundary_type",
+        "property": "boundary_type",
+        "expected": "reflective",
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 0,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_boundary_type"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:0:lower",
+          "surface:4"
+        ],
+        "actual": [
+          "reflective"
+        ]
+      },
+      {
+        "requirement_id": "outer.0.lower.effective_albedo",
+        "property": "effective_albedo",
+        "expected": 1.0,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 0,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_effective_albedo"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:0:lower",
+          "surface:4"
+        ],
+        "actual": [
+          1.0
+        ]
+      },
+      {
+        "requirement_id": "outer.0.upper.coordinate_cm",
+        "property": "coordinate_cm",
+        "expected": 0.63,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 0,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_coordinate_cm"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:0:upper",
+          "surface:5"
+        ],
+        "actual": [
+          0.63
+        ]
+      },
+      {
+        "requirement_id": "outer.0.upper.boundary_type",
+        "property": "boundary_type",
+        "expected": "reflective",
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 0,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_boundary_type"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:0:upper",
+          "surface:5"
+        ],
+        "actual": [
+          "reflective"
+        ]
+      },
+      {
+        "requirement_id": "outer.0.upper.effective_albedo",
+        "property": "effective_albedo",
+        "expected": 1.0,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 0,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_effective_albedo"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:0:upper",
+          "surface:5"
+        ],
+        "actual": [
+          1.0
+        ]
+      },
+      {
+        "requirement_id": "outer.1.lower.coordinate_cm",
+        "property": "coordinate_cm",
+        "expected": -0.63,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 1,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_coordinate_cm"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:1:lower",
+          "surface:6"
+        ],
+        "actual": [
+          -0.63
+        ]
+      },
+      {
+        "requirement_id": "outer.1.lower.boundary_type",
+        "property": "boundary_type",
+        "expected": "reflective",
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 1,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_boundary_type"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:1:lower",
+          "surface:6"
+        ],
+        "actual": [
+          "reflective"
+        ]
+      },
+      {
+        "requirement_id": "outer.1.lower.effective_albedo",
+        "property": "effective_albedo",
+        "expected": 1.0,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 1,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_effective_albedo"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:1:lower",
+          "surface:6"
+        ],
+        "actual": [
+          1.0
+        ]
+      },
+      {
+        "requirement_id": "outer.1.upper.coordinate_cm",
+        "property": "coordinate_cm",
+        "expected": 0.63,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 1,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_coordinate_cm"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:1:upper",
+          "surface:7"
+        ],
+        "actual": [
+          0.63
+        ]
+      },
+      {
+        "requirement_id": "outer.1.upper.boundary_type",
+        "property": "boundary_type",
+        "expected": "reflective",
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 1,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_boundary_type"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:1:upper",
+          "surface:7"
+        ],
+        "actual": [
+          "reflective"
+        ]
+      },
+      {
+        "requirement_id": "outer.1.upper.effective_albedo",
+        "property": "effective_albedo",
+        "expected": 1.0,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 1,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_effective_albedo"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:1:upper",
+          "surface:7"
+        ],
+        "actual": [
+          1.0
+        ]
+      },
+      {
+        "requirement_id": "outer.2.lower.coordinate_cm",
+        "property": "coordinate_cm",
+        "expected": -0.63,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 2,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_coordinate_cm"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:2:lower",
+          "surface:8"
+        ],
+        "actual": [
+          -0.63
+        ]
+      },
+      {
+        "requirement_id": "outer.2.lower.boundary_type",
+        "property": "boundary_type",
+        "expected": "reflective",
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 2,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_boundary_type"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:2:lower",
+          "surface:8"
+        ],
+        "actual": [
+          "reflective"
+        ]
+      },
+      {
+        "requirement_id": "outer.2.lower.effective_albedo",
+        "property": "effective_albedo",
+        "expected": 1.0,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 2,
+          "side": "lower",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_effective_albedo"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:2:lower",
+          "surface:8"
+        ],
+        "actual": [
+          1.0
+        ]
+      },
+      {
+        "requirement_id": "outer.2.upper.coordinate_cm",
+        "property": "coordinate_cm",
+        "expected": 0.63,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 2,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_coordinate_cm"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:2:upper",
+          "surface:9"
+        ],
+        "actual": [
+          0.63
+        ]
+      },
+      {
+        "requirement_id": "outer.2.upper.boundary_type",
+        "property": "boundary_type",
+        "expected": "reflective",
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 2,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_boundary_type"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:2:upper",
+          "surface:9"
+        ],
+        "actual": [
+          "reflective"
+        ]
+      },
+      {
+        "requirement_id": "outer.2.upper.effective_albedo",
+        "property": "effective_albedo",
+        "expected": 1.0,
+        "rule": {
+          "kind": "exact"
+        },
+        "source": {
+          "path": "prompts/cases/reflective_pin_cell.md",
+          "sha256": "937f90a4eb39fc635e66cdda0a217e7dd60fd5d13b394bd03f090cc97038f921",
+          "clause": "Domain cube and six reflective outer faces; unmodified reflection uses the pinned effective default albedo 1."
+        },
+        "selector": {
+          "kind": "root_box_face",
+          "axis": 2,
+          "side": "upper",
+          "domain_bounds_cm": [
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ],
+            [
+              -0.63,
+              0.63
+            ]
+          ],
+          "location_comparison": {
+            "kind": "exact"
+          }
+        },
+        "observations_needed": [
+          "established_root_domain",
+          "participating_face",
+          "effective_effective_albedo"
+        ],
+        "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+        "verdict": "conformity_established",
+        "cause": null,
+        "evidence": [
+          "root-face:2:upper",
+          "surface:9"
+        ],
+        "actual": [
+          1.0
+        ]
+      }
+    ],
+    "coverage": {
+      "method": "region-bound pruning and exact Boolean reduction over axis-plane arrangements",
+      "state_limit": 65536,
+      "work_limit": 4000000,
+      "global_geometry_validity": "not_assessed",
+      "residual_atom_limit": 16,
+      "face_edges_and_corners": "excluded",
+      "interior_cells_and_curved_boundaries": "not assessed",
+      "xml_surfaces_not_used_by_root": [],
+      "analysis": {
+        "work_units": 746,
+        "arrangement_cells_visited": 27,
+        "enumerated_assignments": 0,
+        "residual_queries": 4,
+        "max_residual_atoms": 2,
+        "cells_pruned_by_bounds": 72,
+        "exploration_started": true,
+        "phase": "complete",
+        "elapsed_seconds": 0.001631
+      },
+      "root_cells": 4,
+      "surface_records": 9,
+      "region_nodes": 34,
+      "nonplane_atoms": 3,
+      "plane_coordinate_counts": [
+        2,
+        2,
+        2
+      ],
+      "arrangement_cells": 27,
+      "estimated_global_assignments": 216,
+      "proven_inactive_root_surface_ids": []
+    },
+    "global_geometry_verdict": "not_assessed",
+    "unresolved_nonexternal_behavior": [],
+    "score_check": true,
+    "score_eligibility": "eligible",
+    "status": "passed_checks",
+    "experimental_treatment": "apply unchanged geometry boundary check weight"
+  },
+  "settings": {
+    "status": "passed_checks",
+    "checks": [
+      {
+        "field": "run_mode",
+        "actual": "eigenvalue",
+        "expected": "eigenvalue",
+        "passed": true
+      },
+      {
+        "field": "energy_mode",
+        "actual": "continuous-energy",
+        "expected": "continuous-energy",
+        "passed": true
+      },
+      {
+        "field": "temperature_method",
+        "actual": "nearest",
+        "expected": "nearest",
+        "passed": true
+      },
+      {
+        "field": "particles",
+        "actual": 25000.0,
+        "expected": 25000,
+        "passed": true
+      },
+      {
+        "field": "batches",
+        "actual": 800.0,
+        "expected": 800,
+        "passed": true
+      },
+      {
+        "field": "inactive",
+        "actual": 200.0,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "field": "generations_per_batch",
+        "actual": 2.0,
+        "expected": 2,
+        "passed": true
+      },
+      {
+        "field": "seed",
+        "actual": 19.0,
+        "expected": 19,
+        "passed": true
+      },
+      {
+        "field": "temperature_tolerance",
+        "actual": 1.0,
+        "expected": 1.0,
+        "passed": true
+      },
+      {
+        "field": "temperature_multipole",
+        "actual": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "field": "source_count",
+        "actual": 1,
+        "expected": 1,
+        "passed": true
+      },
+      {
+        "field": "source_type",
+        "actual": "independent",
+        "expected": "independent",
+        "passed": true
+      },
+      {
+        "field": "source_particle",
+        "actual": "neutron",
+        "expected": "neutron",
+        "passed": true
+      },
+      {
+        "field": "source_space",
+        "actual": "uniform_cartesian_box",
+        "expected": "uniform_cartesian_box",
+        "passed": true,
+        "cause": null
+      },
+      {
+        "field": "source_parameters",
+        "axis": "x",
+        "actual": [
+          -0.63,
+          0.63
+        ],
+        "expected": [
+          -0.63,
+          0.63
+        ],
+        "passed": true,
+        "cause": null
+      },
+      {
+        "field": "source_parameters",
+        "axis": "y",
+        "actual": [
+          -0.63,
+          0.63
+        ],
+        "expected": [
+          -0.63,
+          0.63
+        ],
+        "passed": true,
+        "cause": null
+      },
+      {
+        "field": "source_parameters",
+        "axis": "z",
+        "actual": [
+          -0.63,
+          0.63
+        ],
+        "expected": [
+          -0.63,
+          0.63
+        ],
+        "passed": true,
+        "cause": null
+      },
+      {
+        "field": "source_fissionable",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "field": "source_rejection",
+        "actual": "resample",
+        "expected": "resample",
+        "passed": true
+      },
+      {
+        "field": "source_angle",
+        "component": "description",
+        "actual": "isotropic",
+        "expected": "supported_complete_description",
+        "passed": true,
+        "cause": null
+      },
+      {
+        "field": "source_angle",
+        "component": "solid_angle",
+        "actual": "isotropic",
+        "expected": "isotropic",
+        "passed": true,
+        "cause": null
+      },
+      {
+        "field": "source_energy",
+        "actual": "watt",
+        "expected": "watt",
+        "passed": true
+      },
+      {
+        "field": "source_watt",
+        "actual": [
+          988000.0,
+          2.249e-06
+        ],
+        "expected": [
+          988000.0,
+          2.249e-06
+        ],
+        "passed": true
+      },
+      {
+        "field": "entropy_mesh_count",
+        "actual": 1,
+        "expected": 1,
+        "passed": true
+      },
+      {
+        "field": "entropy_mesh_type",
+        "actual": "regular",
+        "expected": "regular",
+        "passed": true
+      },
+      {
+        "field": "entropy_dimensions",
+        "actual": [
+          10.0,
+          10.0,
+          1.0
+        ],
+        "expected": [
+          10,
+          10,
+          1
+        ],
+        "passed": true
+      },
+      {
+        "field": "entropy_lower_left",
+        "actual": [
+          -0.63,
+          -0.63,
+          -0.63
+        ],
+        "expected": [
+          -0.63,
+          -0.63,
+          -0.63
+        ],
+        "passed": true
+      },
+      {
+        "field": "entropy_upper_right",
+        "actual": [
+          0.63,
+          0.63,
+          0.63
+        ],
+        "expected": [
+          0.63,
+          0.63,
+          0.63
+        ],
+        "passed": true
+      },
+      {
+        "field": "final_statepoint",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      }
+    ],
+    "unassessed_options": [],
+    "angular_source": {
+      "comparison_version": "isotropic-source-comparison-v1",
+      "observation": {
+        "encoding": "isotropic",
+        "marginals": {},
+        "frame": null,
+        "limitations": [],
+        "law": "isotropic"
+      }
+    },
+    "spatial_source": {
+      "comparison_version": "uniform-box-source-comparison-v1",
+      "observation": {
+        "encoding": "box",
+        "independent": true,
+        "axes": {
+          "x": {
+            "distribution": "uniform",
+            "bounds": [
+              -0.63,
+              0.63
+            ]
+          },
+          "y": {
+            "distribution": "uniform",
+            "bounds": [
+              -0.63,
+              0.63
+            ]
+          },
+          "z": {
+            "distribution": "uniform",
+            "bounds": [
+              -0.63,
+              0.63
+            ]
+          }
+        },
+        "limitations": []
+      }
+    }
+  },
+  "status": "passed_checks",
+  "coverage": "Finite all-matching-cell probes and reachable boundary inventory, not exhaustive proof of CSG correctness."
+}

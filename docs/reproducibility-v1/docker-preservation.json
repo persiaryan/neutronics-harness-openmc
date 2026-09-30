@@ -1,0 +1,23 @@
+{
+  "before_snapshot_sha256": "0137bd39713113c51c7c80ce2ab495ab7ad7c2ad4d978791d008f759e9907d27",
+  "checked_utc": "2026-09-29T23:28:11.420160+00:00",
+  "current_counts": {
+    "containers": 0,
+    "image_tags": 86,
+    "images": 85,
+    "volumes": 7
+  },
+  "original_counts": {
+    "containers": 0,
+    "image_tags": 82,
+    "images": 81,
+    "volumes": 7
+  },
+  "original_objects_preserved": {
+    "containers": true,
+    "image_tags": true,
+    "images": true,
+    "volumes": true
+  },
+  "scope": "After both public source builds, development native runs and fresh-checkout native assessment. New public runtime images were added; no pre-existing image/tag/container/volume was removed."
+}

@@ -35,8 +35,12 @@ def clean_resources():
     require(not exporter.docker('volume', 'ls', '-q', '--filter', 'name=neutronics-v5-'), 'Prior project volume remains')
 
 
-def target(case):
+def target(case, *, reference=None, runtime=None):
     require(case in CASE_FILES, 'Unknown public case')
+    if reference is not None:
+        from evaluation.public_reference import target as public_target
+        return public_target(case, reference, runtime)
+    require(runtime is None, 'A public runtime requires an explicit public reference')
     checked = verify_suite(INDEX)
     manifest = receipts.read(INDEX / 'manifest.json')
     reference = manifest['references'][case]
@@ -99,8 +103,9 @@ def markdown(report):
 
 
 def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTORY,
-             execution_profile=FACTORY_PROFILE, evaluator_protocol=BOUNDARY_PROTOCOL):
-    route = assessment_route(contract, execution_profile, evaluator_protocol)
+             execution_profile=FACTORY_PROFILE, evaluator_protocol=BOUNDARY_PROTOCOL,
+             reference=None, runtime=None):
+    route = assessment_route(contract, execution_profile, evaluator_protocol, runtime=runtime)
     route['prompt_sha256'] = exporter.digest(build_prompt(case, contract=contract).encode())
     budgets = route['execution_profile']['budgets']
     require(case in CASE_FILES, 'Unknown public case')
@@ -125,7 +130,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
                  'evaluator' if cause == 'indeterminate' else cause, detail)
         raise StopAssessment()
     try:
-        goal = target(case)
+        goal = target(case, reference=reference, runtime=runtime)
         require(all(goal['protocol'][key] == route['execution_profile'][key] for key in ('export_image', 'transport_image')),
                 'Selected execution profile differs from frozen runtime identities')
         source = exporter.source_bytes(Path(candidate))
@@ -161,22 +166,22 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         stage = 'export'
         value = exporter.evaluate(output / 'candidate.py', output / 'export', index=index,
                                   image=goal['protocol']['export_image'], wall_seconds=budgets['export'],
-                                  contract=contract, execution_profile=execution_profile)
+                                  contract=contract, execution_profile=execution_profile, runtime=runtime)
         report['phases']['export'] = value
         if value.get('cleanup_confirmed') is not True:
             stop('infrastructure', 'Export cleanup uncertain')
         receipts.container_phase(output / 'export', goal['protocol']['export_image'], index, source_hash)
         if value['status'] != 'exported':
-            cause = export_outcome(output / 'export', goal['protocol']['export_image'], index, source_hash)['cause']
+            cause = export_outcome(output / 'export', goal['protocol']['export_image'], index, source_hash, runtime=runtime)['cause']
             stop(cause, value.get('reason', value['status']), 'model_builds')
         gate('model_builds', True, detail='Submitted module produced admitted combined XML under ' + contract)
         xml, identity = accepted_export(output / 'export')
         require(identity['candidate_sha256'] == source_hash, 'Export source identity changed')
         report['final_model'] = dict(path='export/artifacts/model.xml', sha256=exporter.digest(xml), bytes=len(xml))
         stage = 'export-inspection'
-        observation = inspect_xml(xml, probes(case)[0], output / stage, wall_seconds=budgets['inspection'])
+        observation = inspect_xml(xml, probes(case)[0], output / stage, wall_seconds=budgets['inspection'], image=goal['protocol']['export_image'])
         report['phases'][stage] = {k: observation[k] for k in ('status', 'cleanup_confirmed')}
-        observation = inspection_record(case, output / stage, xml, WORKER.read_bytes())
+        observation = inspection_record(case, output / stage, xml, WORKER.read_bytes(), image=goal['protocol']['export_image'])
         failure = assessment.inspection_failure(observation)
         if failure:
             if observation['status'] == 'invalid_model':
@@ -184,11 +189,11 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
                 report['checks']['materials']['composition'] = False
             stop(**failure)
         stage = 'export-boundaries'
-        value = boundaries.observe(xml, output / stage, wall_seconds=budgets['inspection'])
+        value = boundaries.observe(xml, output / stage, wall_seconds=budgets['inspection'], image=goal['protocol']['export_image'])
         report['phases'][stage] = {k: value[k] for k in ('status', 'cleanup_confirmed')}
         if value['status'] != 'inspected' or value['cleanup_confirmed'] is not True:
             stop('evaluator', 'Boundary observation incomplete; no model attribution')
-        boundary_observation = boundaries.record(output / stage, xml)
+        boundary_observation = boundaries.record(output / stage, xml, image=goal['protocol']['export_image'])
         boundary_result = boundary_assessment.evaluate(boundary_observation, boundary_spec, observation)
         stage = 'export-inspection'
         fidelity = assess(case, admit(xml), observation, report['assignment']['sampling'], boundary_result=boundary_result)
@@ -205,7 +210,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
             stop('model', 'Submission requests nuclear data outside the explicitly specified task collection', 'required_data')
         stage = 'transport'
         value = solver.transport(output / 'export', output / 'transport', index=index,
-                                 image=goal['protocol']['transport_image'], wall_seconds=budgets['transport'])
+                                 image=goal['protocol']['transport_image'], wall_seconds=budgets['transport'], runtime=runtime)
         report['phases']['transport'] = value
         if value.get('cleanup_confirmed') is not True:
             stop('infrastructure', 'Transport cleanup uncertain')
@@ -235,7 +240,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         report['leakage'] = leak
         unchanged(record['receipts'])
         require(read_regular(output / 'candidate.py') == source, 'Submission changed during evaluation')
-        require(verify_suite(INDEX) == goal['index'], 'Frozen reference index changed during evaluation')
+        require(target(case, reference=reference, runtime=runtime) == goal, 'Reference changed during evaluation')
         report['status'] = 'assessed'
     except StopAssessment:
         report['status'] = 'stopped'

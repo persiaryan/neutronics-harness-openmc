@@ -12,14 +12,20 @@ PROFILE = dict(id=FACTORY_PROFILE, delivery_contract=FACTORY,
     transport_image='sha256:08dc044b81f87eb3762c1adeb11ad422d8dfc8a2847d04a1d1e2de2d0817c835')
 
 
-def execution_profile(identifier, contract):
+def execution_profile(identifier, contract, *, runtime=None):
     if identifier != FACTORY_PROFILE or contract != FACTORY:
         raise ValueError('Execution profile and delivery contract do not match')
-    return deepcopy(PROFILE)
+    value = deepcopy(PROFILE)
+    if runtime is not None:
+        from evaluator.public_runtime import validate
+        validate(runtime)
+        value.update(export_image=runtime['export_image'], transport_image=runtime['transport_image'],
+                     runtime_binding=deepcopy(runtime))
+    return value
 
 
-def assessment_route(contract, profile, protocol):
-    value = execution_profile(profile, contract)
+def assessment_route(contract, profile, protocol, *, runtime=None):
+    value = execution_profile(profile, contract, runtime=runtime)
     if protocol != BOUNDARY_PROTOCOL:
         raise ValueError('Unsupported evaluator protocol for factory execution')
     return dict(delivery_contract=contract, execution_profile=value, evaluator_protocol=protocol)

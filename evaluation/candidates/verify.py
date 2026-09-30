@@ -32,7 +32,7 @@ def stopped_verdict(report, gates, checks, phases, stage, cause, reason):
                 stop=report['stop'], attribution=cause)
 
 
-def assessment_report(directory, index):
+def assessment_report(directory, index, *, reference=None, runtime=None):
     directory = Path(directory)
     report = receipts.read(directory / 'report.json')
     require(report['format'] == 'private-candidate-diagnostic-v5',
@@ -64,7 +64,7 @@ def assessment_report(directory, index):
     route = assignment['assessment_route']
     boundary_spec = None
     from evaluator.profiles import assessment_route
-    expected_route = assessment_route(contract, route['execution_profile']['id'], route['evaluator_protocol'])
+    expected_route = assessment_route(contract, route['execution_profile']['id'], route['evaluator_protocol'], runtime=runtime)
     expected_route['prompt_sha256'] = digest(build_prompt(assignment['case'], contract=contract).encode())
     require(route == expected_route and assignment['budgets'] == route['execution_profile']['budgets'],
             'Assessment execution profile/protocol changed')
@@ -87,7 +87,7 @@ def assessment_report(directory, index):
     require(digest(source) == assignment['source_sha256'], 'Submission changed')
     require(assignment['provenance']['source_sha256'] == assignment['source_sha256'], 'Assignment source provenance changed')
     require((directory / 'prompt.txt').read_bytes() == build_prompt(assignment['case'], contract=contract).encode(), 'Assessment public prompt changed')
-    goal = run.target(assignment['case'])
+    goal = run.target(assignment['case'], reference=reference, runtime=runtime)
     require(assignment['frozen_index_sha256'] == goal['index']['manifest_sha256'] and
             assignment['reference'] == goal['reference'], 'Assessment reference changed')
     require(assignment['sampling'] == dict(particles=10000, batches=run.SPECS[assignment['case']]['batches'],
@@ -102,7 +102,7 @@ def assessment_report(directory, index):
     if report['status'] != 'assessed' and report['stop']['stage'] == 'export':
         value = receipts.container_phase(directory / 'export', goal['protocol']['export_image'], index, digest(source))
         require(report['phases'] == {'export': value}, 'Stopped export phase report changed')
-        outcome = export_outcome(directory / 'export', goal['protocol']['export_image'], index, digest(source))
+        outcome = export_outcome(directory / 'export', goal['protocol']['export_image'], index, digest(source), runtime=runtime)
         cause = outcome['cause']
         require(cause is not None and report['stop']['cause'] == cause and
                 report['stop']['detail'] == outcome['reason'], 'Stop contradicts execution attribution')
@@ -121,7 +121,7 @@ def assessment_report(directory, index):
     expected['required_data'] = dict(passed=True, cause=None)
     value = receipts.container_phase(directory / 'export', goal['protocol']['export_image'], index, digest(source))
     require(value == report['phases']['export'], 'Export phase report changed')
-    outcome = export_outcome(directory / 'export', goal['protocol']['export_image'], index, digest(source))
+    outcome = export_outcome(directory / 'export', goal['protocol']['export_image'], index, digest(source), runtime=runtime)
     require(outcome == dict(cause=None, reason=None), 'Completed export contradicts process evidence')
     reached = {'export'}
     xml, _ = receipts.accepted_export(directory / 'export')
@@ -129,7 +129,7 @@ def assessment_report(directory, index):
             'Final artifact identity changed')
     expected['model_builds'] = dict(passed=True, cause=None)
     inspection_result = receipts.read(directory / 'export-inspection/result.json')
-    obs = inspection_record(assignment['case'], directory / 'export-inspection', xml, WORKER.read_bytes())
+    obs = inspection_record(assignment['case'], directory / 'export-inspection', xml, WORKER.read_bytes(), image=goal['protocol']['export_image'])
     reached.add('export-inspection')
     require(report['phases']['export-inspection'] ==
             {k: inspection_result[k] for k in ('status', 'cleanup_confirmed')}, 'Inspector phase summary changed')
@@ -147,7 +147,7 @@ def assessment_report(directory, index):
         return stopped_verdict(report, expected, checks, reached, 'export-inspection',
                                failure['cause'], failure['detail'])
     require('material_input_findings' not in report, 'Successful inspection claims material input failure')
-    boundary_observation = boundaries.record(directory / 'export-boundaries', xml)
+    boundary_observation = boundaries.record(directory / 'export-boundaries', xml, image=goal['protocol']['export_image'])
     summary = receipts.read(directory / 'export-boundaries/result.json')
     require(report['phases']['export-boundaries'] == {k: summary[k] for k in ('status', 'cleanup_confirmed')},
             'Boundary inspection summary changed')
@@ -202,14 +202,14 @@ def assessment_report(directory, index):
     return dict(status='verified_from_retained_execution', score=computed['score'], strict_correct=computed['strict_correct'])
 
 
-def review_assessment(directory, index):
+def review_assessment(directory, index, *, reference=None, runtime=None):
     """A new review record; never replace or fill gaps in the historical evidence."""
     annotation = dict(format='evidence-review-v2', reported_score=None)
     try:
         original = receipts.read(Path(directory) / 'report.json')
         require(isinstance(original, dict) and isinstance(original.get('diagnostic_score'), dict), 'Malformed assessment report')
         annotation['reported_score'] = original.get('diagnostic_score', {}).get('score')
-        result = assessment_report(directory, index)
+        result = assessment_report(directory, index, reference=reference, runtime=runtime)
     except (InsufficientEvidence, FileNotFoundError) as exc:
         return dict(annotation, evidence_status='insufficient', score=None, reason=str(exc))
     except (ValueError, KeyError, TypeError, RuntimeError, UnicodeError) as exc:

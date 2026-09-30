@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<model>
+  <materials>
+    <material id="1" name="fuel" depletable="true" temperature="293.6">
+      <density value="10.4" units="g/cm3"/>
+      <nuclide name="U235" ao="0.04"/>
+      <nuclide name="U238" ao="0.96"/>
+      <nuclide name="O16" ao="2.0"/>
+    </material>
+    <material id="2" name="clad" temperature="293.6">
+      <density value="6.55" units="g/cm3"/>
+      <nuclide name="Zr90" ao="0.5145"/>
+      <nuclide name="Zr91" ao="0.1122"/>
+      <nuclide name="Zr92" ao="0.1715"/>
+      <nuclide name="Zr94" ao="0.1738"/>
+      <nuclide name="Zr96" ao="0.028"/>
+    </material>
+    <material id="3" name="moderator" temperature="293.6">
+      <density value="0.997" units="g/cm3"/>
+      <nuclide name="H1" ao="2.0"/>
+      <nuclide name="O16" ao="1.0"/>
+      <sab name="c_H_in_H2O"/>
+    </material>
+  </materials>
+  <geometry>
+    <cell id="1" material="1" region="-1 -5 4 -7 6 -9 8" universe="1"/>
+    <cell id="2" material="void" region="1 -2 -5 4 -7 6 -9 8" universe="1"/>
+    <cell id="3" material="2" region="2 -3 -5 4 -7 6 -9 8" universe="1"/>
+    <cell id="4" material="3" region="3 -5 4 -7 6 -9 8" universe="1"/>
+    <surface id="1" type="z-cylinder" coeffs="0.0 0.0 0.4096"/>
+    <surface id="2" type="z-cylinder" coeffs="0.0 0.0 0.418"/>
+    <surface id="3" type="z-cylinder" coeffs="0.0 0.0 0.475"/>
+    <surface id="4" type="x-plane" boundary="reflective" coeffs="-0.63"/>
+    <surface id="5" type="x-plane" boundary="reflective" coeffs="0.63"/>
+    <surface id="6" type="y-plane" boundary="reflective" coeffs="-0.63"/>
+    <surface id="7" type="y-plane" boundary="reflective" coeffs="0.63"/>
+    <surface id="8" type="z-plane" boundary="reflective" coeffs="-0.63"/>
+    <surface id="9" type="z-plane" boundary="reflective" coeffs="0.63"/>
+  </geometry>
+  <settings>
+    <run_mode>eigenvalue</run_mode>
+    <particles>25000</particles>
+    <batches>800</batches>
+    <inactive>200</inactive>
+    <generations_per_batch>2</generations_per_batch>
+    <source type="independent" strength="1.0" particle="neutron">
+      <space type="box">
+        <parameters>-0.63 -0.63 -0.63 0.63 0.63 0.63</parameters>
+      </space>
+      <angle type="isotropic"/>
+      <energy type="watt" parameters="988000.0 2.249e-06"/>
+      <constraints>
+        <fissionable>true</fissionable>
+      </constraints>
+    </source>
+    <state_point>
+      <batches>800</batches>
+    </state_point>
+    <seed>19</seed>
+    <entropy_mesh>1</entropy_mesh>
+    <mesh id="1">
+      <dimension>10 10 1</dimension>
+      <lower_left>-0.63 -0.63 -0.63</lower_left>
+      <upper_right>0.63 0.63 0.63</upper_right>
+    </mesh>
+    <temperature_default>293.6</temperature_default>
+    <temperature_method>nearest</temperature_method>
+    <temperature_tolerance>1.0</temperature_tolerance>
+  </settings>
+  </model>

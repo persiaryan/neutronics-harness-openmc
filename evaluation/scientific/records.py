@@ -36,20 +36,21 @@ def unchanged(receipts):
 def close(a, b):
     # Serialization/arithmetic tolerance only, not a physics acceptance margin.
     return math.isclose(float(a), float(b), rel_tol=1e-10, abs_tol=1e-10)
-def inspection_record(case, directory, xml, worker):
+def inspection_record(case, directory, xml, worker, *, image=None):
     """Verify completed observations OR a retained failure; never assume success."""
     from evaluation.benchmark_suite.suite_cases import probes
     from evaluation.scientific.inspection import verify, admit, IMAGE
+    image = IMAGE if image is None else image
     def read(name):return read_regular(directory/name)
     manifest=json.loads(read('manifest.json'));raw=read('input.json');payload=json.loads(raw)
     require(manifest['format']=='private-scientific-inspection-v3' and manifest['model_xml_sha256']==digest(xml), 'Inspection XML/version changed')
-    require(manifest['image_id']==IMAGE and manifest['candidate_python_access'] is False and
+    require(manifest['image_id']==image and manifest['candidate_python_access'] is False and
             manifest['nuclear_data_access'] is False and manifest['host_mounts'] is False and
             manifest['native_transport']=='not_run', 'Inspector execution boundary changed')
     require(manifest['input_sha256']==digest(raw) and payload['xml'].encode()==xml and payload['points']==probes(case)[0], 'Inspection input/probes changed')
     require(read('worker.py')==worker and manifest['worker_sha256']==digest(worker), 'Inspector worker changed')
     require(all(json.loads(read('container-checks.json')).values()), 'Inspector boundary failed')
-    verify(json.loads(read('container-inspect.json')))
+    verify(json.loads(read('container-inspect.json')), image)
     execution=json.loads(read('execution.json'))
     raw=read('stdout.json');read('stderr.txt')
     result=json.loads(read('result.json'))

@@ -1,0 +1,45 @@
+{
+  "status": "calculated_unreviewed",
+  "model_xml_sha256": "49eca093b15a4e2c7f3b6cc7d00482ff63f0a1a66e4d64da3e2b74da3f98d03f",
+  "statepoint": {
+    "name": "statepoint.800.h5",
+    "sha256": "26908e1899d448d566ff69c9c227b2ffc243884b3617823c85dd45d8a171be38",
+    "bytes": 2649800
+  },
+  "openmc_version": [
+    0,
+    15,
+    3
+  ],
+  "sampling": {
+    "particles": 25000,
+    "batches": 800,
+    "inactive": 200,
+    "generations_per_batch": 2,
+    "seed": 19
+  },
+  "keff": {
+    "mean": 1.4488925454032306,
+    "std_dev": 0.00016175366894689348,
+    "uncertainty": "one sigma"
+  },
+  "generation_count": 1600,
+  "entropy": "recorded",
+  "openmc_runtime_seconds": {
+    "SEND-RECV source sites": 0.12277057999999987,
+    "accumulating tallies": 0.0004967340000000008,
+    "active batches": 1025.226383169,
+    "inactive batches": 349.940405453,
+    "reading cross sections": 0.793928375,
+    "sampling source sites": 0.4928421940000007,
+    "simulation": 1375.166677955,
+    "synchronizing fission bank": 0.6157526899999989,
+    "total": 1375.9832513719998,
+    "total initialization": 0.803090667,
+    "transport": 1373.565676245001,
+    "writing statepoints": 0.003859792
+  },
+  "convergence_assessment": "not_performed",
+  "scientific_fidelity": "not_checked",
+  "reference_comparison": "not_run"
+}

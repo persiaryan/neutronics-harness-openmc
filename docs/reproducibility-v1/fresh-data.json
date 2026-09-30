@@ -1,0 +1,17 @@
+{
+  "archive_bytes": 9661406540,
+  "archive_sha256": "b7ad59cb4a3d76d8a291326093a98507f8d24b6e6af629116d3f7dc85f83c4cb",
+  "attempt": 2,
+  "command": "caffeinate -dimsu python3 -B -m reproducibility.data --source download --output \"$DATA_DIR\" --expected examples/reflective_pin_cell/reference/data-acquisition.json --receipt scratch/public-data-receipt-02.json",
+  "commit": "908f34210672c2ff846bb3383ff1c949f85b3f70",
+  "exit_code": 0,
+  "format": "fresh-public-data-validation-v1",
+  "index_sha256": "34abcff5361eda11798e4e4da51efa7d824159065837c8677c12ac576fbc185c",
+  "log_sha256": "605ed3399a96e823b9f54d4f7bb9bb6e3ea8e0027230faac0fd8fa9e2f7dd4fa",
+  "prior_attempt": "fresh-data-timeout.json",
+  "receipt_matches_published_reference": true,
+  "receipt_sha256": "b983f129714277250f7d177b98419db97c970009bff3c84911bf174d42b9362f",
+  "retained_hdf5_bytes": 2974881632,
+  "retained_hdf5_files": 10,
+  "source": "Independent public HTTPS acquisition from fresh checkout; no local archive copied"
+}

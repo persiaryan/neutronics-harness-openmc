@@ -19,11 +19,11 @@ REQUIREMENTS = Path(__file__).with_name('boundary_requirements_v1.json')
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def observe(xml, output, *, wall_seconds=120):
-    return inspection.inspect_xml(xml, [], output, wall_seconds=wall_seconds, capability='effective-boundary-v2')
+def observe(xml, output, *, wall_seconds=120, image=inspection.IMAGE):
+    return inspection.inspect_xml(xml, [], output, wall_seconds=wall_seconds, capability='effective-boundary-v2', image=image)
 
 
-def execution_record(directory, xml):
+def execution_record(directory, xml, *, image=inspection.IMAGE):
     """Bind worker output to an externally completed, cleaned-up XML inspection.
 
     A failed worker response is execution evidence, never a boundary observation.
@@ -31,7 +31,7 @@ def execution_record(directory, xml):
     directory = Path(directory)
     read = lambda n: json.loads(read_regular(directory/n))
     manifest=read('manifest.json'); payload=read_regular(directory/'input.json'); worker=WORKER.read_bytes()
-    require(manifest['format']=='private-boundary-inspection-v2' and manifest['image_id']==inspection.IMAGE,
+    require(manifest['format']=='private-boundary-inspection-v2' and manifest['image_id']==image,
             'Unknown boundary observation protocol')
     require(manifest['candidate_python_access'] is False and manifest['nuclear_data_access'] is False and
             manifest['host_mounts'] is False and manifest['native_transport']=='not_run' and manifest['points']==0,
@@ -40,7 +40,7 @@ def execution_record(directory, xml):
             json.loads(payload)==dict(xml=xml.decode(),points=[]), 'Boundary observation input changed')
     require(read_regular(directory/'worker.py')==worker and manifest['worker_sha256']==digest(worker),
             'Unqualified boundary observer version')
-    require(inspection.verify(read('container-inspect.json'))==read('container-checks.json'), 'Boundary containment changed')
+    require(inspection.verify(read('container-inspect.json'), image)==read('container-checks.json'), 'Boundary containment changed')
     require(read('execution.json')==dict(exit_code=0,stop_reason=None), 'Boundary observer execution incomplete')
     result,stdout=read('result.json'),read('stdout.json')
     if result['cleanup_confirmed'] is not True:
@@ -49,8 +49,8 @@ def execution_record(directory, xml):
     return stdout
 
 
-def record(directory, xml):
-    stdout=execution_record(directory, xml)
+def record(directory, xml, *, image=inspection.IMAGE):
+    stdout=execution_record(directory, xml, image=image)
     if stdout.get('status')!='inspected':
         raise InsufficientEvidence('Boundary observer did not complete with confirmed cleanup')
     require(stdout['observer_version']==VERSION and stdout['openmc_version']=='0.15.3' and

@@ -1,0 +1,24 @@
+{
+  "commit": "908f34210672c2ff846bb3383ff1c949f85b3f70",
+  "format": "fresh-portable-validation-v1",
+  "host": {
+    "architecture": "arm64",
+    "python": "3.14.6",
+    "system": "Darwin"
+  },
+  "prompt": {
+    "command": "python3 -B -m prompts.prepare --case reflective_pin_cell --output scratch/public-prompt",
+    "exit_code": 0,
+    "model_calls": 0,
+    "prompt_sha256": "d10442e867657d08f0c7a85cb30d00c2b7d966258f431b3177c9c223aa2ee697"
+  },
+  "tests": {
+    "command": "python3 -B -m unittest discover -s tests -p 'test_*.py' -v",
+    "elapsed_seconds": 2.954,
+    "exit_code": 0,
+    "failed": 0,
+    "log_sha256": "6a4f33f87ccd7c8ffdb8de11cfc112601ee77a5d7f644a528edb711160c04925",
+    "passed": 313,
+    "skipped": 0
+  }
+}

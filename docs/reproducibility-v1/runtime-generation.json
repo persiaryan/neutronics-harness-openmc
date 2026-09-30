@@ -1,0 +1,83 @@
+{
+  "architecture": "linux/arm64",
+  "assessment_threads": 1,
+  "binding": {
+    "export_image": "sha256:7c3b896d9744cf39e71eec5efb618f66542ab5a2a47b132056294ca39ec212bc",
+    "format": "public-runtime-binding-v1",
+    "native_identity": {
+      "solver_files": {
+        "/opt/openmc/bin/openmc": "81d99b22b466116abc5069645dd85310cf98c5a2d4914900c6029c9c3821f634",
+        "/opt/openmc/lib/libopenmc.so": "4df23e8387afe6667f698498d360f201e013ee11751c7ac1f2c402ea4977bfc6"
+      },
+      "worker_sha256": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445"
+    },
+    "semantic": {
+      "id": "public-openmc-0.15.3-arm64-v1",
+      "mpi": false,
+      "native_threads": 1,
+      "openmc": "0.15.3",
+      "openmc_commit": "27e38e894697bb32a1dac7848d2618818b6b8daf",
+      "platform": "linux/arm64",
+      "recipe_sha256": {
+        "evaluator/runtime/idle.py": "3c5109830f965bcd2bf9726dd4c99de3a5c28ef21b2475ed0a12e3dc1188713e",
+        "evaluator/runtime/probe.py": "6b6b7897b199a65cff5b9018d28271aed97137773ca45788c3ce0497eca50024",
+        "evaluator/runtime/transport_worker.py": "f67cd6c9437dc5f6484db6e0368253d07f4baa71e9ff8dd16079fe9882f88445",
+        "reproducibility/runtime/Dockerfile": "332d98cf39815854b812b009f06192c16eecf570d68b8e1a6cd568bbbe436830",
+        "reproducibility/runtime/requirements.txt": "b401002f1f493822a70265e14c5b5703272a11e67f6a42fa9866f1cfb044475b"
+      }
+    },
+    "transport_image": "sha256:66f6511f0cf0ab8dbae07440ad3ff23b5abc43e7d4e6451e98717e2e49222609"
+  },
+  "build_command": "python3 -B -m reproducibility.build_runtime --no-cache --output scratch/reproducibility-v1/runtime-01.json",
+  "exit_code": 0,
+  "installed_python": {
+    "packages": {
+      "Pygments": "2.21.0",
+      "asttokens": "3.0.2",
+      "contourpy": "1.4.0",
+      "cycler": "0.12.1",
+      "decorator": "5.3.1",
+      "endf": "0.1.9",
+      "executing": "2.2.1",
+      "fonttools": "4.66.1",
+      "h5py": "3.13.0",
+      "ipython": "9.2.0",
+      "ipython_pygments_lexers": "1.1.1",
+      "jedi": "0.20.0",
+      "kiwisolver": "1.5.1",
+      "lxml": "5.4.0",
+      "matplotlib": "3.10.3",
+      "matplotlib-inline": "0.2.2",
+      "numpy": "2.2.6",
+      "openmc": "0.15.3",
+      "packaging": "26.3",
+      "pandas": "2.2.3",
+      "parso": "0.8.7",
+      "pexpect": "4.9.0",
+      "pillow": "12.3.0",
+      "pip": "25.0.1",
+      "prompt_toolkit": "3.0.53",
+      "ptyprocess": "0.7.0",
+      "pure_eval": "0.2.4",
+      "pyparsing": "3.3.3",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.4",
+      "scipy": "1.15.3",
+      "setuptools": "80.9.0",
+      "setuptools-scm": "8.3.1",
+      "six": "1.17.0",
+      "stack-data": "0.6.3",
+      "traitlets": "5.16.1",
+      "tzdata": "2026.4",
+      "uncertainties": "3.2.3",
+      "wcwidth": "0.9.1",
+      "wheel": "0.45.1"
+    },
+    "python": "3.12.11 (main, Sep 30 2025, 00:41:12) [GCC 12.2.0]"
+  },
+  "mpi": false,
+  "native_compiler": "GNU 12.2.0",
+  "native_hdf5": "1.10.8",
+  "server_version": "28.4.0",
+  "source_base": "python:3.12.11-slim-bookworm@sha256:519591d6871b7bc437060736b9f7456b8731f1499a57e22e6c285135ae657bf7"
+}

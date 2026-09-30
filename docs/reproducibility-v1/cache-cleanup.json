@@ -1,0 +1,70 @@
+{
+  "format": "reproducibility-cache-cleanup-v1",
+  "date": "2026-09-29",
+  "authorization": "Unused build cache only, approximately 18 GB; preserve all images, containers and volumes",
+  "passes": [
+    {
+      "command": [
+        "docker",
+        "builder",
+        "prune",
+        "--all",
+        "--force",
+        "--keep-storage",
+        "1GB"
+      ],
+      "exit_code": 0,
+      "preserved": {
+        "images": true,
+        "image_tags": true,
+        "containers": true,
+        "volumes": true
+      },
+      "prune_reported_total": "16.97GB"
+    },
+    {
+      "command": [
+        "docker",
+        "builder",
+        "prune",
+        "--all",
+        "--force"
+      ],
+      "exit_code": 0,
+      "preserved": {
+        "images": true,
+        "image_tags": true,
+        "containers": true,
+        "volumes": true
+      },
+      "prune_reported_total": [
+        "Total:\t18.93GB"
+      ]
+    }
+  ],
+  "before": {
+    "images": 81,
+    "containers": 0,
+    "volumes": 7,
+    "image_size": "37.09GB",
+    "volume_size": "340MB",
+    "build_cache_records": 627,
+    "build_cache_size": "17.99GB"
+  },
+  "after": {
+    "images": 81,
+    "containers": 0,
+    "volumes": 7,
+    "image_size": "37.09GB",
+    "volume_size": "340MB",
+    "build_cache_records": 0,
+    "build_cache_size": "0B"
+  },
+  "measured_accounting_change": "docker system df build-cache accounting decreased from 17.99GB to 0B",
+  "limitations": [
+    "Prune-reported totals include shared accounting and are not additive filesystem free-space measurements.",
+    "A failed build between the two cache-only passes created additional temporary cache.",
+    "No image, container or volume was removed by cleanup; no system/image prune was used.",
+    "Subsequent authorized builds create new runtime images/cache; normal evaluator lifecycle removes only its own new ephemeral containers/work volumes."
+  ]
+}
