@@ -226,6 +226,13 @@ It does not rerun the grader, infer private reasoning, reconstruct arbitrary she
 edits, or assign points for tool use. The evaluated builder retains no network or
 host mount through which to read the operator page or private evaluation results.
 
+Its campaign view aggregates only retained observations, with a task assignment
+as the counting unit. It groups compatible recorded identities, preserves unknown
+outcomes in denominators, uses equal task weights and suppresses comparisons with
+missing task coverage or conflicting task identities. Missing-outcome bounds are
+not confidence intervals. Campaign loading and comparison never dispatch runs or
+recompute scientific verdicts; original per-session evidence remains inspectable.
+
 Public: harness source, physical task statements, requirement comparisons, score
 policy and portable synthetic regressions. Private: reference implementations and
 answers, campaigns, raw model traces, native qualification evidence and external

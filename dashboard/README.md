@@ -4,7 +4,7 @@ Read-only bilingual interface for a prepared, running or retained experiment. No
 external services, JavaScript libraries, database, LLM judge or runtime dependency
 beyond host Python 3.12+ and a browser. Source/feedback/logs are rendered as text.
 
-English is the default. The **Language** selector switches all five views to
+English is the default. The **Language** selector switches all six views to
 English or French and remembers the choice in browser local storage. If storage
 is unavailable, switching still works for the current page. Numbers and times
 follow the selected locale. Original instructions, emitted messages, feedback,
@@ -69,6 +69,57 @@ unrecognized or conflicting identities remain unknown, including legacy conditio
 - **Model & evidence**: final Python/XML, working-versus-final XML identities/diff,
   downloadable text evidence and hashes.
 - **Guide**: vocabulary, interpretation and coverage limits.
+- **Compare A/B/C**: campaign scope, compatible model/protocol groups, equal-task
+  success rates, domain/check matrices, task coverage, effort and session drilldown.
+
+## Compare recorded campaigns
+
+Repeat `--run` for individual directories, or create a local JSON manifest:
+
+```json
+{"runs": ["../experiment-A-01", "../experiment-B-01", "../experiment-C-01"]}
+```
+
+```sh
+python3 -B -m dashboard.server --campaign scratch/my-campaign.json --port 8765
+```
+
+Paths are relative to the manifest. List the actual prepared or retained run
+directories; an ordinary run may contain several task assignments. Duplicate
+resolved roots are refused. Loading this manifest never launches an experiment.
+All selected directories appear in the individual-run selector and in comparison.
+The campaign reads compact report/review/result files, without parsing raw model
+responses or loading XML/histories for every session. Its aggregate cache lasts
+at most 10 seconds; the individual run view retains its two-second polling.
+
+An observation is one task in one run. Models, evaluator protocols, runtime
+profiles, authoring request/time/retry budgets, rubric identities, builder images,
+declared request setup identities and public/private reference scopes form
+separate groups. Different task prompt/reference/sampling identities and varying
+tool budgets within the same condition suppress aggregate rates and comparisons.
+Missing identities suppress comparisons. Unrecorded provider settings cannot be
+checked; compatible recorded fields do not establish experimental equivalence.
+
+Rates use only recognized A/B/C configurations and supported rubric checks with a
+coherent retained review. A domain passes only when all required checks pass;
+a demonstrated failed check makes it fail; otherwise it remains unknown. Model
+hard-gate failures are failures, while infrastructure failures and unreached
+domains remain unknown. The original diagnostic score is never recomputed.
+
+For each task, the denominator includes every loaded observation, including
+unknown outcomes. Global rates are the mean of the task rates, with equal task
+weights. The task inventory is the union in the selected group: a task missing
+from an arm suppresses that arm's global rate. Prepared sessions can represent
+pending assignments; an unlisted repeat cannot be detected. Copied session
+directories are not independently authenticated and must not be listed as repeats.
+
+Displayed bounds span all unknown outcomes failing through all unknown outcomes
+passing. They are **missing-outcome bounds, not statistical confidence intervals**.
+A/B/C differences use the same task inventory and show corresponding bounds.
+Counts and task-level results remain visible; differences are descriptive, not
+causal evidence. Effort and score means use available observations with their own
+counts; incomplete token usage is excluded. Click any matrix cell, filter outcomes,
+then open a session's evaluation to inspect its actual evidence.
 
 Polling is every two seconds; complete LLM responses and native process logs are
 written at completion, not token/batch streamed. Host-side `progress.jsonl`
@@ -90,9 +141,12 @@ prove understanding, causation or correction. There is no score for tool use.
 
 ```sh
 python3 -B -m unittest tests.test_dashboard -v
+python3 -B -m unittest tests.test_dashboard_campaign -v
 python3 -B -m unittest discover -s tests -p 'test_*.py' -v
 # Optional template checks, with an installed Node.js; no npm packages required.
 node tests/test_dashboard_templates.cjs
+# Optional campaign template/event checks against a saved /api/campaign JSON:
+node tests/test_dashboard_campaign_templates.cjs /path/to/campaign-response.json
 ```
 
 Portable tests cover pending/zero/unknown results, original verdict preservation,

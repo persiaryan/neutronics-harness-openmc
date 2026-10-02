@@ -13,7 +13,7 @@ const labels = {geometry:'Géométrie',materials:'Matériaux',physics_settings:'
 Object.assign(labels,{temperature_tolerance:'Tolérance de température (K)',temperature_method:'Méthode de température',temperature_multipole:'Traitement multipôle',run_mode:'Mode de calcul',energy_mode:'Traitement énergétique',particles:'Particules par génération',batches:'Nombre de batches',inactive:'Batches inactifs',generations_per_batch:'Générations par batch',seed:'Graine aléatoire',source_count:'Nombre de sources',source_particle:'Particule source',source_space:'Distribution spatiale',source_parameters:'Bornes de la source (cm)',source_fissionable:'Source limitée au matériau fissile',source_angle:'Distribution angulaire',source_energy:'Distribution énergétique',source_watt:'Paramètres de Watt',entropy_dimensions:'Dimensions du maillage d’entropie',entropy_lower_left:'Origine du maillage (cm)',entropy_upper_right:'Limite du maillage (cm)',final_statepoint:'Statepoint final',required_material_roles:'Rôles des matériaux'});
 const phaseNames = {authoring:'Construction par l’agent',model_request:'Requête au modèle',boundary_tool:'Outil frontières',smoke_tool:'Smoke de travail',assessment:'Évaluation finale',preflight:'Préparation du runtime',export:'Export final Python → XML','export-inspection':'Inspection scientifique du XML','export-boundaries':'Inspection des frontières',fidelity:'Comparaisons à la consigne',transport:'Transport final',scoring:'Calcul de la note','xml-load':'Chargement du XML',openmc:'Calcul OpenMC',statepoint:'Lecture du statepoint',staging:'Transfert du XML','solver-version':'Version du solveur','runtime-identity':'Identité du runtime'};
 const states = {started:'Début de phase enregistré',completed:'Terminé',returned:'Processus retourné',assessed:'Évalué',exported:'Exporté',recorded:'Enregistré',finished:'Session terminée',stopped:'Session arrêtée',failed:'Échec',calculated_unreviewed:'Calcul terminé, revue à suivre',verification:'Vérification des preuves',assessment:'Évaluation finale',authoring:'Agent en cours'};
-let data=null, view='overview', taskIndex=0, runIndex=0, filter='all', mode='live', replayIndex=0, playback=null, search='', previous='', busy=false;
+let data=null, view='overview', taskIndex=0, runIndex=0, filter='all', mode='live', replayIndex=0, playback=null, search='', previous='', busy=false, pendingCampaignCase=null;
 const task = () => data?.tasks?.[taskIndex] || {};
 const artifactURL = path => '/api/artifact?run='+runIndex+'&path='+encodeURIComponent(path);
 // Exact recorded protocol identities only. Legacy/custom conditions are not A/B/C.
@@ -118,27 +118,31 @@ function localizeShell(){
  $('language-select').value=I18N.language;
 }
 function render(){
- if(!data)return;
+ if(!data&&view!=='campaign')return;
  const opened=[...document.querySelectorAll('details[open]')].map(d=>d.dataset.key);
  const el=document.activeElement, focusId=el?.id, selection=el?.selectionStart;
- $('content').innerHTML=configurationBanner(task())+({overview,agent,evaluation,artifacts,guide}[view])(task());
+ $('content').innerHTML=view==='campaign'?campaignView():configurationBanner(task())+({overview,agent,evaluation,artifacts,guide}[view])(task());
+ if($('run-select'))$('run-select').disabled=view==='campaign';
+ if($('case-select'))$('case-select').disabled=view==='campaign';
  document.querySelectorAll('details').forEach(d=>{d.open=opened.includes(d.dataset.key)});
  if(focusId&&$(focusId)){ $(focusId).focus({preventScroll:true}); if(typeof selection==='number')try{$(focusId).setSelectionRange(selection,selection)}catch{} }
  document.querySelectorAll('nav button').forEach(b=>{b.classList.toggle('selected',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false')});
 }
 async function refresh(force=false){
+ if(view==='campaign'){await refreshCampaign(force);return;}
  if(busy||(!force&&!$('auto').checked))return;
  busy=true;
  try{
    const r=await fetch('/api/state?run='+runIndex,{cache:'no-store'});if(!r.ok)throw Error(ui("Lecture indisponible (")+r.status+')');
    const next=await r.json(), serial=JSON.stringify(next);
+   if(pendingCampaignCase!==null){taskIndex=Math.max(0,next.tasks.findIndex(t=>t.case===pendingCampaignCase));pendingCampaignCase=null;}
    $('error').hidden=true;$('connection').textContent=ui("Lecture à ")+new Date().toLocaleTimeString(I18N.locale);
    if(serial!==previous||force){data=next;previous=serial;taskIndex=Math.min(taskIndex,Math.max(0,data.tasks.length-1));$('case-select').innerHTML=data.tasks.map((t,i)=>`<option value="${i}" ${i===taskIndex?'selected':''}>${esc(t.case)}</option>`).join('');render();}
  }catch(e){$('error').hidden=false;$('error').textContent=e.message+ui(" · Les dernières données restent affichées, elles peuvent être périmées.");$('connection').textContent=ui("Connexion interrompue");}finally{busy=false;}
 }
 document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
- if(b.dataset.view){view=b.dataset.view;render();return;}
+ if(b.dataset.view){view=b.dataset.view;render();if(view==='campaign')refreshCampaign(true);return;}
  if(b.id==='mode-live'){mode='live';clearInterval(playback);playback=null;render();}
  if(b.id==='mode-replay'){mode='replay';replayIndex=0;render();}
  if(b.id==='play'){if(playback){clearInterval(playback);playback=null;}else{playback=setInterval(()=>{const max=(task().builder?.timeline?.length||1)-1;if(replayIndex>=max){clearInterval(playback);playback=null;}else replayIndex++;render();},1000);}render();}

@@ -64,6 +64,53 @@ do not relabel its scientific outcomes.
 
 ## Owner browser review
 
+### One authorized configuration A run with the 16-request profile
+
+On 2026-10-02, `scratch/dashboard-A16-pin-01` ran `reflective_pin_cell`
+with `gpt-5.6-luna`, configuration A and `authoring-requests-16-v1`.
+Both plan and builder manifest recorded 16 maximum requests and 600 seconds.
+The agent completed in 151.033 seconds using five requests, with no boundary or
+smoke calls. This checks the extended allowance, not execution of all 16 slots.
+
+The independent public-reference assessment completed in 321.283 seconds:
+100/100, all six hard gates passed, all implemented required checks passed,
+review coherent and strict correctness true. Native output contains 800 generations;
+k-effective is `1.4481972350919354 ± 0.0003414972628200393` (one sigma).
+This is the public computational demonstration within its declared coverage.
+
+Live HTTP observations captured authoring, export/inspection, native transport and
+the final score. Served candidate, final XML, report and review matched the files
+exactly. The campaign kept this observation separate from the eight-request
+groups. EN/FR templates and campaign navigation passed on this retained fixture.
+Cleanup was confirmed, with no remaining project containers or volumes.
+Evidence and verification scripts are retained in `scratch/dashboard-A16-pin-01`,
+`scratch/dashboard-A16-pin-run.py` and `scratch/dashboard-A16-verify.py`.
+
+### Campaign comparison view
+
+The previous configuration/banner work was committed as `b9baace` before this
+view was implemented. No new live session or native calculation was launched.
+The comparison reader consumes compact retained plan/result/report/review files.
+
+Validation passed: 26 targeted Python tests (14 aggregation tests and 12 dashboard
+tests), existing bilingual run-view checks, and campaign template/event checks
+in English and French using both retained observations and a synthetic 150-record
+fixture. The synthetic fixture creates files only, with process execution blocked:
+two model identities, three conditions, five tasks and five observations per cell.
+Checks cover equal task weights, unknown denominators, zero versus absent scores,
+missing tasks, incompatible versions/budgets, corrupt/symlink evidence, session
+drilldown, escaping, empty results and stale-data errors. HTTP returned 200 for
+the page, campaign script, translation script, run list and campaign endpoint.
+
+The three existing local observations form two comparison groups. A/cylinder is
+unknown; the two C/pin-cell observations contain one failure and one success.
+They are not presented as a matched A/C experiment. HTTP and template fixtures
+are retained under `scratch/dashboard-validation/campaign-*.json`.
+The new view has not had a rendered-browser visual review. The owner can open
+**Compare A/B/C**, choose a group/task, click a domain or check cell, and open its
+original session evaluation. Percentage bounds describe missing outcomes; they
+are not confidence intervals or evidence of causality.
+
 ### Configuration A on a different task
 
 On 2026-10-02, a fresh live `gpt-5.6-luna` run used `moderated_cylinder`
