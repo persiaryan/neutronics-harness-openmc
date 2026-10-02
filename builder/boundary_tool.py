@@ -11,6 +11,8 @@ import queue
 import subprocess
 import threading
 import uuid
+import time
+from observability import now, tool_observation
 
 from evaluation.scientific import boundaries
 from evaluation.scientific.boundary_scope import SCOPE, LIMITATIONS
@@ -75,6 +77,7 @@ class Session:
             raise ValueError('Boundary tool request budget already exhausted')
         self.calls+=1
         folder=self.output/f'call-{self.calls:02d}';folder.mkdir()
+        observed_start, observed_clock = now(), time.monotonic()
         reference=f'boundary-inspection:{self.id}:{self.calls}'
         write_json(folder/'request.json',request)
         response=dict(format=PROFILE['version'],evidence_reference=reference,status='indeterminate',
@@ -114,6 +117,7 @@ class Session:
             # never included in this public reply. Full receipts stay operator-side.
             write_json(folder/'response.json',response)
             write_json(folder/'feedback.json',boundary_feedback.compact(response))
+            tool_observation(folder,'boundary-tool',PROFILE['version'],started=observed_start,elapsed_seconds=time.monotonic()-observed_clock)
             write_json(self.output/'usage.json',dict(attempted_calls=self.calls,
                 artifact_snapshots=sum((p/'model.xml').exists() for p in self.output.glob('call-*')),
                 started_inspections=sum((p/'inspection').exists() for p in self.output.glob('call-*')),

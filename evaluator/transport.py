@@ -11,6 +11,7 @@ from evaluator import run
 from evaluator.build_transport import IMAGE, NATIVE_ID
 from evaluator.inspect import parse_xml
 from evaluator.transport_input import accepted_export, read_regular, transport_profile
+from observability import record as observe_progress
 
 MEMORY = 3 * 1024**3
 MAX_ARCHIVE = 128_000_000
@@ -170,6 +171,7 @@ def _transport(export, output, *, index, image, wall_seconds, smoke_input=None, 
 
         def phase(label, arguments, timeout, data=None):
             nonlocal collect
+            observe_progress(output, label, 'started', limit_seconds=timeout)
             execution = run.bounded(['docker', 'exec', '--workdir', '/work',
                                       *(['-i'] if data is not None else []), name, *arguments],
                                      timeout=timeout, data=data)
@@ -177,6 +179,8 @@ def _transport(export, output, *, index, image, wall_seconds, smoke_input=None, 
                 (output / (label + '-' + channel + '.txt')).write_bytes(execution[channel])
             run.write_json(output / (label + '-process.json'),
                            {key: execution[key] for key in ('exit_code', 'stop_reason')})
+            observe_progress(output, label, 'returned', exit_code=execution['exit_code'],
+                             stop_reason=execution['stop_reason'])
             if execution['stop_reason']:
                 collect = False  # Never collect artifacts from timed-out live processes.
                 result.update(status='budget_exceeded', reason=label + '_' + execution['stop_reason'])

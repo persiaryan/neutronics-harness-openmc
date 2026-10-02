@@ -1,0 +1,292 @@
+{
+  "format": "evaluation-definition-v1",
+  "protocol": "legacy-recorded-protocol",
+  "report_format": "private-candidate-diagnostic-v5",
+  "rubric_sha256": "c7c7be041942d4b93fdf247dabc363c519e9ca28bfa883de50e7542e945f0650",
+  "score": {
+    "maximum": 100,
+    "applicable_points": 70
+  },
+  "checks": {
+    "geometry": {
+      "interfaces": {
+        "label": {
+          "en": "Interfaces"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "extent_and_map": {
+        "label": {
+          "en": "Extent and map"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "domain": {
+        "label": {
+          "en": "Domain"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "boundaries": {
+        "label": {
+          "en": "Boundaries"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      }
+    },
+    "materials": {
+      "composition": {
+        "label": {
+          "en": "Composition"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "density": {
+        "label": {
+          "en": "Density"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "thermal_scattering": {
+        "label": {
+          "en": "Thermal scattering"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "temperature": {
+        "label": {
+          "en": "Temperature"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      }
+    },
+    "physics_settings": {
+      "physics": {
+        "label": {
+          "en": "Physics"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "sampling": {
+        "label": {
+          "en": "Sampling"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "source": {
+        "label": {
+          "en": "Source"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "entropy_mesh_and_output": {
+        "label": {
+          "en": "Entropy mesh and output"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      }
+    },
+    "keff": {
+      "equivalence_demonstrated": {
+        "label": {
+          "en": "Equivalence demonstrated"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      }
+    },
+    "statistical_quality": {
+      "precision": {
+        "label": {
+          "en": "Precision"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "entropy_screen": {
+        "label": {
+          "en": "Entropy screen"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      }
+    },
+    "engineering_consistency": {
+      "leakage_probability": {
+        "label": {
+          "en": "Leakage probability"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      },
+      "leakage_boundary_consistency": {
+        "label": {
+          "en": "Leakage boundary consistency"
+        },
+        "description": {
+          "en": "All declared required observations must satisfy this check."
+        },
+        "unit": null,
+        "rule": null
+      }
+    }
+  },
+  "gates": {
+    "model_builds": {
+      "label": {
+        "en": "Model builds"
+      },
+      "description": {
+        "en": "All declared required observations must satisfy this check."
+      },
+      "unit": null,
+      "rule": null
+    },
+    "openmc_runs": {
+      "label": {
+        "en": "Openmc runs"
+      },
+      "description": {
+        "en": "All declared required observations must satisfy this check."
+      },
+      "unit": null,
+      "rule": null
+    },
+    "valid_geometry": {
+      "label": {
+        "en": "Valid geometry"
+      },
+      "description": {
+        "en": "All declared required observations must satisfy this check."
+      },
+      "unit": null,
+      "rule": null
+    },
+    "required_data": {
+      "label": {
+        "en": "Required data"
+      },
+      "description": {
+        "en": "All declared required observations must satisfy this check."
+      },
+      "unit": null,
+      "rule": null
+    },
+    "finite_statepoint": {
+      "label": {
+        "en": "Finite statepoint"
+      },
+      "description": {
+        "en": "All declared required observations must satisfy this check."
+      },
+      "unit": null,
+      "rule": null
+    },
+    "required_observables": {
+      "label": {
+        "en": "Required observables"
+      },
+      "description": {
+        "en": "All declared required observations must satisfy this check."
+      },
+      "unit": null,
+      "rule": null
+    }
+  },
+  "domain_labels": {
+    "geometry": {
+      "en": "Geometry"
+    },
+    "materials": {
+      "en": "Materials"
+    },
+    "physics_settings": {
+      "en": "Physics settings"
+    },
+    "keff": {
+      "en": "Keff"
+    },
+    "statistical_quality": {
+      "en": "Statistical quality"
+    },
+    "engineering_consistency": {
+      "en": "Engineering consistency"
+    }
+  },
+  "weights": {
+    "geometry": 20,
+    "materials": 15,
+    "physics_settings": 10,
+    "keff": 15,
+    "statistical_quality": 5,
+    "engineering_consistency": 5
+  },
+  "rules": {
+    "equivalence_margin_pcm": 150.0,
+    "interval_multiplier": 1.96,
+    "maximum_candidate_std_dev_pcm": 51.96152422706632,
+    "entropy_active_half_drift_screen_bits": 0.02
+  },
+  "aggregation": "all-required-checks-v1",
+  "sha256": "bf30bfb08c4b39ac64d869217a6e181e8bdc4a6fd4743213ec039562864e4cd5"
+}

@@ -212,6 +212,38 @@ containers receive no reference mount, credentials or host Docker socket.
 
 ## Public/private separation
 
+The optional local [operator dashboard](dashboard/README.md) reads retained run
+evidence and updates through loopback HTTP polling. Best-effort host telemetry in
+`observability.py` adds `progress.jsonl` phase events; builder runtime events also
+carry a host observation timestamp. This telemetry never supplies candidate
+feedback or scientific verdicts. Its failures warn without changing the run.
+Recorded starts are not liveness proofs. Completed response/native-process files
+remain the source of displayed content; token/batch streaming is not added.
+
+The dashboard reuses exact feedback-delivery projection after authoring, preserves
+unknown/zero/failure distinctions and displays the retained independent review.
+It does not rerun the grader, infer private reasoning, reconstruct arbitrary shell
+edits, or assign points for tool use. The evaluated builder retains no network or
+host mount through which to read the operator page or private evaluation results.
+
+Its campaign view aggregates only retained observations, with a task assignment
+as the counting unit. It groups compatible recorded identities, preserves unknown
+outcomes in denominators, uses equal task weights and suppresses comparisons with
+missing task coverage or conflicting task identities. Missing-outcome bounds are
+not confidence intervals. Campaign loading and comparison never dispatch runs or
+recompute scientific verdicts; original per-session evidence remains inspectable.
+
+Observation metadata is versioned and retained with new plans, tool calls and
+evaluation reports. A shared report reader validates definitions before both
+individual and campaign display. Historical readers use frozen migration
+definitions, not the current rubric. Comparison compatibility includes the complete
+evaluation-definition identity. Explicit campaigns retain their planned model
+groups and suppress rates on identity conflicts instead of splitting denominators;
+configuration/tool inventories drive their columns. New reviews bind to canonical
+report content. This adds no scientific
+credit or tool permissions. See [observation contracts](dashboard/CONTRACTS.md)
+for supported schemas, explicit unknown/invalid states and compatibility limits.
+
 Public: harness source, physical task statements, requirement comparisons, score
 policy and portable synthetic regressions. Private: reference implementations and
 answers, campaigns, raw model traces, native qualification evidence and external

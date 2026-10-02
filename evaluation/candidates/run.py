@@ -21,6 +21,8 @@ from prompts.prepare import build_prompt, CASE_FILES
 from evaluator.profiles import BOUNDARY_PROTOCOL, FACTORY_PROFILE, assessment_route
 from evaluation.scientific import boundaries
 from evaluation.candidates import boundary_assessment
+from observability import record as observe_progress
+from observation_contracts import evaluation_definition
 
 ROOT = Path(__file__).resolve().parents[2]
 INDEX = ROOT / 'evaluation/benchmark_suite/frozen/pilot-1'
@@ -113,11 +115,13 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
     output = Path(output).absolute()
     require(not output.exists(), 'Refusing to overwrite candidate evidence')
     output.mkdir(parents=True)
+    observe_progress(output, 'assessment', 'started')
     started = time.monotonic()
     report = dict(format='private-candidate-diagnostic-v5', case=case, status='incomplete',
                   created_utc=datetime.now(timezone.utc).isoformat(), gates=assessment.blank_gates(), checks=assessment.blank_checks(),
                   phases={}, grading_enabled=False, scientific_review='pending_owner_review', builder_feedback='not_sent',
                   candidate_repair=False, host_candidate_execution='not_run', cleanup_confirmed=False)
+    report['observation_definition'] = evaluation_definition(scoring.RUBRIC, scoring.identity()['sha256'], evaluator_protocol)
     stage = 'admission'
     def gate(name, passed, cause=None, detail=''):
         report['gates'][name] = dict(passed=passed, cause=cause, detail=detail)
@@ -160,14 +164,17 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
             stage = 'eligibility'
             stop('capability', 'External cylinder boundary requirements are outside the qualified observer scope')
         stage = 'preflight'
+        observe_progress(output, stage, 'started')
         index, checked = preflight(index, goal)
         exporter.write_json(output / 'preflight.json', checked)
         gate('required_data', True, detail='Evaluator-supplied task data match frozen hashes')
         stage = 'export'
+        observe_progress(output, stage, 'started')
         value = exporter.evaluate(output / 'candidate.py', output / 'export', index=index,
                                   image=goal['protocol']['export_image'], wall_seconds=budgets['export'],
                                   contract=contract, execution_profile=execution_profile, runtime=runtime)
         report['phases']['export'] = value
+        observe_progress(output, stage, value['status'])
         if value.get('cleanup_confirmed') is not True:
             stop('infrastructure', 'Export cleanup uncertain')
         receipts.container_phase(output / 'export', goal['protocol']['export_image'], index, source_hash)
@@ -179,6 +186,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         require(identity['candidate_sha256'] == source_hash, 'Export source identity changed')
         report['final_model'] = dict(path='export/artifacts/model.xml', sha256=exporter.digest(xml), bytes=len(xml))
         stage = 'export-inspection'
+        observe_progress(output, stage, 'started')
         observation = inspect_xml(xml, probes(case)[0], output / stage, wall_seconds=budgets['inspection'], image=goal['protocol']['export_image'])
         report['phases'][stage] = {k: observation[k] for k in ('status', 'cleanup_confirmed')}
         observation = inspection_record(case, output / stage, xml, WORKER.read_bytes(), image=goal['protocol']['export_image'])
@@ -189,6 +197,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
                 report['checks']['materials']['composition'] = False
             stop(**failure)
         stage = 'export-boundaries'
+        observe_progress(output, stage, 'started')
         value = boundaries.observe(xml, output / stage, wall_seconds=budgets['inspection'], image=goal['protocol']['export_image'])
         report['phases'][stage] = {k: value[k] for k in ('status', 'cleanup_confirmed')}
         if value['status'] != 'inspected' or value['cleanup_confirmed'] is not True:
@@ -198,6 +207,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         stage = 'export-inspection'
         fidelity = assess(case, admit(xml), observation, report['assignment']['sampling'], boundary_result=boundary_result)
         exporter.write_json(output / 'export-fidelity.json', fidelity)
+        observe_progress(output, 'fidelity', 'recorded')
         report['checks'] = assessment.fidelity_checks(case, fidelity, observation)
         report['fidelity'] = fidelity
         if fidelity['geometry']['invalid_geometry']:
@@ -209,9 +219,11 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         if not set(map(tuple, profile['required_tables'])) <= allowed:
             stop('model', 'Submission requests nuclear data outside the explicitly specified task collection', 'required_data')
         stage = 'transport'
+        observe_progress(output, stage, 'started')
         value = solver.transport(output / 'export', output / 'transport', index=index,
                                  image=goal['protocol']['transport_image'], wall_seconds=budgets['transport'], runtime=runtime)
         report['phases']['transport'] = value
+        observe_progress(output, stage, value['status'])
         if value.get('cleanup_confirmed') is not True:
             stop('infrastructure', 'Transport cleanup uncertain')
         if value['status'] != 'calculated_unreviewed':
@@ -225,6 +237,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
                 stop('model', value['reason'], 'openmc_runs')
             stop('evaluator', value.get('reason', value['status']), 'openmc_runs')
         stage = 'assessment'
+        observe_progress(output, 'scoring', 'started')
         record = receipts.transport_record(output, source_hash, goal['protocol']['transport_image'], index)
         require(record['runtime'] == goal['runtime'], 'Native runtime differs from frozen reference')
         require(record['data']['index_sha256'] == goal['data']['index_sha256'] and
@@ -263,6 +276,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         report['elapsed_seconds'] = round(time.monotonic() - started, 3)
         exporter.write_json(output / 'report.json', report)
         (output / 'report.md').write_text(markdown(report))
+        observe_progress(output, 'assessment', report['status'], cleanup_confirmed=report['cleanup_confirmed'])
     return report
 
 
