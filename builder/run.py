@@ -20,6 +20,7 @@ from builder import openmc_python
 from builder.relay import forward, load_auth, validate_request
 from prompts.prepare import CASE_FILES
 from evaluator.profiles import BOUNDARY_PROTOCOL
+from observability import now, record
 
 
 IMAGE = openmc_python.IMAGE_ID
@@ -139,6 +140,7 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
         raise ValueError('Builder requires the qualified pinned OpenMC authoring image')
     name = "neutronics-v5-builder-" + uuid.uuid4().hex[:16]
     output.mkdir(parents=True)
+    record(output, 'authoring', 'started')
     (output / "prompt.txt").write_text(prompt)
     # Keep the exact implementation behind each run even before a Git commit.
     for source, snapshot_name in ((Path(__file__), "controller-source.py"),
@@ -206,7 +208,7 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                 except queue.Empty:
                     continue
                 kind = event.get("type")
-                log.write(json.dumps(event) + "\n")
+                log.write(json.dumps(dict(event, observed_utc=now())) + "\n")
                 log.flush()
                 if kind == "ready":
                     if ready or event.get("entry_sha256") != manifest["entry_sha256"]:
@@ -227,6 +229,7 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                     if not ready or done or count >= max_requests:
                         raise ValueError("Model-request budget or lifecycle violation")
                     count += 1
+                    record(output, 'model_request', 'started', turn=count)
                     if event.get("id") != count:
                         raise ValueError("Nonsequential model request")
                     body = event["body"]
@@ -254,16 +257,21 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                     else:
                         data = responder(count, body)
                     (output / f"response-{count:02d}.sse").write_bytes(data)
+                    record(output, 'model_request', 'completed', turn=count)
                     send(process, {"id": count, "status": 200, "data": base64.b64encode(data).decode()})
                 elif kind == 'boundary_tool_request':
                     if boundary_adapter is None or done:
                         raise ValueError('Undeclared or late boundary tool request')
+                    record(output, 'boundary_tool', 'started')
                     boundary_adapter.handle(event['frame'],deadline-time.monotonic())
+                    record(output, 'boundary_tool', 'returned')
                 elif kind == 'boundary_tool_error':
                     raise RuntimeError('Boundary tool bridge failed')
                 elif kind == 'smoke_tool_request':
                     if smoke_adapter is None or done:raise ValueError('Undeclared or late smoke request')
+                    record(output, 'smoke_tool', 'started')
                     smoke_adapter.handle(event['frame'],deadline-time.monotonic())
+                    record(output, 'smoke_tool', 'returned')
                 elif kind == 'smoke_tool_error':
                     raise RuntimeError('Smoke tool bridge failed')
                 elif kind == "done":
@@ -321,6 +329,7 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                       host_candidate_execution="not_run", evaluator_validation="not_run")
         write_json(output / "lifecycle.json", lifecycle)
         write_json(output / "result.json", result)
+        record(output, 'authoring', result['status'], cleanup_confirmed=result['cleanup_confirmed'])
     return result
 
 

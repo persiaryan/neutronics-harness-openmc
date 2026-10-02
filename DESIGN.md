@@ -212,6 +212,20 @@ containers receive no reference mount, credentials or host Docker socket.
 
 ## Public/private separation
 
+The optional local [operator dashboard](dashboard/README.md) reads retained run
+evidence and updates through loopback HTTP polling. Best-effort host telemetry in
+`observability.py` adds `progress.jsonl` phase events; builder runtime events also
+carry a host observation timestamp. This telemetry never supplies candidate
+feedback or scientific verdicts. Its failures warn without changing the run.
+Recorded starts are not liveness proofs. Completed response/native-process files
+remain the source of displayed content; token/batch streaming is not added.
+
+The dashboard reuses exact feedback-delivery projection after authoring, preserves
+unknown/zero/failure distinctions and displays the retained independent review.
+It does not rerun the grader, infer private reasoning, reconstruct arbitrary shell
+edits, or assign points for tool use. The evaluated builder retains no network or
+host mount through which to read the operator page or private evaluation results.
+
 Public: harness source, physical task statements, requirement comparisons, score
 policy and portable synthetic regressions. Private: reference implementations and
 answers, campaigns, raw model traces, native qualification evidence and external

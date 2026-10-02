@@ -114,6 +114,23 @@ task variation, the v6-to-v7 amendment, outcome categories and evidence limits.
 
 ## Quick start
 
+### Local run dashboard
+
+Follow authoring, feedback delivery, final XML, independent evaluation and scientific
+results in the local bilingual operator interface (English by default, French available):
+
+```sh
+python3 -B -m dashboard.server --run scratch/my-run --port 8765
+```
+
+Open **http://127.0.0.1:8765/**. The directory can be prepared, running or retained.
+See [dashboard usage and the explicit live-agent demo](dashboard/README.md).
+The interface reads evidence; model calls and native runs require a separate
+explicit launch. It preserves unknown outcomes and never supplies feedback to
+the builder or calculates scientific grades.
+
+### Portable preparation
+
 Run from the extracted repository with Python 3.12 or newer. Host code uses the
 standard library; these commands need no OpenMC installation, Docker, nuclear
 data, credentials or model calls.
