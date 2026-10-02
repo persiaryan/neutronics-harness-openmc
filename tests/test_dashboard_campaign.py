@@ -50,7 +50,7 @@ class CampaignTest(unittest.TestCase):
         self.write(base/'builder/manifest.json', dict(image_id='builder'))
         self.write(base/'builder/result.json', dict(status='completed', elapsed_seconds=12, request_count=3))
         self.write(root/'summary.json', {'tasks':[dict(case=case, authoring={'effort':dict(token_usage={'total_tokens':200},token_usage_complete=True)})]})
-        report = dict(status='assessed', assignment=dict(rubric={'sha256':self.rubric}, reference={'case':case,'version':1},sampling={'seed':1}),
+        report = dict(format='private-candidate-diagnostic-v5', status='assessed', assignment=dict(rubric={'sha256':self.rubric}, reference={'case':case,'version':1},sampling={'seed':1}),
                       gates={k:dict(passed=True,cause=None) for k in GATES},
                       checks={k:{n:True for n in v} for k,v in CHECKS.items()},
                       diagnostic_score=dict(status='scored',score=100,strict_correct=True))

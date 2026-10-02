@@ -1,10 +1,60 @@
 # Dashboard validation — 2026-10-02
 
 Branch: `feat/local-run-dashboard`, based on `b4780ab097efba286fcaa85c8e90d93dbb020f03`.
-Implementation and evidence remain local and uncommitted. This is an observation
-and integration demonstration, not a new A/B efficacy study.
+The dashboard/campaign implementation through the A16 demonstration was committed
+as `d81fa2f`. Subsequent observation-contract consolidation and interrupted-report
+display corrections are described below. Scratch evidence stays local and ignored. This is an
+observation and integration demonstration, not a new A/B efficacy study.
+
+## Observation-contract consolidation
+
+On 2026-10-02, after the preceding commit:
+
+- **355 portable Python tests passed**, including 16 new evolution controls.
+  Coverage includes D, a new tool/domain/criterion, distinct score scales,
+  definition and report binding, missing criteria, invalid/unsupported formats,
+  frozen historical readers, new tool budget conflicts, prepared-plan consistency,
+  evaluator metadata/review production with a synthetic admission failure, and
+  consistency between the current catalogue and runtime permissions/tool versions.
+- JavaScript syntax and all three template suites passed. English/French views
+  display D, the thermal probe, the new criterion, a score on 10 and a 75 pcm
+  margin without adding configuration-specific columns. Unknown/malformed reports
+  retain an escaped original report and a visible reader diagnostic.
+- Local HTTP returned 200 for all five static resources, inventory, four session
+  states and campaign data. Original report/review objects matched the retained
+  files exactly. All four projections had zero file-read warnings.
+- The three completed historical evaluations remain supported and review coherent:
+  scores 100, 96.42857142857143 and 100. The historical cylinder admission failure
+  remains unscored; its absent rubric identity is explicitly unsupported by the
+  historical reader, with the original report still accessible.
+- `git diff --check` passed. No new provider request, agent run or native transport
+  was launched for this consolidation. No fresh rendered-browser review was made;
+  template checks are not visual/ergonomic acceptance.
+
+Disposable fixtures and HTTP checks: `scratch/dashboard-consolidation/`.
+Reproducible synthetic fixture commands are in [CONTRACTS.md](CONTRACTS.md).
+The loopback server was restarted with the same four retained sessions.
 
 ## Checks actually executed
+
+### Follow-up: historical interrupted assessment display
+
+The cylinder admission failure now appears as **Assessment interrupted: required
+references unavailable**, with its recorded stage/error and absent score. The
+historical missing-rubric warning is secondary. Overview and evaluation no longer
+present this terminal report as waiting for assessment. `assessment_state()` in
+`dashboard/contracts.py` supplies execution metadata independently of rubric
+validation; `assessmentNotice()` and `unavailableText()` in `static/app.js` render
+it in English/French. No historical report or scientific verdict was changed.
+
+Verified: **357 portable Python tests passed**; interrupted-assessment templates
+passed in both languages on synthetic files and the actual cylinder HTTP response.
+Existing individual, evolution and campaign template suites passed. HTTP state
+and campaign checks confirmed identical original report/review objects, null score
+and unknown aggregate outcome. `git diff --check` passed. Server restarted at
+`127.0.0.1:8765`; reload the page to load the updated JavaScript. No new agent/native
+run or rendered-browser validation was performed. Local check fixture:
+`scratch/dashboard-stop-fix/actual-cylinder-state.json`.
 
 | Check | Result | Scope |
 |---|---|---|

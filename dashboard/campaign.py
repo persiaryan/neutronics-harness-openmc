@@ -7,17 +7,10 @@ from pathlib import Path
 
 from dashboard.projection import Evidence, confined
 
-RUBRIC_BYTES = (Path(__file__).resolve().parents[1]/'evaluation/benchmark_suite/scoring.json').read_bytes()
-RUBRIC = json.loads(RUBRIC_BYTES)
-RUBRIC_HASH = hashlib.sha256(RUBRIC_BYTES).hexdigest()
-CHECKS = {k: v['checks'] for k, v in RUBRIC['categories'].items()}
-CHECKS['hard_gates'] = RUBRIC['hard_gates']
-DOMAINS = ['overall', 'hard_gates', *RUBRIC['categories']]
-CONFIGURATIONS = {
-    'A': ('guided_construction', 'generic_coding_guided_construction_v1'),
-    'B': ('guided_boundaries', 'generic_coding_guided_boundaries_v3'),
-    'C': ('guided_boundaries_smoke', 'generic_coding_guided_boundaries_smoke_v1'),
-}
+from dashboard.contracts import configuration_view, normalize_evaluation
+from observation_contracts import catalog, fingerprint
+
+CONFIGURATIONS = {c['id']: c for c in catalog()['configurations']}
 
 
 def obj(value):
@@ -29,11 +22,8 @@ def number(value):
 
 
 def configuration(plan):
-    for letter, (assistance, condition) in CONFIGURATIONS.items():
-        if (plan.get('assistance') == assistance or plan.get('condition') == condition) and all(
-                plan.get(k) in (None, '', v) for k, v in [('assistance', assistance), ('condition', condition)]):
-            return letter
-    return '?'
+    value = configuration_view(plan)['definition']
+    return value['configuration']['id'] if value else '?'
 
 
 def digest(value):
@@ -79,19 +69,19 @@ def read_records(roots):
             row = next((v for v in (summary_tasks if isinstance(summary_tasks, list) else []) if isinstance(v, dict) and v.get('case') == case), {})
             effort = obj(obj(row.get('authoring')).get('effort'))
             assignment = obj(report.get('assignment'))
-            score = obj(report.get('diagnostic_score'))
+            evaluation = normalize_evaluation(report or None, review)
+            definition = evaluation['definition']
+            presented = evaluation['report'] or {}
+            score = obj(presented.get('diagnostic_score'))
             rubric = obj(assignment.get('rubric'))
-            supported = rubric.get('sha256') == RUBRIC_HASH
-            valid_score = score.get('score') is None or (number(score.get('score')) is not None and score['score'] <= 100)
-            trusted = (review.get('evidence_status') == 'coherent' and supported
-                       and valid_score and score.get('status') in ('scored', 'model_gate_failure', 'unscored')
-                       and (review.get('strict_correct') is not True or (score.get('status') == 'scored' and score.get('score') == 100))
-                       and review.get('score') == score.get('score')
-                       and type(review.get('strict_correct')) is bool
-                       and review.get('strict_correct') == score.get('strict_correct'))
+            supported = evaluation['status'] == 'supported'
+            trusted = evaluation['trusted']
+            inventory = {**definition['checks'], 'hard_gates': definition['gates']} if definition else {}
+            config_view = configuration_view(plan)
+            config_definition = config_view['definition']
             checks, domains = {}, {}
-            for domain, names in CHECKS.items():
-                raw = obj(report.get('gates' if domain == 'hard_gates' else 'checks'))
+            for domain, names in inventory.items():
+                raw = obj(presented.get('gates' if domain == 'hard_gates' else 'checks'))
                 if domain != 'hard_gates':
                     raw = obj(raw.get(domain))
                 checks[domain] = {}
@@ -112,7 +102,7 @@ def read_records(roots):
             profile = obj(route.get('execution_profile')) or obj(plan.get('execution_profile'))
             cohort = dict(model=plan.get('model'), protocol=route.get('evaluator_protocol') or plan.get('evaluator_protocol'),
                           budgets={k: budgets.get(k) for k in ('model_requests', 'authoring_seconds', 'automatic_retries')},
-                          profile=profile, rubric=rubric.get('sha256'), adapter=plan.get('adapter'),
+                          profile=profile, rubric=definition['rubric_sha256'] if definition else rubric.get('sha256'), definition=definition['sha256'] if definition else None, adapter=plan.get('adapter'),
                           builder_image=manifest.get('image_id'), request_setup_sha256=digest(manifest['required_request_setup']) if manifest.get('required_request_setup') else None,
                           reference_scope='public_demo' if assessment.name == 'assessment-public-demo' else 'private')
             prompts = obj(obj(plan.get('prompts')).get(case))
@@ -120,14 +110,14 @@ def read_records(roots):
             elapsed = number(builder.get('elapsed_seconds'))
             tokens = number(obj(effort.get('token_usage')).get('total_tokens')) if effort.get('token_usage_complete') is True else None
             records.append(dict(id=f'{run_id}:{case}', run=run_id, run_name=e.root.name, task_index=task_index,
-                case=case, configuration=configuration(plan), cohort=digest(cohort), context=cohort,
+                case=case, configuration=configuration(plan), configuration_description=config_definition, configuration_status=config_view['status'], evaluation_status=evaluation['status'], evaluation_reason=evaluation['reason'], definition=definition, cohort=digest(cohort), context=cohort,
                 task_signature=digest(signature), task_identity_known=bool(signature['prompt'] and signature['reference'] and signature['sampling']),
                 report_path=str(assessment/'report.json'), review_path=str(assessment/'review.json'),
                 review_status=review.get('evidence_status', 'absent'), report_status=report.get('status', 'pending'),
                 builder_status=builder.get('status', 'pending'), domains=domains, checks=checks,
                 score=number(score.get('score')) if trusted else None,
                 elapsed_seconds=elapsed, tokens=tokens, requests=number(builder.get('request_count')),
-                assistance_budgets={k:budgets.get(k) for k in ('boundary_calls','boundary_seconds','smoke_calls','smoke_native_seconds')},
+                assistance_budgets={k:v for k,v in budgets.items() if k not in ('model_requests','authoring_seconds','automatic_retries')},
                 supported_rubric=supported, trusted=trusted))
         warnings.extend(dict(run=run_id, **w) for w in e.warnings)
     return records, warnings
@@ -154,9 +144,9 @@ def mean(values):
     return dict(mean=sum(values)/len(values) if values else None, n=len(values))
 
 
-def group(rows, tasks, blocked_tasks=()):
-    domains = {d: summarize(rows, tasks, lambda r: r['domains'][d]) for d in DOMAINS}
-    checks = {d: {c: summarize(rows, tasks, lambda r: r['checks'][d][c]) for c in names} for d, names in CHECKS.items()}
+def group(rows, tasks, inventory, blocked_tasks=()):
+    domains = {d: summarize(rows, tasks, lambda r: r['domains'].get(d, 'unknown')) for d in ['overall', *inventory]}
+    checks = {d: {c: summarize(rows, tasks, lambda r: r['checks'].get(d, {}).get(c, 'unknown')) for c in names} for d, names in inventory.items()}
     if set(tasks).intersection(blocked_tasks):
         for value in [*domains.values(), *(v for domain in checks.values() for v in domain.values())]:
             value.update(rate=None, possible_rate=None)
@@ -165,27 +155,47 @@ def group(rows, tasks, blocked_tasks=()):
 
 
 def aggregate(records, warnings=()):
+    # Same human label can denote different retained configuration versions.
+    descriptors = {fingerprint(c): c for c in CONFIGURATIONS.values()}
+    for record in records:
+        snapshot = record.get('configuration_description')
+        if snapshot:
+            descriptor = {**snapshot['configuration'], 'tool_definitions': snapshot['tools']}
+            descriptors[fingerprint(descriptor)] = descriptor
+    # Remove default placeholders where recorded definitions supply that ID/version.
+    recorded_ids = {r['configuration'] for r in records if r.get('configuration_description')}
+    descriptors = {h:c for h,c in descriptors.items() if 'tool_definitions' in c or c['id'] not in recorded_ids}
+    counts = Counter(c['id'] for c in descriptors.values())
+    keys = {h: c['id'] if counts[c['id']] == 1 else c['id']+'@'+c['version']+'-'+h[:6] for h,c in descriptors.items()}
+    configurations = {keys[h]:c for h,c in descriptors.items()}
+    records = [dict(r) for r in records]
+    for record in records:
+        snapshot = record.get('configuration_description')
+        if snapshot:
+            record['configuration'] = keys[fingerprint({**snapshot['configuration'], 'tool_definitions': snapshot['tools']})]
     buckets = defaultdict(list)
     for record in records:
         buckets[record['cohort']].append(record)
     cohorts = []
     for identity, rows in buckets.items():
         tasks = sorted({r['case'] for r in rows})
-        valid = [r for r in rows if r['configuration'] in CONFIGURATIONS]
+        definition = rows[0].get('definition')
+        inventory = {'hard_gates': definition['gates'], **definition['checks']} if definition else {}
+        valid = [r for r in rows if r['configuration'] in configurations]
         conflicts = [t for t in tasks if len({r['task_signature'] for r in valid if r['case'] == t}) > 1]
-        budget_conflicts = [c for c in CONFIGURATIONS if len({digest(r['assistance_budgets']) for r in valid if r['configuration'] == c}) > 1]
+        budget_conflicts = [c for c in configurations if len({digest(r['assistance_budgets']) for r in valid if r['configuration'] == c}) > 1]
         blocked_tasks = tasks if budget_conflicts else conflicts
-        groups = {c: group([r for r in valid if r['configuration'] == c], tasks, blocked_tasks) for c in CONFIGURATIONS}
-        by_task = {t: {c: group([r for r in valid if r['case'] == t and r['configuration'] == c], [t], blocked_tasks) for c in CONFIGURATIONS} for t in tasks}
+        groups = {c: group([r for r in valid if r['configuration'] == c], tasks, inventory, blocked_tasks) for c in configurations}
+        by_task = {t: {c: group([r for r in valid if r['case'] == t and r['configuration'] == c], [t], inventory, blocked_tasks) for c in configurations} for t in tasks}
         context = rows[0]['context']
-        comparable = (bool(valid) and not conflicts and not budget_conflicts and all(r['task_identity_known'] for r in valid)
+        comparable = (bool(valid) and definition is not None and not conflicts and not budget_conflicts and all(r['task_identity_known'] for r in valid)
                       and bool(context['model'] and context['protocol'] and context['rubric'] and context['builder_image'])
                       and all(v is not None for v in context['budgets'].values()))
-        cohorts.append(dict(id=identity, context=context, tasks=tasks, groups=groups, by_task=by_task,
+        cohorts.append(dict(id=identity, context=context, definition=definition, configurations=configurations, domains=['overall', *inventory], tasks=tasks, groups=groups, by_task=by_task,
                             conflicting_tasks=conflicts, conflicting_tool_budgets=budget_conflicts,
-                            assistance_budgets={c: next((r['assistance_budgets'] for r in valid if r['configuration'] == c), None) for c in CONFIGURATIONS},
+                            assistance_budgets={c: next((r['assistance_budgets'] for r in valid if r['configuration'] == c), None) for c in configurations},
                             comparable=comparable, excluded=sum(r['configuration']=='?' for r in rows)))
-    return dict(format='dashboard-campaign-v1', domains=DOMAINS, cohorts=cohorts,
+    return dict(format='dashboard-campaign-v2', configurations=configurations, cohorts=cohorts,
                 records=records, warnings=list(warnings), assignments=len(records))
 
 

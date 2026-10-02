@@ -2,9 +2,9 @@
 // Gettext-style catalog: the original French UI strings are the stable keys.
 // Only UI-owned strings pass through t(); evidence, source and logs remain verbatim.
 const UI_ENGLISH = {
-  "Comparaison limitée : identités manquantes, versions de tâche ou budgets d’outils différents. Les écarts A/B/C sont masqués.": "Limited comparison: missing identities, differing task versions or tool budgets. A/B/C differences are hidden.",
+  "Comparaison limitée : identités manquantes, versions de tâche ou budgets d’outils différents. Les écarts entre configurations sont masqués.": "Limited comparison: missing identities, differing task versions or tool budgets. A/B/C differences are hidden.",
   "Taux de réussite": "Success rate",
-"Comparaison A/B/C": "Compare A/B/C",
+"Comparaison des configurations": "Compare configurations",
 "Réussite complète": "Complete success",
 "Contrôles obligatoires": "Hard gates",
 "Aucune session": "No sessions",
@@ -27,8 +27,8 @@ const UI_ENGLISH = {
 "Groupe compatible": "Compatible group",
 "Toutes les tâches · poids égaux": "All tasks · equal weights",
 "Les sélecteurs Session et Tâche de la barre supérieure concernent les vues individuelles. Ici, utiliser les filtres de comparaison.": "The Run and Task selectors in the top bar apply to individual views. Use the comparison filters here.",
-"Comparaison limitée : identités manquantes ou versions de tâche différentes. Les écarts A/B/C sont masqués.": "Limited comparison: missing identities or differing task versions. A/B/C differences are hidden.",
-"observations sans configuration reconnue : exclues des agrégats A/B/C, conservées dans le détail.": "observations without a recognized configuration: excluded from A/B/C aggregates, retained in the details.",
+"Comparaison limitée : identités manquantes ou versions de tâche différentes. Les écarts entre configurations sont masqués.": "Limited comparison: missing identities or differing task versions. A/B/C differences are hidden.",
+"observations sans configuration reconnue : exclues des agrégats par configuration, conservées dans le détail.": "observations without a recognized configuration: excluded from A/B/C aggregates, retained in the details.",
 "Réussite complète · poids égal par tâche": "Complete success · equal task weights",
 "Résultats par domaine": "Results by domain",
 "Cliquer sur une cellule pour retrouver les sessions et leurs preuves. Un domaine réussit lorsque tous ses contrôles requis réussissent.": "Click a cell to find its sessions and evidence. A domain passes when all its required checks pass.",
@@ -57,7 +57,7 @@ const UI_ENGLISH = {
 "Pour chaque tâche : réussites établies / toutes les observations chargées. Le taux global est la moyenne de ces taux par tâche. Un résultat indéterminé reste dans le dénominateur.": "For each task: established successes / all loaded observations. The overall rate is the mean of these task rates. Unresolved outcomes stay in the denominator.",
 "Les bornes montrent le taux si tous les indéterminés échouaient ou réussissaient. Elles ne sont pas un intervalle de confiance statistique. Avec peu de répétitions, les écarts restent descriptifs.": "Bounds show the rate if all unresolved outcomes failed or passed. They are not statistical confidence intervals. With few repeats, differences remain descriptive.",
 "Les domaines non observés après un arrêt restent indéterminés. Seuls les verdicts accompagnés d’une revue cohérente et du barème reconnu sont agrégés. Le dashboard ne relance pas la vérification.": "Domains not observed after a stop remain unresolved. Only verdicts with a coherent review and a recognized rubric are aggregated. The dashboard does not rerun verification.",
-"Les différences A/B/C ne prouvent pas une causalité. La configuration des requêtes non enregistrée, les tâches réutilisées et les biais partagés limitent l’interprétation.": "A/B/C differences do not establish causality. Unrecorded request settings, reused tasks and shared biases limit interpretation.",
+"Les différences entre configurations ne prouvent pas une causalité. La configuration des requêtes non enregistrée, les tâches réutilisées et les biais partagés limitent l’interprétation.": "A/B/C differences do not establish causality. Unrecorded request settings, reused tasks and shared biases limit interpretation.",
 "Identités et budgets du groupe": "Group identities and budgets",
 "Fichiers illisibles ou incomplets": "Unreadable or incomplete files",
   "Configuration testée": "Test configuration",
@@ -395,6 +395,32 @@ const UI_ENGLISH = {
   "Exécution séparée du modèle ; résultat à venir.": "Separate model execution; result pending.",
   "Session agent terminée": "Agent session ended"
 };
+
+Object.assign(UI_ENGLISH, {
+"Évaluation interrompue. Consulter le motif d’arrêt.": "Assessment interrupted. See the recorded stop reason.",
+"Résultats indisponibles pour ce rapport.": "Results unavailable for this report.",
+"Évaluation interrompue : références requises indisponibles": "Assessment interrupted: required references unavailable",
+"Évaluation interrompue": "Assessment interrupted",
+"Arrêt à l’admission, avant les contrôles scientifiques. Aucune note n’a été calculée.": "Stopped at admission, before scientific checks. No score was calculated.",
+"La construction par l’agent est terminée.": "The agent has completed construction.",
+"Étape": "Stage",
+"Cause enregistrée": "Recorded cause",
+"Rapport historique sans identité de barème enregistrée. Les résultats scientifiques ne peuvent pas être interprétés.": "Historical report without a recorded rubric identity. Scientific results cannot be interpreted.",
+  "Unité": "Unit",
+  "Lecture du rapport": "Report reader",
+  "Rapport original": "Original report",
+  "Définition enregistrée du barème": "Recorded evaluation definition",
+  "Description enregistrée de la configuration": "Recorded configuration description",
+  "traces": "records",
+  "Barème déclaré : {points} points applicables ; échelle sur {maximum}.": "Declared rubric: {points} applicable points; score out of {maximum}.",
+  "Marge enregistrée : ±{margin} pcm ; multiplicateur de l’intervalle : {multiplier}. Ces paramètres ne constituent pas une limite de sûreté.": "Recorded margin: ±{margin} pcm; interval multiplier: {multiplier}. These parameters are not a safety limit.",
+  " pcm ; intervalle enregistré ": " pcm; recorded interval ",
+  "Zone verte : marge déclarée · trait bleu : intervalle enregistré": "Green band: declared margin · blue line: recorded interval",
+  "La transmission nécessite un reçu de livraison distinct.": "Delivery requires a separate delivery receipt.",
+  "Reçu d’observation et empreintes": "Observation receipt and hashes",
+  "Critères : attendu, observé, unité, règle et preuve": "Criteria: expected, observed, unit, rule and evidence",
+  "Score diagnostique": "Diagnostic score"
+});
 
 const I18N = (() => {
   const storageKey = 'neutronics-dashboard-language';

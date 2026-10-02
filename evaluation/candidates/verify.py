@@ -15,6 +15,7 @@ from evaluation.scientific.inspection import WORKER, admit
 from evaluation.scientific.records import require
 from prompts.prepare import build_prompt
 from evaluator.profiles import BOUNDARY_PROTOCOL
+from observation_contracts import evaluation_definition, fingerprint
 from evaluation.scientific import boundaries
 from evaluation.candidates import boundary_assessment
 
@@ -37,6 +38,10 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
     report = receipts.read(directory / 'report.json')
     require(report['format'] == 'private-candidate-diagnostic-v5',
             'Incompatible historical report: use its original protocol verifier; never rescore as current')
+    if 'observation_definition' in report:
+        protocol = report.get('assignment', {}).get('assessment_route', {}).get('evaluator_protocol', BOUNDARY_PROTOCOL)
+        require(report['observation_definition'] == evaluation_definition(scoring.RUBRIC, scoring.identity()['sha256'], protocol),
+                'Recorded evaluation definition differs from the evaluator rules')
     require('repeat_export' not in report and not any(n.startswith('repeat-') for n in report['phases']),
             'V2 forbids repeat-export phases or verdicts')
     require(report['grading_enabled'] is False and report['builder_feedback'] == 'not_sent' and
@@ -209,6 +214,7 @@ def review_assessment(directory, index, *, reference=None, runtime=None):
         original = receipts.read(Path(directory) / 'report.json')
         require(isinstance(original, dict) and isinstance(original.get('diagnostic_score'), dict), 'Malformed assessment report')
         annotation['reported_score'] = original.get('diagnostic_score', {}).get('score')
+        annotation['report_sha256'] = fingerprint(original)
         result = assessment_report(directory, index, reference=reference, runtime=runtime)
     except (InsufficientEvidence, FileNotFoundError) as exc:
         return dict(annotation, evidence_status='insufficient', score=None, reason=str(exc))

@@ -46,6 +46,7 @@ for(const view of ['overview','agent','evaluation','artifacts','guide']){
 }
 task.report={status:'stopped',grading_enabled:false,gates:{model_builds:{passed:false,detail:'API error'}},
   checks:{geometry:{domain:null}},diagnostic_score:{score:0,categories:{}},fidelity:{}};
+task.evaluation={status:'supported',trusted:false,report:task.report,definition:{score:{maximum:100,applicable_points:70},rules:{equivalence_margin_pcm:150,interval_multiplier:1.96}}};
 task.review={evidence_status:'contradictory',score:null,strict_correct:false};
 vm.runInContext('data.tasks[0]='+JSON.stringify(task),context);
 assert.ok(render('overview').includes('0,0 / 100'));
@@ -123,6 +124,7 @@ assert.ok(elements.content.innerHTML.includes('Reading guide'));
 assert.equal(vm.runInContext('replayIndex',context),3);
 assert.equal(vm.runInContext('JSON.stringify(data)',context),before);
 console.log('Language selector handler passed: shell, current view, replay position and evidence preserved.');
+const catalog=JSON.parse(fs.readFileSync(path.join(__dirname,'../observation_catalog.json'),'utf8'));
 const planCases=[
  ['A','guided_construction','generic_coding_guided_construction_v1'],
  ['B','guided_boundaries','generic_coding_guided_boundaries_v3'],
@@ -132,11 +134,13 @@ for(const language of ['en','fr']){
  vm.runInContext('I18N.setLanguage('+JSON.stringify(language)+')',context);
  for(const [letter,assistance,condition] of planCases){
    vm.runInContext('data.plan='+JSON.stringify({model:'test-model',assistance,condition,budgets:{model_requests:8,authoring_seconds:600,boundary_calls:2,smoke_calls:2}}),context);
+   const descriptor=catalog.configurations.find(c=>c.id===letter);
+   vm.runInContext('data.configuration='+JSON.stringify({status:'supported',definition:{configuration:descriptor,tools:catalog.tools.filter(t=>descriptor.tools.includes(t.id))}}),context);
    const banner=vm.runInContext('configurationBanner(task())',context);
    assert.ok(banner.includes('Configuration '+letter));
    assert.ok(banner.includes('test-model'));
    assert.ok(banner.includes('600 s'));
-   assert.equal((banner.match(new RegExp(language==='en'?'Not allowed':'Non autorisé','g'))||[]).length,letter==='A'?2:letter==='B'?1:0);
+   assert.ok(banner.includes(language==='en'?'Allowed':'Autorisé'));
    for(const view of ['overview','agent','evaluation','artifacts','guide']){
      vm.runInContext('view='+JSON.stringify(view)+'; render()',context);
      assert.ok(elements.content.innerHTML.includes('Configuration '+letter));
@@ -147,11 +151,11 @@ vm.runInContext("I18N.setLanguage('en')",context);
 for(const plan of [{},{assistance:'generic',condition:'generic_coding_v1'},
  {assistance:'guided_construction',condition:'generic_coding_guided_boundaries_smoke_v1'},
  {condition:'unknown<script>alert(1)</script>'}]){
- vm.runInContext('data.plan='+JSON.stringify(plan),context);
+ vm.runInContext('data.plan='+JSON.stringify(plan)+';data.configuration={status:"unsupported",definition:null}',context);
  const banner=vm.runInContext('configurationBanner(task())',context);
  assert.ok(banner.includes('Unknown configuration'));
  assert.ok(!banner.includes('<script>'));
 }
-vm.runInContext("data.plan={condition:'generic_coding_guided_boundaries_smoke_v1'}",context);
+vm.runInContext('data.configuration='+JSON.stringify({status:'supported',definition:{configuration:catalog.configurations[2],tools:catalog.tools}}),context);
 assert.ok(vm.runInContext('configurationBanner(task())',context).includes('Configuration C'));
 console.log('Configuration checks passed: A/B/C in both languages and all views; access versus records; unknown, legacy, conflicting and escaped identities.');

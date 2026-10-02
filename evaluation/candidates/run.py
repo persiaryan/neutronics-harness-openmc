@@ -22,6 +22,7 @@ from evaluator.profiles import BOUNDARY_PROTOCOL, FACTORY_PROFILE, assessment_ro
 from evaluation.scientific import boundaries
 from evaluation.candidates import boundary_assessment
 from observability import record as observe_progress
+from observation_contracts import evaluation_definition
 
 ROOT = Path(__file__).resolve().parents[2]
 INDEX = ROOT / 'evaluation/benchmark_suite/frozen/pilot-1'
@@ -120,6 +121,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
                   created_utc=datetime.now(timezone.utc).isoformat(), gates=assessment.blank_gates(), checks=assessment.blank_checks(),
                   phases={}, grading_enabled=False, scientific_review='pending_owner_review', builder_feedback='not_sent',
                   candidate_repair=False, host_candidate_execution='not_run', cleanup_confirmed=False)
+    report['observation_definition'] = evaluation_definition(scoring.RUBRIC, scoring.identity()['sha256'], evaluator_protocol)
     stage = 'admission'
     def gate(name, passed, cause=None, detail=''):
         report['gates'][name] = dict(passed=passed, cause=cause, detail=detail)

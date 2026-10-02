@@ -233,6 +233,15 @@ missing task coverage or conflicting task identities. Missing-outcome bounds are
 not confidence intervals. Campaign loading and comparison never dispatch runs or
 recompute scientific verdicts; original per-session evidence remains inspectable.
 
+Observation metadata is versioned and retained with new plans, tool calls and
+evaluation reports. A shared report reader validates definitions before both
+individual and campaign display. Historical readers use frozen migration
+definitions, not the current rubric. Comparison groups include the complete
+evaluation-definition identity, and configuration/tool inventories drive their
+columns. New reviews bind to canonical report content. This adds no scientific
+credit or tool permissions. See [observation contracts](dashboard/CONTRACTS.md)
+for supported schemas, explicit unknown/invalid states and compatibility limits.
+
 Public: harness source, physical task statements, requirement comparisons, score
 policy and portable synthetic regressions. Private: reference implementations and
 answers, campaigns, raw model traces, native qualification evidence and external

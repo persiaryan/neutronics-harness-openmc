@@ -4,6 +4,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
+from observation_contracts import describe_configuration
 from builder import run as agent
 from builder.submission import submission
 from builder.route import CONDITIONS, GUIDED_CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS, condition_prompt, request_limit, EXTENDED_REQUEST_BUDGET
@@ -71,6 +72,9 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
             resource_policy='Same 8-request/600-second session, including boundary and smoke calls. Separate declared per-tool caps. No automatic retries.',
             tool_use_policy='Guided export, boundary inspection and smoke execution; one smoke correction opportunity. Observed use is not scientific credit.')
     plan['condition'] = CONDITIONS[assistance]
+    description = describe_configuration(plan)
+    if description is not None:
+        plan['observation_configuration'] = description
     if request_budget is not None:
         plan['request_budget_profile'] = request_budget
         plan['resource_policy'] = plan['resource_policy'].replace('8-request', str(declared['model_requests'])+'-request')
@@ -84,6 +88,8 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
 def execute(output, *, responder=None, request_setup=None):
     output = Path(output)
     plan = json.loads((output/'plan.json').read_bytes())
+    if 'observation_configuration' in plan:
+        describe_configuration(plan)  # Reject drift between retained description and executable plan.
     if plan.get('authoring_allowed') is False:
         raise ValueError('Authoring slot already consumed; retained submissions may only be reassessed')
     if plan.get('format') != 'research-usability-pilot-v2':

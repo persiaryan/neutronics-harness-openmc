@@ -7,6 +7,8 @@ import threading
 import uuid
 
 from builder import boundary_tool,smoke_feedback
+import time
+from observability import now, tool_observation
 from evaluator import smoke
 from evaluator.run import bounded,write_json,digest
 
@@ -44,6 +46,7 @@ class Session:
     def invoke(self,request,*,remaining_seconds):
         if self.calls>=PROFILE['max_calls']+1:raise ValueError('Smoke request budget exhausted')
         self.calls+=1;folder=self.output/f'call-{self.calls:02d}';folder.mkdir()
+        observed_start, observed_clock = now(), time.monotonic()
         write_json(folder/'request.json',request)
         response=dict(format='candidate-smoke-result-v1',status='not_started',cause=None,native_outcome='not_started',
             evidence_reference=f'smoke-run:{self.id}:{self.calls}',profile=PROFILE,
@@ -73,6 +76,7 @@ class Session:
             self.cleanup_confirmed=self.cleanup_confirmed and response.get('cleanup_confirmed') is True
             write_json(folder/'response.json',response)
             write_json(folder/'feedback.json',smoke_feedback.compact(response));self.usage()
+            tool_observation(folder,'smoke-tool','candidate-smoke-tool-v1',started=observed_start,elapsed_seconds=time.monotonic()-observed_clock)
 
 
 class AttachedSession:

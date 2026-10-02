@@ -1,0 +1,107 @@
+{
+  "format": "observation-catalog-v1",
+  "configurations": [
+    {
+      "id": "A",
+      "version": "1",
+      "assistance": "guided_construction",
+      "condition": "generic_coding_guided_construction_v1",
+      "label": {
+        "en": "A",
+        "fr": "A"
+      },
+      "description": {
+        "en": "Guided construction",
+        "fr": "Construction guidée"
+      },
+      "tools": [
+        "coding"
+      ]
+    },
+    {
+      "id": "B",
+      "version": "3",
+      "assistance": "guided_boundaries",
+      "condition": "generic_coding_guided_boundaries_v3",
+      "label": {
+        "en": "B",
+        "fr": "B"
+      },
+      "description": {
+        "en": "Guided construction + boundary inspection",
+        "fr": "Construction guidée + inspection des frontières"
+      },
+      "tools": [
+        "coding",
+        "boundary-tool"
+      ]
+    },
+    {
+      "id": "C",
+      "version": "1",
+      "assistance": "guided_boundaries_smoke",
+      "condition": "generic_coding_guided_boundaries_smoke_v1",
+      "label": {
+        "en": "C",
+        "fr": "C"
+      },
+      "description": {
+        "en": "Guided construction + boundaries + OpenMC smoke test",
+        "fr": "Construction guidée + frontières + smoke OpenMC"
+      },
+      "tools": [
+        "coding",
+        "boundary-tool",
+        "smoke-tool"
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "id": "coding",
+      "version": "1",
+      "label": {
+        "en": "Coding tools",
+        "fr": "Outils de programmation"
+      },
+      "description": {
+        "en": "Generic coding and shell tools",
+        "fr": "Outils génériques de programmation et commandes"
+      },
+      "directory": null,
+      "budget_key": null
+    },
+    {
+      "id": "boundary-tool",
+      "version": "candidate-boundary-tool-v2",
+      "label": {
+        "en": "Boundary inspection",
+        "fr": "Inspection des frontières"
+      },
+      "description": {
+        "en": "Boundary observations within the declared coverage",
+        "fr": "Observations des frontières dans le périmètre déclaré"
+      },
+      "directory": "boundary-tool",
+      "budget_key": "boundary_calls",
+      "legacy_projection": "inspection_calls",
+      "working_xml": "model.xml"
+    },
+    {
+      "id": "smoke-tool",
+      "version": "candidate-smoke-tool-v1",
+      "label": {
+        "en": "OpenMC smoke test",
+        "fr": "Smoke OpenMC"
+      },
+      "description": {
+        "en": "Bounded native diagnostic transport",
+        "fr": "Calcul natif de diagnostic limité"
+      },
+      "directory": "smoke-tool",
+      "budget_key": "smoke_calls",
+      "legacy_projection": "smoke_calls",
+      "working_xml": "execution/working.xml"
+    }
+  ]
+}

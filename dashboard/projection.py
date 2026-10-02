@@ -9,6 +9,8 @@ from pathlib import Path
 
 from builder.relay import event_frame
 from builder.trajectory import response_items, summarize
+from dashboard.contracts import configuration_view, normalize_evaluation
+from observation_contracts import catalog
 
 MAX_FILE = 32_000_000
 MAX_TEXT = 50_000
@@ -96,7 +98,7 @@ def clip(value):
     return text[:MAX_TEXT] + ('\n[… extrait tronqué ; consulter les preuves complètes …]' if len(text) > MAX_TEXT else '')
 
 
-def authoring(e, base):
+def authoring(e, base, tool_definitions=None):
     result = e.json(base / 'result.json', register=True)
     manifest = e.json(base / 'manifest.json') or {}
     timeline, turn, seen_messages = [], None, set()
@@ -170,7 +172,10 @@ def authoring(e, base):
         except Exception as exc:
             e.warnings.append(dict(path=str(base), reason='Projection non disponible : ' + type(exc).__name__))
     tools = []
-    for folder, key in [('boundary-tool', 'inspection_calls'), ('smoke-tool', 'smoke_calls')]:
+    for definition in (tool_definitions or catalog()['tools']):
+        folder=definition.get('directory')
+        if not folder: continue
+        key=definition.get('legacy_projection')
         path = confined(e.root, base / folder)
         if not path.exists():
             continue
@@ -180,9 +185,23 @@ def authoring(e, base):
                 continue
             relative = call.relative_to(e.root)
             feedback = e.json(relative / 'feedback.json', register=True)
+            envelope=e.json(relative/'observation.json',register=True)
+            envelope_status='legacy' if envelope is None else 'supported'
+            if envelope is not None:
+                try:
+                    if envelope.get('format')!='tool-observation-v1': raise ValueError('Unsupported tool observation format')
+                    if envelope.get('tool_id')!=definition['id'] or envelope.get('call_id')!=call.name: raise ValueError('Tool observation identity mismatch')
+                    if envelope.get('tool_version')!=definition['version']: raise ValueError('Tool observation version mismatch')
+                    for name,artifact in envelope.get('artifacts',{}).items():
+                        if name not in ('request.json','response.json','feedback.json') or artifact.get('path')!=name: raise ValueError('Tool artifact outside envelope contract')
+                        raw=e.raw(relative/name,register=True)
+                        if raw is None or hashlib.sha256(raw).hexdigest()!=artifact.get('sha256'): raise ValueError('Tool artifact digest mismatch')
+                except (ValueError,TypeError,KeyError,AttributeError) as exc:
+                    envelope_status='invalid'
+                    e.warnings.append(dict(path=str(relative/'observation.json'),reason=str(exc)))
             prefix = folder+'/'+call.name
             match = next((x for x in projected if x.get('evidence') == prefix or str(x.get('evidence','')).startswith(prefix+'/')), None)
-            tools.append(dict(tool=folder, call=call.name, feedback=feedback,
+            tools.append(dict(tool=definition['id'], definition=definition, envelope=envelope,envelope_status=envelope_status,call=call.name, feedback=feedback,
                 projection=match, evidence=str(relative / 'feedback.json')))
             e.raw(relative / 'model.xml', register=True)
     tools.sort(key=lambda t: (t.get('projection') or {}).get('request_turn') or
@@ -210,6 +229,10 @@ def assertions(value, prefix=''):
 def snapshot(root):
     e = Evidence(root)
     plan = e.json('plan.json', register=True) or {}
+    configuration=configuration_view(plan)
+    definitions={t['id']:t for t in catalog()['tools']}
+    if configuration['definition']:
+        definitions.update({t['id']:t for t in configuration['definition']['tools']})
     summary = e.json('summary.json', register=True)
     status = e.json('dashboard-run.json', register=True)
     cases = plan.get('cases', [])
@@ -231,7 +254,8 @@ def snapshot(root):
         review = e.json(a / 'review.json', register=True)
         if case is None and review is None:
             review = e.json('review.json', register=True)
-        builder = authoring(e, b)
+        builder = authoring(e, b, list(definitions.values()))
+        evaluation=normalize_evaluation(report,review)
         prompt = e.text(b / 'prompt.txt') or (e.text(Path('inputs') / case / 'prompt.txt') if case else None)
         candidate = e.text(task / 'candidate.py') or e.text(a / 'candidate.py')
         xml = e.text(a / 'export/artifacts/model.xml')
@@ -268,21 +292,22 @@ def snapshot(root):
         for tool in builder['tools']:
             f = tool['feedback'] or {}
             observed = f.get('working_xml_sha256', f.get('artifact_sha256'))
-            final = (report or {}).get('final_model', {}).get('sha256')
+            final_model = (report or {}).get('final_model')
+            final = final_model.get('sha256') if isinstance(final_model, dict) else None
             identities.append(dict(label=tool['tool']+'/'+tool['call'], working_xml=observed,
                 final_xml=final, identical=(observed==final) if observed and final else None))
         last = builder['tools'][-1] if builder['tools'] else None
-        working_xml = e.text(Path(last['evidence']).parent/'model.xml') if last and last['tool']=='boundary-tool' else None
-        if last and last['tool']=='smoke-tool':
-            working_xml = e.text(Path(last['evidence']).parent/'execution/working.xml')
+        working_path = last['definition'].get('working_xml') if last else None
+        working_xml = e.text(Path(last['evidence']).parent/working_path) if working_path else None
         diff = None
         if working_xml is not None and xml is not None:
             diff = ''.join(difflib.unified_diff(working_xml.splitlines(True), xml.splitlines(True),
                           fromfile='Dernier XML de travail observé', tofile='XML final')) or 'Aucune différence entre ces deux XML.'
         tasks.append(dict(case=case or (report or {}).get('case', 'session'), prompt=prompt,
+            evaluation=evaluation,
             builder=builder, assessment_dir=str(a), report=report, review=review, fidelity=fidelity,
             assertions=assertions(fidelity), phases=phases, phase_results=phase_results, candidate=candidate, xml=xml,
             identities=identities, xml_diff=diff, convergence=convergence, logs=logs))
-    return dict(format='operator-dashboard-v1', root_name=e.root.name, plan=plan, summary=summary,
+    return dict(format='operator-dashboard-v2', root_name=e.root.name, plan=plan, configuration=configuration, summary=summary,
                 run_status=status, tasks=tasks, warnings=e.warnings, artifacts=list(e.artifacts.values()),
                 interpretation='Observed evidence only; no inference of private reasoning or causal learning.')

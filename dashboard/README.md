@@ -100,7 +100,7 @@ tool budgets within the same condition suppress aggregate rates and comparisons.
 Missing identities suppress comparisons. Unrecorded provider settings cannot be
 checked; compatible recorded fields do not establish experimental equivalence.
 
-Rates use only recognized A/B/C configurations and supported rubric checks with a
+Rates use only recognized retained configurations and supported rubric checks with a
 coherent retained review. A domain passes only when all required checks pass;
 a demonstrated failed check makes it fail; otherwise it remains unknown. Model
 hard-gate failures are failures, while infrastructure failures and unreached
@@ -115,7 +115,7 @@ directories are not independently authenticated and must not be listed as repeat
 
 Displayed bounds span all unknown outcomes failing through all unknown outcomes
 passing. They are **missing-outcome bounds, not statistical confidence intervals**.
-A/B/C differences use the same task inventory and show corresponding bounds.
+Configuration differences use the same task inventory and show corresponding bounds.
 Counts and task-level results remain visible; differences are descriptive, not
 causal evidence. Effort and score means use available observations with their own
 counts; incomplete token usage is excluded. Click any matrix cell, filter outcomes,
@@ -138,6 +138,11 @@ finishes. Missing/ambiguous evidence stays unknown; receiving feedback does not
 prove understanding, causation or correction. There is no score for tool use.
 
 ## Verification
+
+Configuration/tool descriptions and evaluation definitions now drive the display.
+New descriptions are frozen with their run; explicit historical readers preserve
+old meaning. Unknown formats and invalid definitions remain visible without
+producing successful aggregate verdicts. See [contracts and evolution checks](CONTRACTS.md).
 
 ```sh
 python3 -B -m unittest tests.test_dashboard -v

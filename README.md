@@ -125,6 +125,8 @@ python3 -B -m dashboard.server --run scratch/my-run --port 8765
 
 Open **http://127.0.0.1:8765/**. The directory can be prepared, running or retained.
 See [dashboard usage and the explicit live-agent demo](dashboard/README.md).
+See [versioned observation contracts](dashboard/CONTRACTS.md) for evolving
+configurations, tools and evaluation criteria while retaining historical meaning.
 The interface reads evidence; model calls and native runs require a separate
 explicit launch. It preserves unknown outcomes and never supplies feedback to
 the builder or calculates scientific grades.
