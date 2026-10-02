@@ -16,6 +16,25 @@ const states = {started:'Début de phase enregistré',completed:'Terminé',retur
 let data=null, view='overview', taskIndex=0, runIndex=0, filter='all', mode='live', replayIndex=0, playback=null, search='', previous='', busy=false;
 const task = () => data?.tasks?.[taskIndex] || {};
 const artifactURL = path => '/api/artifact?run='+runIndex+'&path='+encodeURIComponent(path);
+// Exact recorded protocol identities only. Legacy/custom conditions are not A/B/C.
+const configurations = [
+ {letter:'A',assistance:'guided_construction',condition:'generic_coding_guided_construction_v1',description:'Construction guidée',boundaries:false,smoke:false},
+ {letter:'B',assistance:'guided_boundaries',condition:'generic_coding_guided_boundaries_v3',description:'Construction guidée + inspection des frontières',boundaries:true,smoke:false},
+ {letter:'C',assistance:'guided_boundaries_smoke',condition:'generic_coding_guided_boundaries_smoke_v1',description:'Construction guidée + frontières + smoke OpenMC',boundaries:true,smoke:true}
+];
+function configurationBanner(t){
+ const p=data.plan||{}, b=p.budgets||{};
+ const config=configurations.find(c=>(p.condition===c.condition||p.assistance===c.assistance)
+   &&(!p.condition||p.condition===c.condition)&&(!p.assistance||p.assistance===c.assistance));
+ const availability=(enabled,limit)=>enabled?ui('Autorisé')+' · '+ui('maximum {count} appels',{count:limit??'—'}):ui('Non autorisé');
+ const tools=t.builder?.tools||[];
+ return `<section class="configuration" aria-label="${esc(ui('Configuration testée'))}">
+ <div class="configuration-heading">${badge(config?'Configuration '+config.letter:ui('Configuration inconnue'),config?'info':'warn')}<strong>${esc(config?ui(config.description):ui('Plan absent, non reconnu ou incohérent'))}</strong></div>
+ <div class="configuration-meta"><span>${esc(ui('Modèle'))}: <strong>${esc(p.model||'—')}</strong></span><span>${esc(ui('Tâche'))}: <strong>${esc(t.case||'—')}</strong></span><span>${esc(ui('Budget de construction'))}: ${esc(b.model_requests??'—')} ${esc(ui('requêtes'))} · ${esc(b.authoring_seconds??'—')} s</span></div>
+ ${config?`<div class="configuration-meta"><span>${esc(ui('Outils de programmation'))}: ${esc(ui('Autorisés'))}</span><span>${esc(ui('Inspection des frontières'))}: ${esc(availability(config.boundaries,b.boundary_calls))}</span><span>${esc(ui('Smoke OpenMC'))}: ${esc(availability(config.smoke,b.smoke_calls))}</span></div>`:''}
+ <p class="muted">${esc(ui('Traces d’appels scientifiques pour cette tâche'))}: ${tools.filter(x=>x.tool==='boundary-tool').length} ${esc(ui('frontières'))} · ${tools.filter(x=>x.tool==='smoke-tool').length} smoke. ${esc(ui('Les autorisations ne prouvent pas l’usage ; des traces absentes ne prouvent pas l’absence d’appels.'))}</p>
+ <div class="evidence">plan.json · assistance: ${esc(p.assistance||'—')} · condition: ${esc(p.condition||'—')}</div></section>`;
+}
 function title(eyebrow, name, description, tag='') {return `<div class="heading"><div><div class="eyebrow">${esc(eyebrow)}</div><h1>${esc(name)}</h1><p class="lead">${esc(description)}</p></div>${tag}</div>`;}
 function metric(label,value,note){return `<div class="metric"><div class="label">${esc(label)}</div><div class="value">${esc(value)}</div><small>${esc(note)}</small></div>`;}
 function referenceBadge(t){const ref=t.report?.assignment?.reference; return ref?.kind==='public-pin-cell-demo-reference-v1'||data.run_status?.reference==='public_demo_only' ? badge(ui("Référence publique · démonstration"),'warn') : badge(ref ? ui("Référence du protocole") : ui("Référence non encore observée"));}
@@ -102,7 +121,7 @@ function render(){
  if(!data)return;
  const opened=[...document.querySelectorAll('details[open]')].map(d=>d.dataset.key);
  const el=document.activeElement, focusId=el?.id, selection=el?.selectionStart;
- $('content').innerHTML=({overview,agent,evaluation,artifacts,guide}[view])(task());
+ $('content').innerHTML=configurationBanner(task())+({overview,agent,evaluation,artifacts,guide}[view])(task());
  document.querySelectorAll('details').forEach(d=>{d.open=opened.includes(d.dataset.key)});
  if(focusId&&$(focusId)){ $(focusId).focus({preventScroll:true}); if(typeof selection==='number')try{$(focusId).setSelectionRange(selection,selection)}catch{} }
  document.querySelectorAll('nav button').forEach(b=>{b.classList.toggle('selected',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false')});

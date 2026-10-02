@@ -64,6 +64,26 @@ do not relabel its scientific outcomes.
 
 ## Owner browser review
 
+### Configuration A on a different task
+
+On 2026-10-02, a fresh live `gpt-5.6-luna` run used `moderated_cylinder`
+with `guided_construction` (A), eight requests / 600 seconds maximum, no retries.
+The builder completed in 75.411 seconds using five model requests and four
+generic tool calls. Working export succeeded; no boundary or smoke calls were
+recorded. Builder cleanup was confirmed and no project containers/volumes remained.
+
+The independent evaluator stopped at admission: the private frozen reference
+package is absent from this public checkout (`Package root must be a real
+directory`). Assessment is `incomplete`, review evidence is `insufficient`,
+and the score is null. No final evaluation XML or native transport was produced.
+This run validates display of an evaluator limitation, not scientific correctness.
+
+Live HTTP observations captured progression from authoring to the final state.
+API candidate/report/review contents matched the retained files exactly, with no
+projection warnings. All five templates rendered in English and French with A,
+the correct task, and an absent score rather than a fabricated zero.
+Evidence: `scratch/dashboard-A-cylinder-01/{http-observations.jsonl,dashboard-state.json,dashboard-validation.json}`.
+
 ### Bilingual interface update
 
 English is now the default, with a persistent English / Français selector.

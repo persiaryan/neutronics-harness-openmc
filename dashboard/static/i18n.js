@@ -2,6 +2,23 @@
 // Gettext-style catalog: the original French UI strings are the stable keys.
 // Only UI-owned strings pass through t(); evidence, source and logs remain verbatim.
 const UI_ENGLISH = {
+  "Configuration testée": "Test configuration",
+  "Configuration inconnue": "Unknown configuration",
+  "Plan absent, non reconnu ou incohérent": "Missing, unrecognized or inconsistent plan",
+  "Construction guidée": "Guided construction",
+  "Construction guidée + inspection des frontières": "Guided construction + boundary inspection",
+  "Construction guidée + frontières + smoke OpenMC": "Guided construction + boundaries + OpenMC smoke test",
+  "Modèle": "Model",
+  "Budget de construction": "Authoring budget",
+  "requêtes": "requests",
+  "Outils de programmation": "Coding tools",
+  "Autorisés": "Allowed",
+  "Autorisé": "Allowed",
+  "Non autorisé": "Not allowed",
+  "maximum {count} appels": "up to {count} calls",
+  "Traces d’appels scientifiques pour cette tâche": "Scientific tool call records for this task",
+  "frontières": "boundaries",
+  "Les autorisations ne prouvent pas l’usage ; des traces absentes ne prouvent pas l’absence d’appels.": "Permission does not establish use; missing records do not establish that no calls occurred.",
   " Intervalle : [": " Interval: [",
   "Observatoire des runs": "Run observatory",
   "Aller au contenu": "Skip to content",

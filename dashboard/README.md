@@ -53,6 +53,12 @@ dashboard demonstration: do not retry to obtain a higher score.
 
 ## Reading the page
 
+Every view shows the recorded A/B/C configuration, model, selected task and
+authoring budgets. A permits guided coding; B adds boundary inspection; C adds
+OpenMC smoke assistance. Declared tool access and observed scientific call records
+are shown separately. Exact plan identities determine the letter; missing,
+unrecognized or conflicting identities remain unknown, including legacy conditions.
+
 - **Overview**: actual instruction, configuration/budgets, recorded progress,
   diagnostic score and evidence-review status.
 - **Agent & tools**: calls, completed commands, emitted messages/reasoning summaries,
