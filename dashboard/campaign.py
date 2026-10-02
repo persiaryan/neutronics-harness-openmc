@@ -9,6 +9,7 @@ from dashboard.projection import Evidence, confined
 
 from dashboard.contracts import configuration_view, normalize_evaluation
 from observation_contracts import catalog, fingerprint
+from dashboard.study_context import read_context
 
 CONFIGURATIONS = {c['id']: c for c in catalog()['configurations']}
 
@@ -36,12 +37,18 @@ def outcome(values):
     return 'pass' if values and all(v == 'pass' for v in values) else 'unknown'
 
 
-def read_records(roots):
+def read_records(roots, members=None):
     records, warnings = [], []
     for run_id, root in enumerate(roots):
         e = Evidence(root)
         plan = e.json('plan.json') or {}
+        plan_available = bool(plan)
+        member = (members or {}).get(str(Path(root).resolve()))
+        if not plan and member:
+            plan = dict(cases=[member['case']], model=member['model'])
+        status = e.json('dashboard-run.json') or {}
         summary = e.json('summary.json') or {}
+        imported = read_context(e)
         cases = plan.get('cases') or []
         if not isinstance(cases, list):
             warnings.append(dict(run=run_id, reason='invalid_task_inventory'))
@@ -71,6 +78,10 @@ def read_records(roots):
             assignment = obj(report.get('assignment'))
             evaluation = normalize_evaluation(report or None, review)
             definition = evaluation['definition']
+            # A sealed study can declare the intended rubric for an unscored
+            # incident. It supplies an inventory, never a scientific verdict.
+            if definition is None and imported and not report:
+                definition = imported['definition']
             presented = evaluation['report'] or {}
             score = obj(presented.get('diagnostic_score'))
             rubric = obj(assignment.get('rubric'))
@@ -104,14 +115,37 @@ def read_records(roots):
                           budgets={k: budgets.get(k) for k in ('model_requests', 'authoring_seconds', 'automatic_retries')},
                           profile=profile, rubric=definition['rubric_sha256'] if definition else rubric.get('sha256'), definition=definition['sha256'] if definition else None, adapter=plan.get('adapter'),
                           builder_image=manifest.get('image_id'), request_setup_sha256=digest(manifest['required_request_setup']) if manifest.get('required_request_setup') else None,
-                          reference_scope='public_demo' if assessment.name == 'assessment-public-demo' else 'private')
+                          reference_scope=('public_demo' if assessment.name == 'assessment-public-demo' else 'private') if report else None)
             prompts = obj(obj(plan.get('prompts')).get(case))
             signature = dict(prompt=prompts.get('prompt_sha256'), reference=assignment.get('reference'), sampling=assignment.get('sampling'))
+            task_signature = digest(signature)
+            task_identity_known = bool(signature['prompt'] and signature['reference'] and signature['sampling'])
+            if imported:
+                declared = imported['context']
+                if any(v is not None and declared.get(k) != v for k,v in cohort.items()):
+                    warnings.append(dict(run=run_id, reason='Imported study conflicts with recorded execution context'))
+                else:
+                    cohort = declared
+                    if not task_identity_known and not report:
+                        task_signature = imported['task_signature']
+                        task_identity_known = True
             elapsed = number(builder.get('elapsed_seconds'))
             tokens = number(obj(effort.get('token_usage')).get('total_tokens')) if effort.get('token_usage_complete') is True else None
+            lifecycle = status.get('state') or ('assessment' if builder.get('status') == 'completed' else 'not_started')
+            if report:
+                lifecycle = 'completed' if trusted and number(score.get('score')) is not None else 'interrupted'
+            elif builder and builder.get('status') != 'completed':
+                lifecycle = 'interrupted'
+            elif (confined(e.root, base/'builder/progress.jsonl')).exists() and lifecycle == 'not_started':
+                lifecycle = 'authoring'
+            # A launcher completion flag cannot replace missing assessment evidence.
+            lifecycle = {'stopped':'interrupted', 'finished':'interrupted'}.get(lifecycle, lifecycle)
             records.append(dict(id=f'{run_id}:{case}', run=run_id, run_name=e.root.name, task_index=task_index,
+                execution_id=obj(plan.get('execution_ids')).get(case), lifecycle=lifecycle,
+                plan_available=plan_available,
+                batch_kind='legacy_batch' if len(cases)>1 else 'single_execution',
                 case=case, configuration=configuration(plan), configuration_description=config_definition, configuration_status=config_view['status'], evaluation_status=evaluation['status'], evaluation_reason=evaluation['reason'], definition=definition, cohort=digest(cohort), context=cohort,
-                task_signature=digest(signature), task_identity_known=bool(signature['prompt'] and signature['reference'] and signature['sampling']),
+                task_signature=task_signature, task_identity_known=task_identity_known,
                 report_path=str(assessment/'report.json'), review_path=str(assessment/'review.json'),
                 review_status=review.get('evidence_status', 'absent'), report_status=report.get('status', 'pending'),
                 builder_status=builder.get('status', 'pending'), domains=domains, checks=checks,
@@ -155,6 +189,9 @@ def group(rows, tasks, inventory, blocked_tasks=()):
 
 
 def aggregate(records, warnings=()):
+    # A contradictory imported identity can split an intended denominator across
+    # legacy groups. Keep evidence visible, but do not publish partial rates.
+    invalid_import = any('Imported study conflicts' in w.get('reason', '') for w in warnings)
     # Same human label can denote different retained configuration versions.
     descriptors = {fingerprint(c): c for c in CONFIGURATIONS.values()}
     for record in records:
@@ -179,19 +216,32 @@ def aggregate(records, warnings=()):
     cohorts = []
     for identity, rows in buckets.items():
         tasks = sorted({r['case'] for r in rows})
-        definition = rows[0].get('definition')
+        definition = next((r['definition'] for r in rows if r.get('definition')), None)
         inventory = {'hard_gates': definition['gates'], **definition['checks']} if definition else {}
         valid = [r for r in rows if r['configuration'] in configurations]
-        conflicts = [t for t in tasks if len({r['task_signature'] for r in valid if r['case'] == t}) > 1]
+        conflicts = [t for t in tasks if len({r['task_signature'] for r in valid if r['case'] == t and r['task_identity_known']}) > 1]
         budget_conflicts = [c for c in configurations if len({digest(r['assistance_budgets']) for r in valid if r['configuration'] == c}) > 1]
         blocked_tasks = tasks if budget_conflicts else conflicts
         groups = {c: group([r for r in valid if r['configuration'] == c], tasks, inventory, blocked_tasks) for c in configurations}
         by_task = {t: {c: group([r for r in valid if r['case'] == t and r['configuration'] == c], [t], inventory, blocked_tasks) for c in configurations} for t in tasks}
-        context = rows[0]['context']
+        context = dict(next((r['context'] for r in rows if r.get('trusted')), rows[0]['context']))
+        # Plans do not prove which runtime/reference actually executed. Compare
+        # assessment identities only where a report records their observation.
+        observed_fields = {'profile', 'rubric', 'definition', 'reference_scope'}
+        context_conflicts = [key for key in context if len({digest(r['context'][key]) for r in rows
+            if r['context'][key] is not None and (key not in observed_fields or r['report_status'] != 'pending')})>1]
+        membership_conflicts = sorted({c for r in rows for c in r.get('membership_conflicts', [])})
         comparable = (bool(valid) and definition is not None and not conflicts and not budget_conflicts and all(r['task_identity_known'] for r in valid)
+                      and not context_conflicts and not membership_conflicts
+                      and not (invalid_import and not rows[0].get('campaign_id'))
                       and bool(context['model'] and context['protocol'] and context['rubric'] and context['builder_image'])
                       and all(v is not None for v in context['budgets'].values()))
-        cohorts.append(dict(id=identity, context=context, definition=definition, configurations=configurations, domains=['overall', *inventory], tasks=tasks, groups=groups, by_task=by_task,
+        if (rows[0].get('campaign_id') and not comparable) or (invalid_import and not rows[0].get('campaign_id')):
+            for g in [*groups.values(), *(g for task in by_task.values() for g in task.values())]:
+                for stats in [*g['domains'].values(), *(v for checks in g['checks'].values() for v in checks.values())]:
+                    stats.update(rate=None, possible_rate=None)
+        cohorts.append(dict(id=identity, campaign_id=rows[0].get('campaign_id'), context=context, definition=definition, configurations=configurations, domains=['overall', *inventory], tasks=tasks, groups=groups, by_task=by_task,
+                            context_conflicts=context_conflicts, membership_conflicts=membership_conflicts,
                             conflicting_tasks=conflicts, conflicting_tool_budgets=budget_conflicts,
                             assistance_budgets={c: next((r['assistance_budgets'] for r in valid if r['configuration'] == c), None) for c in configurations},
                             comparable=comparable, excluded=sum(r['configuration']=='?' for r in rows)))
@@ -199,8 +249,14 @@ def aggregate(records, warnings=()):
                 records=records, warnings=list(warnings), assignments=len(records))
 
 
-def campaign(roots):
-    return aggregate(*read_records(roots))
+def campaign(roots, study_paths=()):
+    from dashboard.collection import read_studies, decorate
+    _, members = read_studies(study_paths)
+    records, warnings = read_records(roots, members)
+    studies = decorate(records, roots, study_paths)
+    result = aggregate(records, warnings)
+    result['campaigns'] = studies
+    return result
 
 
 def selected_roots(runs, manifest=None):

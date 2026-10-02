@@ -27,6 +27,12 @@ vm.runInContext('data='+JSON.stringify(fixture),context);
 function render(view){return vm.runInContext(view+'(task())',context);}
 assert.ok(render('overview').includes('Disponible après l’évaluation'));
 assert.ok(!render('overview').includes('0,0 / 100'));
+const pendingEvaluation=task.evaluation;
+vm.runInContext("data.tasks[0].evaluation={status:'missing',trusted:false,operational:{state:'interrupted',stage:'authoring',cause:'provider_or_stream_incident'}}",context);
+assert.ok(render('overview').includes('Évaluation interrompue'));
+assert.ok(!render('overview').includes('Disponible après l’évaluation'));
+assert.ok(!render('overview').includes('0,0 / 100'));
+vm.runInContext('data.tasks[0].evaluation='+JSON.stringify(pendingEvaluation??null),context);
 assert.ok(render('overview').includes('&lt;script&gt;STEAL_SECRET()&lt;/script&gt;'));
 assert.ok(!render('overview').includes('<script>STEAL_SECRET'));
 assert.ok(render('agent').includes('request-04.json'));

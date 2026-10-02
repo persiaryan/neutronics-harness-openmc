@@ -102,10 +102,15 @@ Legacy reviews lack the new report digest; their weaker binding remains a
 documented compatibility limit. A historical admission failure without a rubric
 identity cannot acquire one by inference from the current code.
 
-Campaign groups include the complete evaluation-definition digest alongside the
-existing model, protocol, runtime, budgets and reference scope. Scores on 10 and
-100, different required criteria, weights or numerical thresholds stay in separate
-groups. The matrix and pairwise comparisons derive columns and domains from the
+Unassigned legacy observations are grouped by recorded compatibility identities,
+including the complete evaluation-definition digest, model, protocol, runtime,
+budgets and reference scope. Explicit campaigns instead keep one stable group per
+model and validate those identities within that group. Conflicting scales,
+criteria, weights or thresholds suppress its rates instead of splitting its
+planned denominator into apparently comparable subsets. Pending runs retain their
+declared scope separately from the observed scope; missing observed identities
+also suppress comparison. Conflicting imported study identities suppress rates
+across the unassigned selection. The matrix and pairwise comparisons derive columns and domains from the
 retained descriptions. Task weighting, missing-outcome bounds and coverage rules
 remain unchanged. These descriptive comparisons do not establish causality.
 

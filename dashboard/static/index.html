@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Neutronics · Run observatory</title><link rel="stylesheet" href="/style.css"><script defer src="/i18n.js"></script><script defer src="/campaign.js"></script><script defer src="/app.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Neutronics · Run observatory</title><link rel="stylesheet" href="/style.css"><script defer src="/i18n.js"></script><script defer src="/campaign.js"></script><script defer src="/navigation.js"></script><script defer src="/app.js"></script></head>
 <body>
 <a class="skip" href="#content"><span data-i18n="Aller au contenu">Skip to content</span></a>
 <aside class="sidebar">
   <div class="brand"><span class="brand-mark">n</span><div>NEUTRONICS<small><span data-i18n="Observatoire des runs">Run observatory</span></small></div></div>
-  <p class="side-label"><span data-i18n="COMPRENDRE UNE SESSION">UNDERSTAND A RUN</span></p>
+  <p class="side-label"><span data-i18n="COMPRENDRE UNE EXÉCUTION">UNDERSTAND A RUN</span></p>
   <nav aria-label="Dashboard views" data-i18n-aria="Vues du dashboard">
     <button data-view="overview" class="selected"><span>01</span><span data-i18n="Vue d’ensemble">Overview</span></button>
     <button data-view="agent"><span>02</span><span data-i18n="Agent &amp; outils">Agent &amp; tools</span></button>
@@ -17,7 +17,7 @@
   <div class="side-note"><span class="dot"></span><span data-i18n="OBSERVATION LOCALE">LOCAL OBSERVATION</span><p><span data-i18n="Les traces expliquent les actions observées. Les verdicts proviennent de l’évaluateur.">Traces describe observed actions. Verdicts come from the evaluator.</span></p></div>
 </aside>
 <div class="workspace">
-  <header class="topbar"><div class="selectors"><label><span data-i18n="SESSION">RUN</span><select id="run-select" aria-label="Run" data-i18n-aria="Session"></select></label><label><span data-i18n="TÂCHE">TASK</span><select id="case-select" aria-label="Task" data-i18n-aria="Tâche"></select></label></div><label class="language"><span data-i18n="Langue">Language</span><select id="language-select"><option value="en" lang="en">English</option><option value="fr" lang="fr">Français</option></select></label><div class="connection"><label class="toggle"><input id="auto" type="checkbox" checked><span data-i18n="Actualisation auto · 2 s">Auto-refresh · 2 s</span></label><span id="connection" role="status"><span data-i18n="Connexion…">Connecting…</span></span></div></header>
+  <header class="topbar"><div class="selectors" id="execution-navigation"><label><span data-i18n="Campagne">Campaign</span><select id="campaign-select" aria-label="Campaign"></select></label><label><span data-i18n="Modèle">Model</span><select id="model-select" aria-label="Model"></select></label><label><span data-i18n="Configuration">Configuration</span><select id="configuration-select" aria-label="Configuration"></select></label><label><span data-i18n="TÂCHE">TASK</span><select id="case-select" aria-label="Task" data-i18n-aria="Tâche"></select></label><label><span data-i18n="EXÉCUTION">RUN</span><select id="run-select" aria-label="Run" data-i18n-aria="Exécution"></select></label></div><label class="language"><span data-i18n="Langue">Language</span><select id="language-select"><option value="en" lang="en">English</option><option value="fr" lang="fr">Français</option></select></label><div class="connection"><label class="toggle"><input id="auto" type="checkbox" checked><span data-i18n="Actualisation auto · 2 s">Auto-refresh · 2 s</span></label><span id="connection" role="status"><span data-i18n="Connexion…">Connecting…</span></span></div></header>
   <div id="error" role="alert" hidden></div>
   <main id="content" tabindex="-1"><div class="empty"><span data-i18n="Lecture des preuves disponibles…">Reading available evidence…</span></div></main>
   <footer><span data-i18n="Vue opérateur privée · Messages et artefacts rendus comme du texte · Aucun verdict calculé par le dashboard">Private operator view · Messages and artifacts displayed as text · The dashboard does not calculate verdicts</span></footer>

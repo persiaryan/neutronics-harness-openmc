@@ -236,9 +236,11 @@ recompute scientific verdicts; original per-session evidence remains inspectable
 Observation metadata is versioned and retained with new plans, tool calls and
 evaluation reports. A shared report reader validates definitions before both
 individual and campaign display. Historical readers use frozen migration
-definitions, not the current rubric. Comparison groups include the complete
-evaluation-definition identity, and configuration/tool inventories drive their
-columns. New reviews bind to canonical report content. This adds no scientific
+definitions, not the current rubric. Comparison compatibility includes the complete
+evaluation-definition identity. Explicit campaigns retain their planned model
+groups and suppress rates on identity conflicts instead of splitting denominators;
+configuration/tool inventories drive their columns. New reviews bind to canonical
+report content. This adds no scientific
 credit or tool permissions. See [observation contracts](dashboard/CONTRACTS.md)
 for supported schemas, explicit unknown/invalid states and compatibility limits.
 

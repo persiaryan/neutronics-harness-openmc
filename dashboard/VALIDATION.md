@@ -208,3 +208,106 @@ Switch to Français and back to English; reload to check the saved choice.
 The dashboard is read-only. Refreshes and replay never execute the agent, native
 transport or grader. Detailed feedback delivery is established only after complete
 authoring evidence is available; a later action is not proof of causal learning.
+
+## Historical archive import and new pilot (2026-10-02)
+
+Imported the completed `abc-temperature-amendment-v1/study-01` archive from the
+separate local research checkout into `scratch/request16-dashboard-history-01`.
+The importer checked the source seal and selected analyses. All 30,468 copied
+text files subsequently matched their retained copy hashes. It preserved the
+original authoring and selected v7 assessments; the first 38 inherited reviews
+were copied byte-for-byte from `verification.json` to the dashboard's
+`review.json` location. No archived code or native binary was executed.
+
+HTTP and comparison checks reproduced 150 terminal observations and 149 scored
+assessments. Equal-task success rates were Luna A/B/C 72/68/56 percent and Sol
+A/B/C 92/100/84 percent. The single Sol/C provider incident remained unknown in
+the denominator, with an interrupted-authoring notice and no scientific score.
+
+Portable verification: 363 Python tests passed. EN/FR run templates and campaign
+navigation passed for both the 150-record archive and a mixed 156-assignment
+selection containing the six newly prepared pilot slots. Regression controls
+cover evidence binding, imported incident denominators, conflicting declared
+identities, fixed pilot budgets, changed source refusal and consumed launches.
+This is HTTP/template verification, not a rendered-browser review.
+
+The six-session pilot was launched in `scratch/dashboard-pilot-6-01` using the
+public pin-cell reference, 16 requests/600 seconds and reviewed request setups.
+The first Luna/A builder completed using three requests. Final transport was
+still running at this checkpoint. The remaining slots had not started, and the
+new 150-session campaign had not been launched. See the retained `progress.json`
+and per-run receipts for subsequent outcomes; this paragraph is not a completed
+pilot claim. Available disk fell below the launcher's 10 GiB reserve during
+that first assessment, so further dispatch requires sufficient space.
+
+Private reference packages were installed as gitignored local copies and passed
+their integrity verifier. Their matching table hashes and required Docker image
+identities were checked. Scientific review remains pending; these checks do not
+enable official grading or establish scientific qualification.
+
+## Campaign and execution terminology consolidation (2026-10-02)
+
+The dashboard selection now explicitly references the retained pilot manifest.
+Its source manifest, launch receipt and scientific outputs were not rewritten.
+New preparations assign UUID campaign/run identities, relative campaign paths and
+per-plan hashes. The retained v1 adapter derives identities from the original
+manifest; unassigned legacy directories keep labeled location-based identities.
+Navigation selects one task execution even inside a legacy multi-task batch.
+
+Local HTTP observations returned 200 for the page, navigation script, campaign
+projection and individual completed/pending views. The pilot reports six planned
+runs, one completed and five not started, zero missing, and the retained disk-space
+stop reason. Both model groups declare public-demo references, without context
+conflicts. The completed execution has an observed public-demo reference; the
+pending execution's observed scope stays null. Incomplete groups withhold rates
+while keeping lifecycle counts and retained scientific verdicts distinct.
+
+Python AST parsing, JavaScript syntax checks and `git diff --check` passed during
+this consolidation. The earlier regression totals above describe earlier checks;
+the regression suite and rendered-browser review were not rerun for this change.
+No new model calls or native runs were launched. The first pilot's final score is
+100/100 with a coherent review; its five remaining slots were not dispatched.
+
+## Final dashboard regression and browser QA (2026-10-02)
+
+This checkpoint supersedes the previous section's unexecuted regression/browser
+checks. The following checks passed on the consolidated dashboard:
+
+- Full portable Python suite: **387 tests**, using
+  `python3 -B -m unittest discover -s tests -p 'test_*.py' -q`.
+  Expected CLI validation errors are emitted by negative tests; the suite exits 0.
+- Node EN/FR run templates; campaign templates against both the retained pilot
+  and a synthetic multi-campaign selection; future configuration/evaluator
+  contracts and interrupted historical report templates.
+- Real headless Chrome **154.0.8037.93**, driven by an existing Playwright install:
+  cascading navigation; two task attempts inside a legacy batch; a deliberately
+  delayed response during rapid navigation; all six views in English/French;
+  language persistence; separate campaigns; matrix drilldown; visible stale-data
+  notices after a network failure; escaped task text; keyboard focus; and no
+  horizontal page overflow at 390 px in any view. No JavaScript page errors.
+- Desktop and mobile screenshots inspected, plus a rendered overview of the
+  retained pilot. The primary server remains available at 127.0.0.1:8765.
+
+Regression fixes include a colliding selector event handler, stale responses
+after navigation, ambiguous topbar context in the comparison view, coding-tool
+counts without dedicated receipts, and unsafe comparison denominators after an
+imported identity conflict. Added controls reject malformed/changed manifests,
+duplicate identities, path escapes and unreadable launch receipts. A launcher
+completion flag without a supported reviewed score no longer counts as a
+completed assessment.
+
+The synthetic importer test reconstructs a sealed 150-record archive, checks
+retained success counts and the unresolved incident, verifies inherited reviews,
+and refuses seal tampering. Serial-launcher tests cover balanced 150-slot
+preparation, disk reserve, scientific failure continuation, and stopping without
+retry after an unscored incident. Provider and evaluator calls are replaced by
+fixtures in these tests. No new paid model calls, native solver executions or
+real 150-run campaign were launched for this QA pass.
+
+Local evidence: `scratch/dashboard-final-qa/python-tests.log`, saved API payloads,
+`browser/result.json`, `browser/campaign-desktop.png` and
+`browser/campaign-mobile.png`. These generated artifacts are intentionally not
+published. Reproducible browser commands are in `dashboard/README.md`.
+The deleted historical campaign was not restored. Browser coverage is Chromium
+only and is not a full accessibility audit; it does not establish scientific
+qualification, provider reliability or causal benefit from agent tools.

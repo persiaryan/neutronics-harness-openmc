@@ -11,6 +11,7 @@ from builder.relay import event_frame
 from builder.trajectory import response_items, summarize
 from dashboard.contracts import configuration_view, normalize_evaluation
 from observation_contracts import catalog
+from dashboard.study_context import read_context
 
 MAX_FILE = 32_000_000
 MAX_TEXT = 50_000
@@ -228,6 +229,7 @@ def assertions(value, prefix=''):
 
 def snapshot(root):
     e = Evidence(root)
+    imported = read_context(e)
     plan = e.json('plan.json', register=True) or {}
     configuration=configuration_view(plan)
     definitions={t['id']:t for t in catalog()['tools']}
@@ -256,6 +258,9 @@ def snapshot(root):
             review = e.json('review.json', register=True)
         builder = authoring(e, b, list(definitions.values()))
         evaluation=normalize_evaluation(report,review)
+        if report is None and imported and imported.get('terminal_category')=='provider_or_stream_incident':
+            evaluation['operational']=dict(state='interrupted',stage='authoring',cause='provider_or_stream_incident',
+                detail='Recorded provider/stream incident; no submission or scientific assessment.')
         prompt = e.text(b / 'prompt.txt') or (e.text(Path('inputs') / case / 'prompt.txt') if case else None)
         candidate = e.text(task / 'candidate.py') or e.text(a / 'candidate.py')
         xml = e.text(a / 'export/artifacts/model.xml')
@@ -308,6 +313,6 @@ def snapshot(root):
             builder=builder, assessment_dir=str(a), report=report, review=review, fidelity=fidelity,
             assertions=assertions(fidelity), phases=phases, phase_results=phase_results, candidate=candidate, xml=xml,
             identities=identities, xml_diff=diff, convergence=convergence, logs=logs))
-    return dict(format='operator-dashboard-v2', root_name=e.root.name, plan=plan, configuration=configuration, summary=summary,
+    return dict(format='operator-dashboard-v2', root_name=e.root.name, plan=plan, configuration=configuration, summary=summary, imported_study=imported,
                 run_status=status, tasks=tasks, warnings=e.warnings, artifacts=list(e.artifacts.values()),
                 interpretation='Observed evidence only; no inference of private reasoning or causal learning.')

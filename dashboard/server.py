@@ -9,13 +9,22 @@ from urllib.parse import parse_qs, urlsplit
 
 from dashboard.projection import Evidence, snapshot
 from dashboard.campaign import campaign, selected_roots
+from dashboard.collection import selection
 
 STATIC = Path(__file__).parent / 'static'
 
 
-def make_server(roots, port=8765):
+def make_server(roots, port=8765, study_paths=()):
     roots = selected_roots(roots)
     cache, lock = {}, threading.Lock()
+
+    def collection_state():
+        previous = cache.get('campaign')
+        if previous and time.monotonic()-previous[0] < 10:
+            return previous[1]
+        result = campaign(roots, study_paths)
+        cache['campaign'] = time.monotonic(), result
+        return result
 
     def state(index):
         with lock:
@@ -23,6 +32,12 @@ def make_server(roots, port=8765):
             if previous and time.monotonic() - previous[0] < 1:
                 return previous[1]
             result = snapshot(roots[index])
+            catalog = collection_state()
+            result['executions'] = [r for r in catalog['records'] if r['run'] == index]
+            result['campaigns'] = catalog['campaigns']
+            for row in result['executions']:
+                if row['lifecycle'] == 'missing' and row['task_index'] < len(result['tasks']):
+                    result['tasks'][row['task_index']]['case'] = row['case']
             cache[index] = time.monotonic(), result
             return result
 
@@ -52,7 +67,7 @@ def make_server(roots, port=8765):
             if host not in allowed or (origin and origin != 'http://' + host):
                 return self.reply(403, b'{"error":"Local same-origin access only"}')
             url = urlsplit(self.path)
-            static = {'/':'index.html', '/app.js':'app.js', '/campaign.js':'campaign.js', '/i18n.js':'i18n.js', '/style.css':'style.css'}
+            static = {'/':'index.html', '/app.js':'app.js', '/campaign.js':'campaign.js', '/navigation.js':'navigation.js', '/i18n.js':'i18n.js', '/style.css':'style.css'}
             if url.path in static:
                 name = static[url.path]
                 mime = 'text/html' if name.endswith('.html') else 'text/css' if name.endswith('.css') else 'text/javascript'
@@ -62,12 +77,7 @@ def make_server(roots, port=8765):
             if url.path == '/api/campaign':
                 try:
                     with lock:
-                        previous = cache.get('campaign')
-                        if previous and time.monotonic() - previous[0] < 10:
-                            result = previous[1]
-                        else:
-                            result = campaign(roots)
-                            cache['campaign'] = time.monotonic(), result
+                        result = collection_state()
                     return self.reply(200, json.dumps(result, ensure_ascii=False, allow_nan=False).encode())
                 except (ValueError, TypeError, KeyError, OSError) as exc:
                     return self.reply(422, json.dumps(dict(error='Campaign evidence unavailable', type=type(exc).__name__)).encode())
@@ -102,10 +112,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', type=Path, action='append',
                         help='Explicit run directory (repeat for local history); may not yet exist')
-    parser.add_argument('--campaign', type=Path, help='JSON manifest with a runs array; paths relative to the manifest')
+    parser.add_argument('--campaign', type=Path, help='Campaign manifest or JSON selection with campaigns/runs arrays; relative paths use the manifest directory')
     parser.add_argument('--port', type=int, default=8765)
     args = parser.parse_args()
-    server = make_server(selected_roots(args.run, args.campaign), args.port)
+    roots, studies = selection(args.run, args.campaign)
+    server = make_server(roots, args.port, studies)
     print(f'Dashboard opérateur : http://127.0.0.1:{server.server_port}/', flush=True)
     try:
         server.serve_forever()

@@ -14,11 +14,17 @@ for(const file of ['i18n.js','campaign.js','app.js']){
  vm.runInContext(source,context);
 }
 vm.runInContext('campaignData='+JSON.stringify(fixture)+'; view="campaign";',context);
+// A mixed live/archive selection can start with an unassessed cohort that has
+// no materials inventory yet. Exercise the matrix on a cohort that has one.
+const matrixCohort=fixture.cohorts.find(c=>c.domains.includes('materials'));
+assert.ok(matrixCohort);
+vm.runInContext('cohortId='+JSON.stringify(matrixCohort.id)+';campaignStudy='+JSON.stringify(matrixCohort.campaign_id||''),context);
+const matrixRecordIndex=fixture.records.findIndex(r=>r.cohort===matrixCohort.id);
 for(const language of ['en','fr']){
  vm.runInContext('I18N.setLanguage('+JSON.stringify(language)+');render()',context);
  const html=elements.content.innerHTML;
  assert.ok(html.includes(language==='en'?'Results by domain':'Résultats par domaine'));
- assert.ok(html.includes(language==='en'?'Sessions behind the results':'Sessions derrière les résultats'));
+ assert.ok(html.includes(language==='en'?'Runs behind the results':'Exécutions derrière les résultats'));
  assert.ok(html.includes('Configuration A'));
  assert.ok(!html.includes('undefined'));
  assert.ok(!html.includes('[object Object]'));
@@ -32,7 +38,7 @@ assert.equal(vm.runInContext('drillConfig',context),'C');
 for(const fn of handlers.change)fn({target:{id:'campaign-outcome',value:'fail'}});
 assert.equal(vm.runInContext('drillOutcome',context),'fail');
 // No condition is invented in empty groups; no HTML from run names is executed.
-vm.runInContext('campaignData.records[0].run_name="<img src=x onerror=bad()>";drillConfig="";drillOutcome="all";render()',context);
+vm.runInContext('campaignData.records['+matrixRecordIndex+'].run_name="<img src=x onerror=bad()>";drillConfig="";drillOutcome="all";render()',context);
 assert.ok(elements.content.innerHTML.includes('&lt;img src=x onerror=bad()&gt;'));
 assert.ok(!elements.content.innerHTML.includes('<img src=x'));
 // Navigation retains the target case name, avoiding accidental cross-task drilldown.

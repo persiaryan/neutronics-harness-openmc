@@ -11,6 +11,47 @@ follow the selected locale. Original instructions, emitted messages, feedback,
 source, XML, logs and evidence receipts retain their original language and values.
 Translations are a static local catalog; no model or translation service is called.
 
+## Campaign, task and run
+
+- **Task / Tâche**: the problem specification, independent of its executions.
+- **Run / Exécution**: one independent attempt on one task, with a model, an
+  assistance configuration and a budget, followed by assessment or interruption.
+- **Campaign / Campagne**: the planned inventory of runs and their recorded
+  operational progress. Repeats are separate attempts, not tool calls or retries.
+- **Batch / Lot**: a legacy directory containing several task executions.
+
+Navigate **Campaign → Model → Configuration → Task → Run (repeat)**. A legacy
+multi-task directory contributes one selectable execution per task; the evidence
+files are not moved or rewritten. The implementation's numeric `run` API parameter
+still addresses its selected directory; it is a routing index, not a durable ID.
+New plans record UUID execution IDs. New campaign manifests record a UUID campaign
+ID, execution IDs, relative paths and plan hashes. The retained v1 campaign adapter
+derives IDs from the unchanged manifest and row identity. Unassigned legacy
+directories use explicitly labeled location-derived IDs, not global identities.
+
+To load a declared campaign, select its manifest directly, or use:
+
+```json
+{"campaigns": ["dashboard-pilot-6-01/manifest.json"]}
+```
+
+Only explicitly selected campaign manifests introduce directories. Their expected
+rows remain in the inventory even when a run directory or plan is missing. The
+dashboard reads adjacent `progress.json` for the recorded campaign state and stop
+reason; completion counts come from run evidence. Separate campaigns never share
+comparison groups. The old `{"runs": [...]}` selection is supported, but explicitly
+labeled **No declared campaign**: its expected size and completeness are unknown.
+
+Planned reference scope comes from the campaign manifest. Observed reference scope
+comes from assessment evidence; absence of evidence means unknown, never private
+by default. Declared scope, observed scope and membership conflicts are exposed
+separately. The campaign groups stay stable by campaign/model during execution.
+Conflicting observed protocols, runtimes, rubrics or membership block comparison
+rates. Incomplete explicit groups retain verdict counts but withhold percentages
+until the required identities are known; pending runs never become scientific
+failures or fabricated assessments. Compatible groups in an unassigned legacy
+selection remain descriptive and do not establish common campaign membership.
+
 From the repository root:
 
 ```sh
@@ -50,6 +91,68 @@ performs the independent public-demo assessment, runs its evidence verifier and
 records `review.json` and a final summary. Existing output is refused. Failures
 remain in the consumed run directory. A failed scientific outcome can be a valid
 dashboard demonstration: do not retry to obtain a higher score.
+
+## Import a retained historical study
+
+`python3 -B -m dashboard.import_study --locations /path/to/campaign-locations.json
+--output scratch/history` imports the completed Request-16 archive identified by
+the recovered location inventory. This is a specific archive adapter, not a
+generic study importer. It requires the original sealed archive and a fresh
+output directory; neither is bundled with the public release.
+
+The importer checks the seal, analysis and copied evidence hashes, preserves the
+selected historical assessments, and records every copy in `import-receipt.json`.
+It checks the resulting six success counts against the retained study. It makes
+no model calls and does not execute archived code. Native binary outputs are not
+copied. Start the server with `--campaign scratch/history/campaign.json`.
+
+The page identifies imported historical evidence. A bound study context keeps
+the unscored provider incident in its intended comparison denominator; it never
+supplies missing verdicts. Historical reviews remain retained reviews, not fresh
+verification by the current evaluator. File hashes establish consistency with
+the local archive, not independent authentication of its origin.
+
+## Explicit serial pilot and prospective campaign
+
+`experiments.dashboard_campaign` prepares and executes fresh sessions, using the
+current implementation. The pilot has six sessions: two model setups × A/B/C on
+the public pin-cell demonstration. The prospective development study has 150:
+two setups × A/B/C × five tasks × five repeats, in a fixed shuffled order.
+Both use 16 requests/600 authoring seconds, with zero automatic retries.
+
+Preparation does not execute models:
+
+```sh
+python3 -B -m experiments.dashboard_campaign prepare --pilot \
+  --output scratch/pilot-6 --setups /path/to/reviewed-setups.json \
+  --runtime /path/to/public-runtime.json --data-index /path/to/public/cross_sections.xml
+python3 -B -m dashboard.server --campaign scratch/pilot-6/dashboard-campaign.json
+```
+
+The setups JSON must map `gpt-5.6-luna` and `gpt-5.6-sol` to their reviewed request
+setup descriptors. Preparation freezes source hashes, setup descriptors, data
+index identity and budgets in `manifest.json`. For a private study, omit
+`--pilot` and `--runtime`, select a new output, and provide the data index matching
+the installed private frozen suite. Verify reference/data/runtime compatibility
+before launch. Public and private references can require different data indices.
+
+This separate command **makes live model calls and native OpenMC runs**:
+
+```sh
+python3 -u -B -m experiments.dashboard_campaign run --output scratch/pilot-6
+```
+
+Each session follows builder → frozen submission → independent evaluation →
+evidence review. A coherent scientific failure is retained and execution
+continues; provider, infrastructure or unscored evaluation incidents stop further
+dispatch. Source changes and less than 10 GiB free space also stop dispatch.
+`progress.json` records campaign status; each run has its own status and evidence.
+A launch is consumed once: the command refuses automatic restart or retry.
+Preserve partial campaigns for diagnosis; do not rerun slots to improve scores.
+
+The dashboard can show historical, pilot and prospective directories together,
+but separates incompatible protocols and reference scopes. This launcher does
+not establish scientific qualification or historical v7 equivalence.
 
 ## Reading the page
 
@@ -92,10 +195,11 @@ The campaign reads compact report/review/result files, without parsing raw model
 responses or loading XML/histories for every session. Its aggregate cache lasts
 at most 10 seconds; the individual run view retains its two-second polling.
 
-An observation is one task in one run. Models, evaluator protocols, runtime
+An observation is one execution of one task. Models, evaluator protocols, runtime
 profiles, authoring request/time/retry budgets, rubric identities, builder images,
 declared request setup identities and public/private reference scopes form
-separate groups. Different task prompt/reference/sampling identities and varying
+compatibility checks. Explicit campaign membership is an additional boundary.
+Different task prompt/reference/sampling identities and varying
 tool budgets within the same condition suppress aggregate rates and comparisons.
 Missing identities suppress comparisons. Unrecorded provider settings cannot be
 checked; compatible recorded fields do not establish experimental equivalence.
@@ -160,6 +264,28 @@ invalid evidence, nonfinite histories, symlinks, telemetry failure, HTTP origin,
 path/method restrictions and inert artifact delivery. They do not qualify a live
 provider or native solver. Browser/native validation for this implementation is
 reported separately in `VALIDATION.md`.
+
+Optional rendered-browser checks use an already installed Playwright and Chromium
+or Chrome. They require no production dependency or provider credentials. Create
+a fresh synthetic selection and start its server in one terminal:
+
+```sh
+python3 -B -m tests.dashboard_browser_fixture --output scratch/dashboard-browser-fixture
+python3 -B -m dashboard.server --campaign scratch/dashboard-browser-fixture/selection.json --port 8767
+```
+
+In another terminal, with `playwright` available to Node:
+
+```sh
+node tests/test_dashboard_browser.cjs http://127.0.0.1:8767 scratch/dashboard-browser-results
+```
+
+Alternatively set `DASHBOARD_PLAYWRIGHT_MODULE` to an existing Playwright module
+directory and `DASHBOARD_BROWSER_EXECUTABLE` to an installed browser executable.
+The checks exercise all six views in EN/FR, cascading and rapid navigation,
+campaign boundaries, legacy batches, matrix drilldown, network failures, inert
+text, keyboard focus and mobile overflow. Results and screenshots go to the
+specified output directory. Stop the fixture server with Ctrl-C when finished.
 
 Telemetry adds small synchronous local writes. No claim is made that its timing
 overhead has zero effect on bounded authoring. Compare matched instrumented

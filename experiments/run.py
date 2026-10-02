@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import tempfile
+import uuid
 from pathlib import Path
 from observation_contracts import describe_configuration
 from builder import run as agent
@@ -58,6 +59,7 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
     output = Path(output); output.mkdir(parents=True, exist_ok=False)
     prompts = {case: prepare_prompt(case, output/'inputs'/case) for case in cases}
     plan = dict(format='research-usability-pilot-v2', status='prepared_not_dispatched', model=model,
+        batch_id=str(uuid.uuid4()), execution_ids={case:str(uuid.uuid4()) for case in cases},
         adapter='codex_subscription', assistance=assistance, cases=list(cases), prompts=prompts,
         delivery_contract=FACTORY, execution_profile=PROFILE, evaluator_protocol=BOUNDARY_PROTOCOL,
         budgets=declared, maximum_model_requests=len(cases)*declared['model_requests'],

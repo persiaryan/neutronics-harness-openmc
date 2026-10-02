@@ -6,3 +6,8 @@
 @media(min-width:1600px){main{padding-top:42px}.metrics{gap:20px}}
 @media(max-width:1100px){.sidebar{width:200px;padding:28px 16px}.workspace{margin-left:200px}main{padding:25px 22px}.topbar{padding:16px 22px}.grid{grid-template-columns:1fr}.selectors select{max-width:200px}.metrics{gap:10px}.metric{padding:15px}.step strong{font-size:11px}}
 @media(max-width:760px){.sidebar{position:static;width:100%;padding:18px}.brand{margin-bottom:14px}.side-label,.side-note{display:none}nav{display:flex;overflow:auto;gap:4px}nav button{white-space:nowrap;padding:9px;font-size:11px}nav button span{display:none}.workspace{margin:0}.topbar{align-items:flex-start;padding:15px;flex-wrap:wrap;gap:8px}.selectors{width:100%;justify-content:space-between;gap:12px}.selectors select{max-width:170px;font-size:11px}.connection{display:flex;justify-content:space-between;width:100%;gap:8px;align-items:center}.toggle{font-size:11px}main{padding:23px 15px}.heading{display:block}h1{font-size:26px}.metrics{grid-template-columns:1fr 1fr}.metric .value{font-size:25px}.steps{grid-template-columns:repeat(4,1fr)}.grid.equal{grid-template-columns:1fr}.panel{padding:17px}.artifact{display:block}.artifact .button{display:inline-block;margin-top:6px}footer{padding:15px;font-size:10px}.stat-pair{gap:15px}.stat-pair strong{font-size:16px}}
+
+/* Campaign → model → configuration → task → execution navigation. */
+.topbar{flex-wrap:wrap}.selectors{flex-wrap:wrap;flex:1;min-width:0}.selectors label{min-width:120px;flex:1}.selectors select{width:100%;max-width:300px}.notice{overflow-wrap:anywhere}
+
+.selectors[hidden]{display:none}

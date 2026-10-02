@@ -41,7 +41,10 @@ assessment and C smoke assistance. Its historical results are unchanged; the
 public source now includes bounded smoke and the optional Request-16 authoring
 profile. Read-only trajectory projection separates smoke completion from
 demonstrated feedback delivery and provides an allowlisted metadata view.
-The study executor and private reference packages are not included.
+The original research study executor and private reference packages are not
+included. A local serial pilot/campaign launcher is documented in
+[dashboard usage](dashboard/README.md); it does not reproduce the historical v7
+implementation.
 
 ## Architecture
 
