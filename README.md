@@ -81,6 +81,12 @@ See [the architecture walkthrough](DESIGN.md),
 
 ## Experimental results
 
+The separate October 2026 campaign is now closed: **108 diagnostic successes,
+30 evaluated failures and 12 incidents across 150 assignments**. See its
+[closeout and limitations](docs/experiments/campaign-150-rerun-01.md) and
+[aggregate data](docs/experiments/campaign-150-rerun-01.json). It uses the public
+temperature/source route, not the historical v7 implementation summarized below.
+
 **150 sessions · 2 agent setups · 3 conditions · 5 OpenMC tasks · 5 repeats · zero retries**
 
 A is guided construction with coding tools, a required export attempt and bounded

@@ -42,6 +42,15 @@ reason; completion counts come from run evidence. Separate campaigns never share
 comparison groups. The old `{"runs": [...]}` selection is supported, but explicitly
 labeled **No declared campaign**: its expected size and completeness are unknown.
 
+The comparison view includes a grouped bar chart by model and configuration,
+filtered by the selected campaign, model and task. Comparable groups use the
+existing equal-task-weight success rates, with hatched unresolved-outcome bounds
+(not confidence intervals). If any displayed group has unavailable rates or the
+displayed groups have different assessment, budget or task identities, all
+bars show retained success counts and unresolved counts instead; no comparison
+gate is bypassed. The accompanying table retains failures and denominators.
+English and French labels follow the dashboard language selector.
+
 Planned reference scope comes from the campaign manifest. Observed reference scope
 comes from assessment evidence; absence of evidence means unknown, never private
 by default. Declared scope, observed scope and membership conflicts are exposed
@@ -149,6 +158,34 @@ dispatch. Source changes and less than 10 GiB free space also stop dispatch.
 `progress.json` records campaign status; each run has its own status and evidence.
 A launch is consumed once: the command refuses automatic restart or retry.
 Preserve partial campaigns for diagnosis; do not rerun slots to improve scores.
+
+The completed October campaign used the following explicitly authorized controller
+to process its remaining pending slots:
+
+```sh
+python3 -u -B -m experiments.continue_campaign --output scratch/my-campaign
+```
+
+This is a recorded operational policy amendment, not a restart of consumed slots.
+It preserves the original manifest, launch seal, results and source hashes, allowing
+only the additional continuation controller, whose hash and prior progress are
+recorded in `continuations.jsonl`. Finished and incident slots are skipped. A
+retained unscored outcome can be followed by another independent slot, without
+rescoring it or changing the evaluator. Environmental prerequisites are rechecked
+every 30 minutes while blocked. Changed source/plan identities, unconfirmed cleanup,
+unexpected controller errors and unreconciled active slots require operator review.
+A file lock prevents concurrent continuation controllers. Completed inventory can
+include incidents; it does not mean every attempt received a scientific score.
+
+This is the retained controller used by that campaign, not a general recovery
+command for arbitrary manifests. It requires the original source snapshot plus
+this controller and assumes the 16-request profile. In particular, confirmed
+cleanup after a builder failure permits the next slot even when that failure is
+an initialization timeout. It has no repeated-incident circuit breaker. The
+October campaign consequently retained seven builder initialization incidents
+with zero model requests. Review this policy before using it for another campaign;
+do not silently retry those attempts or treat them as model failures. See the
+[campaign closeout](../docs/experiments/campaign-150-rerun-01.md).
 
 The dashboard can show historical, pilot and prospective directories together,
 but separates incompatible protocols and reference scopes. This launcher does
