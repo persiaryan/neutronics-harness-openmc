@@ -27,6 +27,42 @@ function campaignMetric(s){
  if(!s?.n)return `<span class="muted">${esc(ui('Aucune session'))}</span>`;
  return `<strong>${pct(s.rate)}</strong>${s.rate==null?'':`<meter min="0" max="1" value="${s.rate}" aria-label="${esc(ui('Taux de réussite'))}">${pct(s.rate)}</meter>`}<small>${s.passed} ${esc(ui('réussites'))} · ${s.failed} ${esc(ui('échecs'))} · ${s.unknown} ${esc(ui('indéterminés'))}</small><small>n = ${s.n} · ${esc(ui('Bornes'))}: ${pct(s.rate)} – ${pct(s.possible_rate)}</small>`;
 }
+function campaignChart(cohorts, task){
+ const series=cohorts.map(c=>({cohort:c,model:(c.context.model||ui('Inconnu'))+(cohorts.filter(x=>x.context.model===c.context.model).length>1?' · '+c.id.slice(0,6):''),groups:task?c.by_task[task]:c.groups}));
+ const configs=[...new Set(series.flatMap(s=>Object.keys(s.groups||{})))].filter(k=>series.some(s=>s.groups?.[k]?.domains.overall.n>0)).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+ if(!configs.length)return '';
+ // The existing gate covers each cohort. A shared plot additionally needs
+ // matching assessment definitions, execution budgets and task identities.
+ const comparisonKey=c=>JSON.stringify([
+   c.campaign_id,c.context.protocol,c.context.rubric,c.context.definition,
+   c.context.profile,c.context.budgets,c.context.reference_scope,
+   task?[task]:[...c.tasks].sort(),
+   [...new Set(campaignData.records.filter(r=>r.cohort===c.id&&(!task||r.case===task)).map(r=>r.task_signature))].sort()
+ ]);
+ const sameContext=series.every(s=>comparisonKey(s.cohort)===comparisonKey(series[0].cohort));
+ const rates=sameContext&&series.every(s=>s.cohort.comparable&&(!task?!s.cohort.conflicting_tasks.length:!s.cohort.conflicting_tasks.includes(task))&&configs.every(k=>Number.isFinite(s.groups?.[k]?.domains.overall.rate)));
+ const stats=series.flatMap(s=>configs.map(k=>s.groups?.[k]?.domains.overall).filter(Boolean));
+ const maximum=rates?100:Math.max(1,...stats.map(s=>s.n));
+ const width=Math.max(640,configs.length*series.length*82+100),top=45,bottom=285,left=55,right=width-25;
+ const slot=(right-left)/configs.length,bar=Math.min(55,slot/(series.length+1));
+ const y=v=>bottom-(bottom-top)*v/maximum;
+ const colors=['#285bad','#99590c','#087d72','#864cb0','#a63760'];
+ const ticks=[...new Set(Array.from({length:6},(_,i)=>rates?maximum*i/5:Math.round(maximum*i/5)))];
+ const axis=ticks.map(v=>`<line x1="${left}" x2="${right}" y1="${y(v)}" y2="${y(v)}" stroke="#dbe3e5"/><text x="${left-10}" y="${y(v)+4}" text-anchor="end">${esc(fmt(v,0))}${rates?' %':''}</text>`).join('');
+ const bars=configs.map((config,i)=>series.map((s,j)=>{
+   const v=s.groups?.[config]?.domains.overall;
+   const x=left+slot*(i+.5)+(j-series.length/2)*bar;
+   if(!v?.n)return `<text x="${x+bar/2}" y="${bottom-8}" text-anchor="middle">—</text>`;
+   const value=rates?100*v.rate:v.passed;
+   const upper=rates?100*(v.possible_rate??v.rate):v.passed+v.unknown;
+   const label=rates?pct(v.rate):String(v.passed);
+   const description=`${s.model} · ${config}: ${label}; ${v.passed} ${ui('réussites')}, ${v.failed} ${ui('échecs')}, ${v.unknown} ${ui('indéterminés')}; n = ${v.n}`;
+   return `<g><title>${esc(description)}</title><rect x="${x+3}" y="${y(value)}" width="${bar-6}" height="${bottom-y(value)}" fill="${colors[j%colors.length]}"/>${upper>value?`<rect x="${x+3}" y="${y(upper)}" width="${bar-6}" height="${y(value)-y(upper)}" fill="url(#campaign-chart-unresolved)" stroke="#556877"/>`:''}<text class="chart-value" x="${x+bar/2}" y="${y(upper)-9}" text-anchor="middle">${esc(label)}</text></g>`;
+ }).join('')+`<text x="${left+slot*(i+.5)}" y="${bottom+27}" text-anchor="middle">${esc(config)}</text>`).join('');
+ const note=rates?ui('Barres pleines : taux établi, avec un poids égal par tâche. Partie hachurée : résultats indéterminés pouvant augmenter ce taux ; ce n’est pas un intervalle de confiance.'):ui('Les pourcentages comparatifs sont indisponibles ou les groupes ont des contextes différents. Le graphique montre les effectifs enregistrés, sans recalculer de taux.');
+ const table=`<div class="table-scroll"><table><caption>${esc(ui('Valeurs du graphique'))}</caption><thead><tr>${['Modèle','Configuration','réussites','échecs','indéterminés','observations'].map(k=>`<th scope="col">${esc(ui(k))}</th>`).join('')}</tr></thead><tbody>${series.flatMap(s=>configs.map(k=>{const v=s.groups?.[k]?.domains.overall;return `<tr><th scope="row">${esc(s.model)}</th><td>${esc(k)}</td>${v?[v.passed,v.failed,v.unknown,v.n].map(n=>`<td>${n}</td>`).join(''):'<td colspan="4">—</td>'}</tr>`})).join('')}</tbody></table></div>`;
+ return `<section class="panel campaign-chart"><h2>${esc(ui('Réussite par modèle et configuration'))}</h2><p>${esc(task||ui(rates?'Toutes les tâches · poids égaux':'Toutes les tâches'))}</p><p class="muted" id="campaign-chart-note">${esc(note)}</p><div class="chart-legend">${series.map((s,i)=>`<span><i style="background:${colors[i%colors.length]}"></i>${esc(s.model)}</span>`).join('')}<span><i class="chart-unresolved"></i>${esc(ui('indéterminés'))}</span></div><div class="table-scroll"><svg viewBox="0 0 ${width} 330" style="min-width:${width}px" role="img" aria-labelledby="campaign-chart-title" aria-describedby="campaign-chart-note"><title id="campaign-chart-title">${esc(ui('Réussite par modèle et configuration'))} — ${esc(rates?ui('Taux de réussite'):ui('Nombre de réussites'))}</title><defs><pattern id="campaign-chart-unresolved" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#f3f6f5"/><path d="M0 6L6 0" stroke="#87969e"/></pattern></defs><text x="${left}" y="18">${esc(rates?ui('Taux de réussite'):ui('Nombre de réussites'))}</text>${axis}${bars}</svg></div><p class="muted">${esc(ui('Les résultats indéterminés restent visibles. Les effectifs ne sont pas des taux ; consulter le tableau lorsque les tailles des groupes diffèrent.'))}</p><details data-key="campaign-chart-values"><summary>${esc(ui('Valeurs du graphique'))}</summary>${table}</details></section>`;
+}
 function campaignView(){
  const heading=title(ui('Comparer les résultats enregistrés'),ui('Comparaison des configurations'),ui('Chaque exécution est une tentative sur une tâche. La campagne définit les répétitions prévues.'));
  if(!campaignData)return heading+empty(campaignError||ui('Chargement de la campagne…'));
@@ -58,6 +94,7 @@ function campaignView(){
  return heading+warning+`<div class="toolbar">${filter('study-select',ui('Campagne'),studies.map(([id,name])=>option(id,name,id===campaignStudy)).join(''))}</div>`+studyOverview()+`<div class="notice">${esc(ui('Les comparaisons restent dans la campagne sélectionnée. Les groupes séparent les modèles ; les divergences de protocole bloquent les taux.'))}</div>`+
  `<div class="toolbar campaign-filters">${filter('campaign-model',ui('Modèle'),option('',ui('Tous les modèles'),!campaignModel)+models.map(m=>option(m,m||ui('Inconnu'),m===campaignModel)).join(''))}${filter('campaign-cohort',ui('Groupe de comparaison'),available.map(x=>option(x.id,`${x.context.model||'?'} · ${x.context.protocol||'?'} · ${x.context.budgets.model_requests??'?'} req · ${x.context.reference_scope} · ${x.id.slice(0,6)}`,x.id===c.id)).join(''))}${filter('campaign-task',ui('Tâche'),option('',ui('Toutes les tâches · poids égaux'),!selectedTask)+c.tasks.map(t=>option(t,t,t===selectedTask)).join(''))}</div>`+
  `<p class="muted">${esc(ui('Utiliser ces filtres pour comparer, puis ouvrir une exécution depuis les tableaux.'))}</p>`+
+ campaignChart(available,selectedTask)+
  (!eligible?`<div class="notice warning">${esc(ui('Comparaison limitée : identités manquantes, versions de tâche ou budgets d’outils différents. Les écarts entre configurations sont masqués.'))} ${esc(c.conflicting_tasks.join(', '))}</div>`:'')+
  (c.excluded?`<div class="notice warning">${c.excluded} ${esc(ui('observations sans configuration reconnue : exclues des agrégats par configuration, conservées dans le détail.'))}</div>`:'')+
  `<div class="campaign-cards">${configs.map(config=>`<section class="panel"><h2>Configuration ${esc(config)}</h2><div class="campaign-value">${campaignMetric(groups[config].domains.overall)}</div><p class="muted">${esc(ui('Réussite complète · poids égal par tâche'))}</p></section>`).join('')}</div>`+

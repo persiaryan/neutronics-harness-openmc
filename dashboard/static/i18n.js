@@ -2,6 +2,13 @@
 // Gettext-style catalog: the original French UI strings are the stable keys.
 // Only UI-owned strings pass through t(); evidence, source and logs remain verbatim.
 const UI_ENGLISH = {
+  "Réussite par modèle et configuration": "Success by model and configuration",
+  "Nombre de réussites": "Number of successful runs",
+  "Valeurs du graphique": "Chart data",
+  "Toutes les tâches": "All tasks",
+  "Barres pleines : taux établi, avec un poids égal par tâche. Partie hachurée : résultats indéterminés pouvant augmenter ce taux ; ce n’est pas un intervalle de confiance.": "Solid bars: established success rate, with equal task weights. Hatched section: unresolved outcomes that could increase this rate; this is not a confidence interval.",
+  "Les pourcentages comparatifs sont indisponibles ou les groupes ont des contextes différents. Le graphique montre les effectifs enregistrés, sans recalculer de taux.": "Comparison percentages are unavailable or the groups have different contexts. The chart shows retained counts without recalculating rates.",
+  "Les résultats indéterminés restent visibles. Les effectifs ne sont pas des taux ; consulter le tableau lorsque les tailles des groupes diffèrent.": "Unresolved outcomes remain visible. Counts are not rates; consult the table when group sizes differ.",
   "Comparaison limitée : identités manquantes, versions de tâche ou budgets d’outils différents. Les écarts entre configurations sont masqués.": "Limited comparison: missing identities, differing task versions or tool budgets. A/B/C differences are hidden.",
   "Taux de réussite": "Success rate",
 "Comparaison des configurations": "Compare configurations",

@@ -1,0 +1,422 @@
+{
+  "format": "campaign-closeout-summary-v1",
+  "campaign": "campaign-150-rerun-01",
+  "campaign_id": "d7b1c687-c094-4f90-9050-cab1f3e047ed",
+  "started": "2026-10-02T21:53:05.584009+00:00",
+  "finished": "2026-10-03T14:59:40.397600+00:00",
+  "state": "complete",
+  "kind": "prospective_development_study",
+  "evaluator_protocol": "factory-assessment-boundaries-v4-temperature-source-v1",
+  "scientific_review": "pending_owner_review",
+  "grading_enabled": false,
+  "request_limit": 16,
+  "authoring_seconds": 600,
+  "automatic_retries": 0,
+  "model_requests_recorded": 884,
+  "reasoning_effort": {
+    "gpt-5.6-luna": "medium",
+    "gpt-5.6-sol": "low"
+  },
+  "totals": {
+    "planned": 150,
+    "success": 108,
+    "evaluated_failure": 30,
+    "incident": 12
+  },
+  "by_task_and_condition": [
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "asymmetric_5x5",
+      "planned": 5,
+      "success": 2,
+      "evaluated_failure": 2,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "axially_zoned_5x5",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 1,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "reflected_7x7",
+      "planned": 5,
+      "success": 2,
+      "evaluated_failure": 2,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "reflective_pin_cell",
+      "planned": 5,
+      "success": 5,
+      "evaluated_failure": 0,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "two_composition_5x5",
+      "planned": 5,
+      "success": 2,
+      "evaluated_failure": 2,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "B",
+      "task": "asymmetric_5x5",
+      "planned": 5,
+      "success": 2,
+      "evaluated_failure": 3,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "B",
+      "task": "axially_zoned_5x5",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 1,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "B",
+      "task": "reflected_7x7",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 1,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "B",
+      "task": "reflective_pin_cell",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 2,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "B",
+      "task": "two_composition_5x5",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 2,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "C",
+      "task": "asymmetric_5x5",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 2,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "C",
+      "task": "axially_zoned_5x5",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 2,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "C",
+      "task": "reflected_7x7",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 1,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "C",
+      "task": "reflective_pin_cell",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 2,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "configuration": "C",
+      "task": "two_composition_5x5",
+      "planned": 5,
+      "success": 1,
+      "evaluated_failure": 3,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "asymmetric_5x5",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 0,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "axially_zoned_5x5",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 0,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "reflected_7x7",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 0,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "reflective_pin_cell",
+      "planned": 5,
+      "success": 5,
+      "evaluated_failure": 0,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "two_composition_5x5",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 1,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "B",
+      "task": "asymmetric_5x5",
+      "planned": 5,
+      "success": 5,
+      "evaluated_failure": 0,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "B",
+      "task": "axially_zoned_5x5",
+      "planned": 5,
+      "success": 5,
+      "evaluated_failure": 0,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "B",
+      "task": "reflected_7x7",
+      "planned": 5,
+      "success": 5,
+      "evaluated_failure": 0,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "B",
+      "task": "reflective_pin_cell",
+      "planned": 5,
+      "success": 3,
+      "evaluated_failure": 0,
+      "incident": 2
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "B",
+      "task": "two_composition_5x5",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 1,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "C",
+      "task": "asymmetric_5x5",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 0,
+      "incident": 1
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "C",
+      "task": "axially_zoned_5x5",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 1,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "C",
+      "task": "reflected_7x7",
+      "planned": 5,
+      "success": 5,
+      "evaluated_failure": 0,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "C",
+      "task": "reflective_pin_cell",
+      "planned": 5,
+      "success": 5,
+      "evaluated_failure": 0,
+      "incident": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "configuration": "C",
+      "task": "two_composition_5x5",
+      "planned": 5,
+      "success": 4,
+      "evaluated_failure": 1,
+      "incident": 0
+    }
+  ],
+  "primary_failure_categories": {
+    "invalid_geometry": 11,
+    "geometry_nonconformity": 7,
+    "settings_nonconformity": 11,
+    "factory_export": 1
+  },
+  "incidents": [
+    {
+      "run": "002-r3-reflected_7x7-gpt-5.6-luna-A",
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "reflected_7x7",
+      "category": "native_exit_unattributed",
+      "model_requests": 9
+    },
+    {
+      "run": "004-r4-reflected_7x7-gpt-5.6-sol-A",
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "reflected_7x7",
+      "category": "unsupported_source_point",
+      "model_requests": 5
+    },
+    {
+      "run": "021-r1-two_composition_5x5-gpt-5.6-luna-C",
+      "model": "gpt-5.6-luna",
+      "configuration": "C",
+      "task": "two_composition_5x5",
+      "category": "authoring_request_budget",
+      "model_requests": 16
+    },
+    {
+      "run": "116-r3-axially_zoned_5x5-gpt-5.6-luna-B",
+      "model": "gpt-5.6-luna",
+      "configuration": "B",
+      "task": "axially_zoned_5x5",
+      "category": "runtime_identity_timeout",
+      "model_requests": 10
+    },
+    {
+      "run": "117-r1-axially_zoned_5x5-gpt-5.6-luna-A",
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "axially_zoned_5x5",
+      "category": "builder_preflight_timeout",
+      "model_requests": 0
+    },
+    {
+      "run": "118-r5-reflective_pin_cell-gpt-5.6-sol-B",
+      "model": "gpt-5.6-sol",
+      "configuration": "B",
+      "task": "reflective_pin_cell",
+      "category": "builder_preflight_timeout",
+      "model_requests": 0
+    },
+    {
+      "run": "119-r4-asymmetric_5x5-gpt-5.6-sol-A",
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "asymmetric_5x5",
+      "category": "export_preflight_failure",
+      "model_requests": 4
+    },
+    {
+      "run": "129-r2-asymmetric_5x5-gpt-5.6-luna-A",
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "asymmetric_5x5",
+      "category": "builder_preflight_timeout",
+      "model_requests": 0
+    },
+    {
+      "run": "130-r1-reflective_pin_cell-gpt-5.6-sol-B",
+      "model": "gpt-5.6-sol",
+      "configuration": "B",
+      "task": "reflective_pin_cell",
+      "category": "builder_preflight_timeout",
+      "model_requests": 0
+    },
+    {
+      "run": "131-r1-asymmetric_5x5-gpt-5.6-sol-C",
+      "model": "gpt-5.6-sol",
+      "configuration": "C",
+      "task": "asymmetric_5x5",
+      "category": "builder_preflight_timeout",
+      "model_requests": 0
+    },
+    {
+      "run": "132-r1-axially_zoned_5x5-gpt-5.6-sol-A",
+      "model": "gpt-5.6-sol",
+      "configuration": "A",
+      "task": "axially_zoned_5x5",
+      "category": "builder_preflight_timeout",
+      "model_requests": 0
+    },
+    {
+      "run": "133-r5-two_composition_5x5-gpt-5.6-luna-A",
+      "model": "gpt-5.6-luna",
+      "configuration": "A",
+      "task": "two_composition_5x5",
+      "category": "builder_preflight_timeout",
+      "model_requests": 0
+    }
+  ],
+  "smoke_observations": {
+    "sessions_using": 45,
+    "calls_completed": 49,
+    "sessions_with_completed_smoke": 43,
+    "subsequent_success": 33,
+    "calls_incomplete": 5,
+    "calls_not_started": 1,
+    "subsequent_nonsuccess": 10
+  },
+  "provenance": {
+    "source_base_commit": "111354c11c805275c9014d5d7987daf26575523d",
+    "manifest_sha256": "bd732c1c6a470a73b3f17dd4b7695ae3b6584951dca6014a943d397c3ce5c8d4",
+    "progress_sha256": "bb2e48cc4900247b2ce6ffd1c576d4733022713848a7fa466cd7c804b3a01032",
+    "launch_sha256": "5b2932151e4b5756c2c9d7fa13bad41cd74a62ac952fd56d95fd18912736edcb",
+    "continuations_sha256": "970ab7c91f9ef4aa11b326cfedc1f52f8296ea73a07d42e0c812ec49ebb9fd81",
+    "controller_sha256": "cc0ffe41e3bd111708144517e9f1bb86ca18426040f28a57b4e6fbc864c55164",
+    "bound_report_review_pairs": 142,
+    "report_review_inventory_sha256": "31acc1bb46e35a1fd3031e3f8a6e4839e7051220538d4901aa4a6b2b5bc36559",
+    "raw_evidence": "Private local evidence; not bundled. Hashes bind content, not authenticity."
+  }
+}
