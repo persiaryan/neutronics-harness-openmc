@@ -11,8 +11,9 @@ fs.mkdirSync(output,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.DASHBOARD_BROWSER_EXECUTABLE?{executablePath:process.env.DASHBOARD_BROWSER_EXECUTABLE}:{})});
  const context=await browser.newContext({viewport:{width:1440,height:1000}});
- const page=await context.newPage();const errors=[];
+ const page=await context.newPage();const errors=[],policyErrors=[];
  page.on('pageerror',error=>errors.push(error.message));
+ page.on('console',message=>{if(message.type()==='error'&&/Content Security Policy|violates.*directive/i.test(message.text()))policyErrors.push(message.text());});
  const waitRun=async(model,config,task)=>page.waitForFunction(({model,config,task})=>!busy&&data?.plan?.model===model&&data?.configuration?.definition?.configuration?.id===config&&data?.tasks?.[taskIndex]?.case===task,{model,config,task});
  try{
   await page.goto(base);await page.waitForFunction(()=>document.querySelector('#run-select').options.length>0&&!busy);
@@ -72,6 +73,48 @@ fs.mkdirSync(output,{recursive:true});
   assert.equal(await page.locator('#execution-navigation').isVisible(),false);
   await page.evaluate(()=>window.scrollTo(0,0));await page.waitForFunction(()=>scrollY===0);
   await page.screenshot({path:path.join(output,'campaign-desktop.png'),fullPage:true});
+  await page.locator('#auto').uncheck();
+  await page.selectOption('#study-select','campaign-one');
+  await page.selectOption('#campaign-model','');
+  assert.match(await page.locator('#campaign-chart-title').textContent(),/Number of successful runs/);
+  assert.match(await page.locator('.campaign-chart svg .chart-legend').textContent(),/model-one.*model-two.*unresolved/);
+  // The visible SVG legend must match each model's bars, including after filtering.
+  await page.selectOption('#study-select','campaign-models');
+  await page.selectOption('#campaign-model','');
+  const legendColors=async()=>page.locator('.campaign-chart svg .chart-legend > g').evaluateAll(rows=>Object.fromEntries(rows.map(row=>[row.querySelector('text').textContent,row.querySelector('rect').getAttribute('fill')])));
+  assert.match(await page.locator('#campaign-chart-title').textContent(),/Success rate/);
+  const colors=await legendColors();
+  assert.equal(colors['gpt-5.6-luna'],'#285bad');
+  assert.equal(colors['gpt-5.6-sol'],'#99590c');
+  const checkLegend=async()=>{
+   await page.waitForFunction(()=>!campaignBusy&&!busy);
+   const legend=page.locator('.campaign-chart svg .chart-legend');
+   await legend.scrollIntoViewIfNeeded();assert.ok(await legend.isVisible());
+   assert.ok(await legend.locator('text').evaluateAll(rows=>rows.every(row=>row.getBoundingClientRect().height>=10)),'Legend text must remain readable');
+   const mapping=await legendColors();
+   const bars=await page.locator('.campaign-chart svg > g:not(.chart-legend)').evaluateAll(rows=>rows.filter(row=>row.querySelector('title')).map(row=>({title:row.querySelector('title').textContent,fill:row.querySelector('rect').getAttribute('fill')})));
+   assert.ok(bars.length>0);
+   for(const bar of bars){
+    const model=bar.title.split(' · ')[0];assert.equal(bar.fill,mapping[model]);assert.equal(bar.fill,colors[model]);
+   }
+   // Swatches and text occupy the SVG viewport, without overlapping the plot.
+   assert.ok(await legend.evaluate(g=>{const svg=g.ownerSVGElement.viewBox.baseVal,b=g.getBBox();return b.x>=0&&b.y>=0&&b.x+b.width<=svg.width&&b.y+b.height<Number(g.nextElementSibling.getAttribute('y'));}));
+  };
+  for(const language of ['en','fr']){
+   await page.selectOption('#language-select',language);
+   await checkLegend();
+   assert.ok((await legendColors())[language==='en'?'unresolved':'indéterminés']);
+   await page.locator('.campaign-chart').screenshot({path:path.join(output,'model-legends-'+language+'.png')});
+  }
+  await page.selectOption('#campaign-model','gpt-5.6-sol');await checkLegend();
+  assert.deepEqual(Object.keys(await legendColors()).sort(),['gpt-5.6-sol','indéterminés'].sort());
+  await page.selectOption('#campaign-model','');
+  await page.setViewportSize({width:390,height:844});await checkLegend();
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await page.locator('.campaign-chart').screenshot({path:path.join(output,'model-legends-mobile.png')});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.selectOption('#language-select','en');
+  await page.selectOption('#study-select','campaign-two');
   // Network failure retains evidence and displays a visible stale-data notice.
   await page.route('**/api/campaign',route=>route.abort());
   await page.evaluate(()=>refreshCampaign(true));
@@ -93,8 +136,8 @@ fs.mkdirSync(output,{recursive:true});
   }
   await page.evaluate(()=>window.scrollTo(0,0));await page.waitForFunction(()=>scrollY===0);
   await page.screenshot({path:path.join(output,'campaign-mobile.png'),fullPage:true});
-  assert.deepEqual(errors,[]);
-  const result={status:'passed',browser:await browser.version(),checks:['cascade navigation','legacy batch','rapid delayed-response navigation','EN/FR six views','language persistence','campaign separation','matrix drilldown','stale network state','inert text','keyboard focus','390px mobile overflow'],screenshots:['campaign-desktop.png','campaign-mobile.png']};
+  assert.deepEqual(errors,[]);assert.deepEqual(policyErrors,[]);
+  const result={status:'passed',browser:await browser.version(),checks:['cascade navigation','legacy batch','rapid delayed-response navigation','EN/FR six views','language persistence','campaign separation','matrix drilldown','stale network state','inert text','keyboard focus','390px mobile overflow','SVG model legends EN/FR','legend/bar color matching','stable filtered colors','mobile legend bounds','count-mode legend','no CSP violations'],screenshots:['campaign-desktop.png','campaign-mobile.png','model-legends-en.png','model-legends-fr.png','model-legends-mobile.png']};
   fs.writeFileSync(path.join(output,'result.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
  }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1});
