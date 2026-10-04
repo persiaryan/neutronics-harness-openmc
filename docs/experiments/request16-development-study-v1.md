@@ -1,5 +1,8 @@
 # Request-16 A/B/C development study
 
+> Historical campaign 1 archive. The primary results are now [campaign 2](../../RESULTS.md).
+> This report retains its original protocol, findings and evidence scope.
+
 **Complete development study · 150 terminal assignments · zero retries**
 
 The question is whether domain-specific scientific feedback improves an agent's

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 510" role="img" aria-labelledby="title desc">
+<title id="title">Campaign 2: terminal outcomes by setup and condition</title>
+<desc id="desc">gpt-5.6-luna A: 14 successes, 7 evaluated failures, 4 unscored incidents out of 25. gpt-5.6-luna B: 15 successes, 9 evaluated failures, 1 unscored incidents out of 25. gpt-5.6-luna C: 14 successes, 10 evaluated failures, 1 unscored incidents out of 25. gpt-5.6-sol A: 21 successes, 1 evaluated failures, 3 unscored incidents out of 25. gpt-5.6-sol B: 22 successes, 1 evaluated failures, 2 unscored incidents out of 25. gpt-5.6-sol C: 22 successes, 2 evaluated failures, 1 unscored incidents out of 25. Descriptive counts; no causal comparison.</desc>
+<style>text{font-family:system-ui,-apple-system,sans-serif;fill:#1f2328;font-size:14px}.bg{fill:white}.grid{stroke:#d0d7de}.luna{fill:#0969da}.sol{fill:#bc4c00}.failure{fill:#f5b5b0}.caption{font-size:12px}.value{font-weight:650}</style>
+<defs><pattern id="incident" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#eaeef2"/><path d="M-1 1L1-1M0 6L6 0M5 7L7 5" stroke="#57606a"/></pattern></defs>
+<rect class="bg" width="820" height="510" rx="10"/>
+<text x="80" y="30" class="value">Campaign 2 · October 2026 · 150 planned assignments</text>
+<rect x="80" y="50" width="14" height="14" fill="#0969da"/>
+<text x="102" y="62">Luna success</text>
+<rect x="250" y="50" width="14" height="14" fill="#bc4c00"/>
+<text x="272" y="62">Sol success</text>
+<rect x="410" y="50" width="14" height="14" fill="#f5b5b0"/>
+<text x="432" y="62">Evaluated failure</text>
+<rect x="600" y="50" width="14" height="14" fill="url(#incident)"/>
+<text x="622" y="62">Unscored incident</text>
+<path class="grid" d="M80 370H785"/>
+<text x="68" y="375" text-anchor="end">0</text>
+<path class="grid" d="M80 320H785"/>
+<text x="68" y="325" text-anchor="end">5</text>
+<path class="grid" d="M80 270H785"/>
+<text x="68" y="275" text-anchor="end">10</text>
+<path class="grid" d="M80 220H785"/>
+<text x="68" y="225" text-anchor="end">15</text>
+<path class="grid" d="M80 170H785"/>
+<text x="68" y="175" text-anchor="end">20</text>
+<path class="grid" d="M80 120H785"/>
+<text x="68" y="125" text-anchor="end">25</text>
+<text transform="translate(25 245) rotate(-90)" text-anchor="middle">Assignment count</text>
+<rect x="123" y="230" width="66" height="140" fill="#0969da"/>
+<rect x="123" y="160" width="66" height="70" fill="#f5b5b0"/>
+<rect x="123" y="120" width="66" height="40" fill="url(#incident)"/>
+<text x="156" y="104" text-anchor="middle" class="value">14 / 25</text>
+<text x="156" y="392" text-anchor="middle">Luna</text>
+<rect x="201" y="160" width="66" height="210" fill="#bc4c00"/>
+<rect x="201" y="150" width="66" height="10" fill="#f5b5b0"/>
+<rect x="201" y="120" width="66" height="30" fill="url(#incident)"/>
+<text x="234" y="104" text-anchor="middle" class="value">21 / 25</text>
+<text x="234" y="392" text-anchor="middle">Sol</text>
+<text x="195" y="420" text-anchor="middle" class="value">A</text>
+<rect x="358" y="220" width="66" height="150" fill="#0969da"/>
+<rect x="358" y="130" width="66" height="90" fill="#f5b5b0"/>
+<rect x="358" y="120" width="66" height="10" fill="url(#incident)"/>
+<text x="391" y="104" text-anchor="middle" class="value">15 / 25</text>
+<text x="391" y="392" text-anchor="middle">Luna</text>
+<rect x="436" y="150" width="66" height="220" fill="#bc4c00"/>
+<rect x="436" y="140" width="66" height="10" fill="#f5b5b0"/>
+<rect x="436" y="120" width="66" height="20" fill="url(#incident)"/>
+<text x="469" y="104" text-anchor="middle" class="value">22 / 25</text>
+<text x="469" y="392" text-anchor="middle">Sol</text>
+<text x="430" y="420" text-anchor="middle" class="value">B</text>
+<rect x="593" y="230" width="66" height="140" fill="#0969da"/>
+<rect x="593" y="130" width="66" height="100" fill="#f5b5b0"/>
+<rect x="593" y="120" width="66" height="10" fill="url(#incident)"/>
+<text x="626" y="104" text-anchor="middle" class="value">14 / 25</text>
+<text x="626" y="392" text-anchor="middle">Luna</text>
+<rect x="671" y="150" width="66" height="220" fill="#bc4c00"/>
+<rect x="671" y="130" width="66" height="20" fill="#f5b5b0"/>
+<rect x="671" y="120" width="66" height="10" fill="url(#incident)"/>
+<text x="704" y="104" text-anchor="middle" class="value">22 / 25</text>
+<text x="704" y="392" text-anchor="middle">Sol</text>
+<text x="665" y="420" text-anchor="middle" class="value">C</text>
+<text x="80" y="451" class="caption">A: construction · B: A + boundaries · C: B + smoke · labels: diagnostic successes / planned</text>
+<text x="80" y="474" class="caption">16 requests / 600 seconds · five reused tasks × five repeats · zero retries</text>
+<text x="80" y="495" class="caption">Incidents remain unscored. Scientific review pending. Counts do not establish a tool effect.</text>
+</svg>

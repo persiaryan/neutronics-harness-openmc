@@ -1,5 +1,8 @@
 # Request-16 mechanistic follow-up
 
+> Historical campaign 1 archive. The primary results are now [campaign 2](../../RESULTS.md).
+> This report retains its original protocol, findings and evidence scope.
+
 **Exploratory retrospective analysis**
 
 This analysis examines observed failure paths after the development-study outcomes

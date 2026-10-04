@@ -32,6 +32,10 @@ retains its original results and v7 protocol.
 
 ## Results
 
+![Terminal outcomes by setup and condition](../assets/campaign-150-rerun-01-outcomes.svg)
+
+This is the primary campaign presented in [RESULTS.md](../../RESULTS.md).
+
 | Setup | Condition | Success | Evaluated failure | Incident | Planned |
 |---|---|---:|---:|---:|---:|
 | Luna | A | 14 | 7 | 4 | 25 |
