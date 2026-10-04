@@ -30,7 +30,15 @@ def prepare(output):
         path=folder/'inputs'/case/'prompt.txt';path.parent.mkdir(parents=True,exist_ok=True)
         path.write_text('Synthetic task '+case+' <img src=x onerror="window.INJECTED=true">')
     fixture.write(output/'progress.json',dict(state='paused_on_incident',error='Synthetic resource stop'))
-    fixture.write(output/'selection.json',dict(campaigns=[first.name,second.name],runs=[legacy.name]))
+    # Public synthetic Luna/Sol comparison, safe to retain in QA screenshots.
+    models=[]
+    for model in ['gpt-5.6-luna','gpt-5.6-sol']:
+        for config in ['A','B','C']:
+            root,_,_=fixture.run_fixture(model=model,config=config,
+                result='fail' if model=='gpt-5.6-luna' and config=='B' else 'pass')
+            models.append(root)
+    comparison,_=fixture.declare(models,cid='campaign-models')
+    fixture.write(output/'selection.json',dict(campaigns=[first.name,second.name,comparison.name],runs=[legacy.name]))
     return output/'selection.json'
 
 

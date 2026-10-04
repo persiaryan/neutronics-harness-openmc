@@ -43,7 +43,9 @@ comparison groups. The old `{"runs": [...]}` selection is supported, but explici
 labeled **No declared campaign**: its expected size and completeness are unknown.
 
 The comparison view includes a grouped bar chart by model and configuration,
-filtered by the selected campaign, model and task. Comparable groups use the
+filtered by the selected campaign, model and task. The SVG includes a visible
+model/color legend and a hatched unresolved-outcome key. Model colors remain
+stable when filters change. See [legend validation and synthetic screenshots](../docs/validation/dashboard-model-legends/README.md). Comparable groups use the
 existing equal-task-weight success rates, with hatched unresolved-outcome bounds
 (not confidence intervals). If any displayed group has unavailable rates or the
 displayed groups have different assessment, budget or task identities, all
@@ -291,6 +293,7 @@ python3 -B -m unittest tests.test_dashboard_campaign -v
 python3 -B -m unittest discover -s tests -p 'test_*.py' -v
 # Optional template checks, with an installed Node.js; no npm packages required.
 node tests/test_dashboard_templates.cjs
+node tests/test_dashboard_chart.cjs
 # Optional campaign template/event checks against a saved /api/campaign JSON:
 node tests/test_dashboard_campaign_templates.cjs /path/to/campaign-response.json
 ```

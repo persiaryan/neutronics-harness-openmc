@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "browser": "149.0.7827.55",
+  "checks": [
+    "cascade navigation",
+    "legacy batch",
+    "rapid delayed-response navigation",
+    "EN/FR six views",
+    "language persistence",
+    "campaign separation",
+    "matrix drilldown",
+    "stale network state",
+    "inert text",
+    "keyboard focus",
+    "390px mobile overflow",
+    "SVG model legends EN/FR",
+    "legend/bar color matching",
+    "stable filtered colors",
+    "mobile legend bounds",
+    "count-mode legend",
+    "no CSP violations"
+  ],
+  "screenshots": [
+    "campaign-desktop.png",
+    "campaign-mobile.png",
+    "model-legends-en.png",
+    "model-legends-fr.png",
+    "model-legends-mobile.png"
+  ]
+}
