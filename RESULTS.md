@@ -1,127 +1,113 @@
 # Experimental results
 
-## Study 1 — Request-16 development study
+## Campaign 2 — October Request-16 campaign
 
-**Status: complete.** Does scientific assistance help an agent construct an OpenMC
-model that meets its public engineering specification?
+**Complete on 2026-10-03: 150 terminal assignments, zero retries.**
+The primary campaign is `campaign-150-rerun-01`. It contains two agent setups ×
+three conditions × five reused tasks × five repeats, with 16 requests and 600
+seconds per authoring session. These are development tasks, not an untouched
+holdout. Luna uses medium reasoning and Sol low reasoning; their generic tools
+and agent instructions differ, so this is not a comparison of model weights alone.
 
-The study contains **150 terminal assignments, zero retries**: two frozen agent
-setups × three conditions × five reused tasks × five repeats. These are development
-tasks, not an untouched holdout. Each setup/condition has 25 assignments, with
-equal task weights. Verified protocol success means all implemented required
-checks passed within declared coverage, with coherent execution evidence.
+- **A — guided construction:** coding tools, required export and bounded repair.
+- **B — A plus guided boundary observations.**
+- **C — B plus bounded native smoke assistance.**
 
-- **A — guided construction:** generic coding/OpenMC tools, required working
-  export, and bounded error repair. A is not tool-free.
-- **B — A + guided boundary observations.**
-- **C — B + guided short native OpenMC smoke feedback.**
+## Observed outcomes
 
-### Primary and secondary results
+| Setup | Condition | Diagnostic success | Evaluated failure | Unscored incident | Planned |
+|---|---|---:|---:|---:|---:|
+| Luna | A | 14 | 7 | 4 | 25 |
+| Luna | B | 15 | 9 | 1 | 25 |
+| Luna | C | 14 | 10 | 1 | 25 |
+| Sol | A | 21 | 1 | 3 | 25 |
+| Sol | B | 22 | 1 | 2 | 25 |
+| Sol | C | 22 | 2 | 1 | 25 |
 
-| Agent setup | A | B | C | Primary C−A | Secondary B−A | Secondary C−B |
-|---|---:|---:|---:|---:|---:|---:|
-| GPT-5.6 Luna | 72% | 68% | 56% | −16 pp | −4 pp | −12 pp |
-| GPT-5.6 Sol | 92% | 100% | 84% | −8 pp | +8 pp | −16 pp |
+![Campaign 2 terminal outcomes per setup and condition](docs/assets/campaign-150-rerun-01-outcomes.svg)
 
-In this bounded development study, the combined boundary + smoke assistance
-package did not improve verified protocol success relative to guided construction.
-Observed differences varied by setup and task.
+Across all assignments, 108/150 (72%) produced diagnostic success. Among the 138
+scored assignments, 108/138 (78.3%) succeeded. The second denominator excludes
+incidents and has uneven task coverage; it cannot replace end-to-end reliability.
+An incident has no scientific score and is not an evaluated model failure.
 
-B−A combines access to boundary observations with guidance on their use; it does
-not isolate tool access. C−B measures incremental smoke assistance in the presence
-of boundary assistance, not smoke alone. These descriptive contrasts do not
-establish that inspection or smoke generally helps or harms agents.
+Sol has more observed successes in each condition. The counts do not establish
+a benefit or harm caused by boundary or smoke tools. Access and guidance change
+together, missing outcomes are uneven, and no significance analysis was performed.
+The dashboard withholds comparison rates when observed identities are missing;
+this static figure shows counts with all planned assignments retained.
 
-![Grouped success rates for Luna and Sol in conditions A, B and C](docs/assets/request16-success-rates.svg)
+| Task | Diagnostic success | Evaluated failure | Unscored incident | Planned |
+|---|---:|---:|---:|---:|
+| `reflective_pin_cell` | 24 | 4 | 2 | 30 |
+| `reflected_7x7` | 24 | 4 | 2 | 30 |
+| `two_composition_5x5` | 18 | 10 | 2 | 30 |
+| `axially_zoned_5x5` | 22 | 5 | 3 | 30 |
+| `asymmetric_5x5` | 20 | 7 | 3 | 30 |
 
-The Sol/C incident stays in the success denominator without an imputed scientific
-score. Its unresolved success bounds are 84–88%, not a confidence interval.
-The [study report](docs/experiments/request16-development-study-v1.md#uncertainty)
-retains the existing task-cell Wilson intervals; no pooled IID interval or
-significance claim has been added.
+## What assessment and traces explain
 
-### Task-level results
+Final assessment used `factory-assessment-boundaries-v4-temperature-source-v1`:
+frozen Python submission, independent factory export, final XML inspections,
+separate native transport and retained-evidence review. No LLM judge assigns the
+score. Scientific review is `pending_owner_review` and `grading_enabled=false`.
+Passing this diagnostic protocol does not establish scientific qualification.
 
-Verified successes out of five assignments per cell:
+The 30 evaluated failures are partitioned once per assignment by precedence:
 
-| Agent setup | Task | A /5 | B /5 | C /5 |
-|---|---|---:|---:|---:|
-| Luna | axially_zoned_5x5 | 3 | 4 | 4 |
-| Luna | reflective_pin_cell | 4 | 4 | 4 |
-| Luna | asymmetric_5x5 | 4 | 3 | 4 |
-| Luna | reflected_7x7 | 2 | 3 | 1 |
-| Luna | two_composition_5x5 | 5 | 3 | 1 |
-| Sol | axially_zoned_5x5 | 5 | 5 | 3 |
-| Sol | reflective_pin_cell | 5 | 5 | 5 |
-| Sol | asymmetric_5x5 | 4 | 5 | 4 |
-| Sol | reflected_7x7 | 5 | 5 | 4 |
-| Sol | two_composition_5x5 | 4 | 5 | 5 |
-
-Luna's lower C rate is concentrated in the reflected and two-composition tasks;
-C exceeds A on the axial task. Sol's C rate is lower on the axial and asymmetric
-tasks, with an unresolved incident on the reflected task; C exceeds A on
-two-composition. A single pooled headline would obscure this variation.
-
-### What the terminal outcomes mean
-
-| Exclusive terminal category | Assignments |
+| Primary failure category | Assignments |
 |---|---:|
-| Verified protocol success | 118 |
-| Demonstrated physical violation | 19 |
-| Model hard-gate failure | 12 |
-| Provider/stream incident | 1 |
+| Invalid geometry at inspection | 11 |
+| Factory export failure | 1 |
+| Remaining geometry nonconformity | 7 |
+| Remaining settings nonconformity | 11 |
 
-Hard-gate outcomes can also contain observed physical violations. Numerical
-agreement, unresolved coverage and incidents remain distinct from strict success.
-The **diagnostic score is secondary**: 149/150 scores are available, including
-12 justified gate zeros. Incident 067 has no submission or assessment and
-`score=null`; Sol/C's full-arm score mean remains null.
+Secondary defects may coexist. Eight assignments exhibit the shared mutable
+OpenMC region alias pattern across both setups, all three conditions and two
+tasks. Other defects include wrong fuel placement, water in required void gaps,
+temperature lookup settings and generations per batch. One final submission
+contains a construction error after a successful working export.
 
-The [development-study report](docs/experiments/request16-development-study-v1.md)
-contains assessment rules, numerical and effort summaries, the evaluator amendment,
-incident handling, uncertainty and provenance.
+Smoke was used in 45 sessions. Of 43 sessions with at least one completed smoke,
+33 ultimately succeeded and ten failed assessment. Completed smoke checks bounded
+runtime behavior and does not certify specification conformity. These observations
+do not establish causality, agent understanding or a full property-by-property
+pre/post analysis of every trajectory.
 
-## Mechanistic follow-up
+The 12 incidents include nine initialization/runtime-preflight failures, one
+unsupported source-point representation, one unattributed native exit and one
+authoring-budget exhaustion. Budget exhaustion is an agent workflow failure;
+these incidents must not all be attributed to infrastructure. Seven assignments
+ended before any model request. The continuation consumed these attempts without
+replacement and lacked a repeated-initialization-incident stop policy. The
+underlying host slowdown was not established.
 
-**Exploratory retrospective analysis.** All 50 C sessions were examined, alongside
-all 150 final outcome/effort records. Among the 15 C non-successes, 12 already
-contained their final demonstrated defect before smoke, one showed a
-final-submission regression after completed smoke, and two never reached smoke.
-Strong property-specific pre/post evidence exists for 13/15.
+See the [closeout](docs/experiments/campaign-150-rerun-01.md) for assignment IDs,
+continuation limits and evidence checks. Its [JSON](docs/experiments/campaign-150-rerun-01.json)
+contains the full task/setup/condition counts and provenance digests. The public
+summary excludes raw candidate code, conversations and private reference answers.
 
-Retained evidence supports three bounded observations: completed smoke can coexist
-with task-conformity defects, runtime feedback has limited specification coverage,
-and pre-existing defects often persist. The evidence for broad over-editing or
-trajectory complexity as a cause is mixed; harmful workspace over-editing is not
-supported as a general account. Universal benefit or harm from smoke is unsupported.
-Internal confidence, misunderstanding and attention are not testable here.
+## Next experiments and limits
 
-C used more requests and time, but not more mean working exports or completed
-workspace writes. Successful post-smoke corrections exist. The
-[mechanistic report](docs/experiments/request16-mechanistic-analysis-v1.md)
-distinguishes these repairs from the final-submission regression and explains why
-none establishes the cause of the aggregate C−A difference.
+Targeted questions remain prospective:
 
-## Next experiments
+- Does guidance or observation around mutable region aliases reduce overlaps?
+- Does final-source consistency with the last successful export prevent regressions?
+- Does checking public settings after smoke reduce persistent mismatches?
+- Does a repeated-incident stop policy preserve campaign coverage without silently
+  replacing consumed attempts?
 
-Prospective questions, not validated improvements:
+Reference review, numerical calibration and untouched tasks remain necessary.
+Finite geometry probes do not prove global overlap freedom; the fixed native seed
+and uncalibrated ±150 pcm criterion limit interpretation. No new repair experiment
+or native calculation was performed for this documentation update.
 
-- Does enforcing final-source consistency with the last successful export prevent
-  submission-only regressions within the same budget?
-- Does an explicit check of public task settings after smoke reduce persistent
-  specification mismatches?
-- When does conditional smoke use offer a better trade-off than routinely guided
-  smoke, including the risk of missing hidden runtime defects?
+## Historical campaign 1
 
-Untouched holdout tasks and broader scientific reference/calibration work remain
-necessary for stronger generalization claims.
-
-## Reading these results
-
-The current public source snapshot provides the earlier A/B construction and
-boundary workflow. Request-16 used a later research implementation, including the
-v7 assessment protocol and C smoke condition. This documentation does not upgrade
-the public evaluator or supply the private study executor, references or raw data.
-
-See the [provenance ledger](docs/experiments/request16-development-study-v1.md#provenance)
-for frozen report identities and the [README](README.md) for runnable public examples.
+Campaign 2 replaces campaign 1 as the primary presentation in this file and the
+README. The original [Request-16 development report](docs/experiments/request16-development-study-v1.md),
+[mechanistic follow-up](docs/experiments/request16-mechanistic-analysis-v1.md),
+data and figure remain archived for traceability. Their original v7 protocol and
+results have not been rewritten or pooled with campaign 2. The older mechanistic
+follow-up has a different review scope; additional workflow evidence in campaign 2
+does not make it a controlled replication or stronger causal study.

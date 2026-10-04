@@ -36,15 +36,13 @@ equivalence nor complete v7 parity. Operator verification also qualifies one
 XML-proven missing-material loading failure, while retaining an indeterminate
 builder reply and assigning no scientific credit.
 
-The completed study below used the later research implementation with v7
-assessment and C smoke assistance. Its historical results are unchanged; the
-public source now includes bounded smoke and the optional Request-16 authoring
-profile. Read-only trajectory projection separates smoke completion from
-demonstrated feedback delivery and provides an allowlisted metadata view.
-The original research study executor and private reference packages are not
-included. A local serial pilot/campaign launcher is documented in
-[dashboard usage](dashboard/README.md); it does not reproduce the historical v7
-implementation.
+The primary results below come from the completed October 2026 campaign using
+this public assessment route, Request-16 authoring and the local campaign workflow.
+Read-only trajectory projection separates smoke completion from demonstrated
+feedback delivery. The original v7 research study remains a
+[historical archive](docs/experiments/request16-development-study-v1.md).
+Private reference packages and raw study evidence are not included. See
+[dashboard usage](dashboard/README.md) for the local serial campaign launcher.
 
 ## Architecture
 
@@ -81,45 +79,48 @@ See [the architecture walkthrough](DESIGN.md),
 
 ## Experimental results
 
-The separate October 2026 campaign is now closed: **108 diagnostic successes,
-30 evaluated failures and 12 incidents across 150 assignments**. See its
-[closeout and limitations](docs/experiments/campaign-150-rerun-01.md) and
-[aggregate data](docs/experiments/campaign-150-rerun-01.json). It uses the public
-temperature/source route, not the historical v7 implementation summarized below.
-
-**150 sessions · 2 agent setups · 3 conditions · 5 OpenMC tasks · 5 repeats · zero retries**
+**Campaign 2 — October 2026 Request-16 campaign, completed 2026-10-03.**
+150 assignments · 2 agent setups · 3 conditions · 5 reused tasks · 5 repeats ·
+16 requests / 600 seconds per authoring session · zero retries.
 
 A is guided construction with coding tools, a required export attempt and bounded
-repair; B adds guided boundary observations; C adds guided short native smoke
-feedback to B. A is not tool-free. Rates use equal task weights.
+repair; B adds guided boundary observations; C adds bounded native smoke feedback
+to B. A includes tools. Luna uses medium reasoning and Sol low reasoning; their
+agent instructions and generic tool declarations also differ.
 
-| Agent setup | A | B | C | C−A |
-|---|---:|---:|---:|---:|
-| GPT-5.6 Luna | 72% | 68% | 56% | −16 pp |
-| GPT-5.6 Sol | 92% | 100% | 84% | −8 pp |
+| Agent setup | Condition | Diagnostic success | Evaluated failure | Unscored incident | Planned |
+|---|---|---:|---:|---:|---:|
+| GPT-5.6 Luna | A | 14 | 7 | 4 | 25 |
+| GPT-5.6 Luna | B | 15 | 9 | 1 | 25 |
+| GPT-5.6 Luna | C | 14 | 10 | 1 | 25 |
+| GPT-5.6 Sol | A | 21 | 1 | 3 | 25 |
+| GPT-5.6 Sol | B | 22 | 1 | 2 | 25 |
+| GPT-5.6 Sol | C | 22 | 2 | 1 | 25 |
 
-![Verified protocol success in the Request-16 development study](docs/assets/request16-success-rates.svg)
+![Campaign 2 outcomes: successes, evaluated failures and unscored incidents per setup and condition](docs/assets/campaign-150-rerun-01-outcomes.svg)
 
-In this bounded development study, the combined boundary + smoke assistance
-package did not improve verified protocol success relative to guided construction.
-Observed differences varied by setup and task.
+**108 successes, 30 evaluated failures and 12 incidents.** The end-to-end observed
+success fraction is 108/150 (72%); the conditional fraction among scored
+assignments is 108/138 (78.3%). Excluding incidents changes task coverage.
+These descriptive counts establish neither a benefit nor harm caused by tools.
+The dashboard suppresses comparison percentages when observed identities are
+missing; this figure preserves all 25 planned assignments in each group.
 
-- B−A was −4 pp for Luna and +8 pp for Sol; access and guidance changed together.
-- C−B was −12 pp and −16 pp respectively, with boundary assistance present.
-- These are development observations on reused tasks, not holdout confirmation
-  or a general causal claim. Sol/C retains one unscored incident; its unresolved
-  success bounds are 84–88%.
-
-**Exploratory mechanism.** Retrospective trajectory analysis found that 12 of the
-15 C non-successes already contained their final defect before smoke. Successful
-smoke execution did not certify task-level conformity. Runtime-error feedback
-could still support useful repairs. The analysis does not establish that smoke
-caused the aggregate performance difference.
+Final assessment used `factory-assessment-boundaries-v4-temperature-source-v1`.
+Scientific review remains `pending_owner_review` with `grading_enabled=false`:
+diagnostic success means passing the implemented protocol, not scientific
+qualification. Failure evidence includes shared mutable Python/OpenMC regions,
+settings mismatches and a final-submission regression. Completed smoke can coexist
+with a nonconforming final model.
 
 Read [RESULTS.md](RESULTS.md), the
-[development study](docs/experiments/request16-development-study-v1.md) and the
-[mechanistic follow-up](docs/experiments/request16-mechanistic-analysis-v1.md) for
-task variation, the v6-to-v7 amendment, outcome categories and evidence limits.
+[campaign closeout](docs/experiments/campaign-150-rerun-01.md) and its
+[aggregate data](docs/experiments/campaign-150-rerun-01.json) for failure categories,
+incidents, continuation policy and provenance. Campaign 1's
+[development report](docs/experiments/request16-development-study-v1.md) and
+[mechanistic analysis](docs/experiments/request16-mechanistic-analysis-v1.md)
+remain historical records under their original v7 protocol; their results are
+not pooled into this campaign.
 
 ## Quick start
 
@@ -295,20 +296,25 @@ explains the first three and their trade-offs.
 
 ## Reproducibility and study provenance
 
-The summaries identify frozen records in the separate experimental research
-archive:
+The primary campaign is `campaign-150-rerun-01`, completed on 2026-10-03:
 
-- Study closeout: `59f370f54c5edb3f6499af37259e3ae09d3e9ca7`.
-- Mechanistic report: `19aa097455e8270ae1e5cfaa58f1a6f33e4b111e`.
-- Protocol: `factory-assessment-boundaries-v7`.
+- Source base: `111354c11c805275c9014d5d7987daf26575523d`.
+- Protocol: `factory-assessment-boundaries-v4-temperature-source-v1`.
 - Authoring: `authoring-requests-16-v1`.
+- Public [closeout JSON](docs/experiments/campaign-150-rerun-01.json): frozen
+  task/setup/condition counts, incident inventory and provenance digests.
+- Figure: `python3 -B docs/assets/render_campaign_closeout.py --check` verifies
+  the SVG against that JSON; omit `--check` to regenerate it.
 
 Full raw retained artifacts, private reference answers, model conversations and
-nuclear data are intentionally not vendored here. These identities are not public
-commit links, and the summaries alone do not permit independent reconstruction
-of the study. The [provenance ledger](docs/experiments/request16-development-study-v1.md#provenance)
-maps tables to source reports and explains how to reproduce the SVG from its
-small public data file.
+nuclear data are intentionally not vendored here. The closeout documents the
+original retained-evidence checks; public summaries alone do not permit auditing
+the private assessments or prove an independent backup exists.
+
+Campaign 1 remains in the [historical provenance ledger](docs/experiments/request16-development-study-v1.md#provenance).
+Its research closeout (`59f370f54c5edb3f6499af37259e3ae09d3e9ca7`), mechanistic
+report (`19aa097455e8270ae1e5cfaa58f1a6f33e4b111e`) and v7 protocol retain their
+original identities. Its figure and data are retained for historical reproducibility.
 
 ## License
 
