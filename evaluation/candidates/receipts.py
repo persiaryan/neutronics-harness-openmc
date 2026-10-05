@@ -72,8 +72,17 @@ def transport_record(directory, source_hash, image, index):
             and result['xml_load'] == 'passed' and result['transport'] == 'completed', 'Incomplete transport')
     get, receipts = reader(folder)
     for name in ('result.json', 'manifest.json', 'lifecycle.json', 'container.json', 'container-checks.json',
-                 'preflight.json', 'frozen-container.json', 'export-provenance.json'):
+                 'preflight.json', 'export-provenance.json'):
         get(name)
+    # Reconstruct completion from phase receipts, not only result.json flags.
+    for phase in ('preflight', 'solver-version', 'runtime-identity', 'staging',
+                  'xml-load', 'openmc', 'statepoint'):
+        name = phase + '-process.json'
+        process = json.loads(get(name))
+        require(isinstance(process, dict) and set(process) == {'exit_code', 'stop_reason'} and
+                type(process['exit_code']) is int and process['exit_code'] == 0 and
+                process['stop_reason'] is None,
+                'Successful transport contradicts process receipt: ' + name)
     xml, identity = accepted_export(directory / 'export')
     provenance = read(folder / 'export-provenance.json')
     require(all(identity[k] == provenance[k] for k in ('candidate_sha256', 'model_xml_sha256', 'receipt_sha256')),
@@ -82,6 +91,11 @@ def transport_record(directory, source_hash, image, index):
     profile = transport_profile(xml, index.name)
     manifest = read(folder / 'manifest.json')
     require(manifest['model_xml_sha256'] == exporter.digest(xml), 'Transport XML identity changed')
+    frozen = json.loads(get('frozen-container.json'))
+    exporter.verify_container(frozen, image, index, manifest['container_name'],
+                              memory_bytes=solver.MEMORY)
+    require(frozen['State']['Running'] is True and frozen['State']['Paused'] is True,
+            'Successful transport artifacts were not frozen')
     artifacts = json.loads(get('artifacts.json')); raw = {}
     for name in ('model.xml', 'xml-load.json', 'calculation.json', 'convergence.csv',
                  f"statepoint.{profile['sampling']['batches']}.h5"):
