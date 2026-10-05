@@ -46,6 +46,28 @@ runtime. General upstream references: [Model XML loading](https://docs.openmc.or
 and [StatePoint fields](https://docs.openmc.org/en/stable/pythonapi/generated/openmc.StatePoint.html).
 The upstream stable documentation may describe a newer version.
 
+## Retained success verification
+
+`evaluation.candidates.receipts.transport_record()` requires successful process
+receipts for preflight, solver-version, runtime-identity, staging, XML loading,
+OpenMC transport and statepoint extraction. Each receipt must contain exactly an
+integer zero exit code and a null stop reason. It also rechecks the frozen
+container's isolation and requires it to have been running and paused before
+artifact retrieval. The receipt bytes join the existing evidence inventory.
+
+`review_assessment()` leaves a missing required receipt **insufficient** and a
+receipt contradicting claimed success **contradictory**, both with `score=null`.
+The original reported score remains explicitly separate; neither state assigns
+a physical model failure or changes the archived report. Complete evidence still
+uses the same scientific checks and scoring. These are checks on trusted operator
+records, not signed proof against an operator rewriting the whole dossier.
+
+Portable regression command:
+
+```sh
+python3 -B -m unittest tests.test_transport_receipts -v
+```
+
 ## Supported inputs and resource limits
 
 The first profile supports continuous-energy neutron eigenvalue calculations,
