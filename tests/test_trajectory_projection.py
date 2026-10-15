@@ -38,6 +38,7 @@ class Trace(unittest.TestCase):
         self.events([dict(type='request',id=1),
                      dict(type='smoke_tool_request',frame=dict(id=1))])
         self.request(2, [self.invocation, output(self.invocation,self.feedback)])
+        self.response(2, [])
         # Any accidental dispatch is a failure, not a health probe.
         self.tripwires=[]
         for target in ('builder.relay.forward', 'builder.run.run', 'subprocess.Popen'):
@@ -91,6 +92,44 @@ class SmokeDelivery(Trace):
         self.assertEqual(row['request_turn'],1)
         self.assertEqual(row['interpretation'],'not_inferred')
         self.assertEqual(row['scientific_score_effect'],'none')
+
+    def test_retained_request_without_response_does_not_prove_delivery(self):
+        (self.folder/'response-02.sse').unlink()
+        summary=self.summary()
+        row=summary['smoke_calls'][0]
+        self.assertEqual(row['native_outcome'],'completed')
+        self.assertEqual(row['feedback_delivery']['status'],'not_demonstrated')
+        self.assertEqual(summary['effort']['smoke_feedback_deliveries_observed'],0)
+        self.assertIsNone(summary['tool_actions'][0]['output_delivered_in'])
+        self.assertEqual(summary['coverage']['retained_requests'],2)
+
+    def test_setup_rejection_never_proves_delivery_even_with_a_response(self):
+        for matched in (False, None, 1):
+            with self.subTest(matched=matched):
+                write(self.folder/'setup-02.json',dict(matched=matched))
+                self.assertEqual(self.smoke_record()['feedback_delivery']['status'],'not_demonstrated')
+        write(self.folder/'setup-02.json',dict(matched=True))
+        self.assertEqual(self.smoke_record()['feedback_delivery']['status'],'complete')
+
+    def test_incomplete_failed_or_duplicate_response_does_not_prove_delivery(self):
+        terminal=dict(type='response.completed',response=dict(output=[]))
+        for events in ([dict(type='response.created',response=dict(id='pending'))],
+                       [dict(type='response.failed')],
+                       [dict(type='response.incomplete')],
+                       [terminal, terminal],
+                       [dict(type='error'), terminal]):
+            with self.subTest(events=events):
+                (self.folder/'response-02.sse').write_text(
+                    ''.join('data: '+json.dumps(e)+'\n\n' for e in events))
+                self.assertEqual(self.smoke_record()['feedback_delivery']['status'],'not_demonstrated')
+
+    def test_repeated_feedback_uses_first_request_with_completed_response(self):
+        (self.folder/'response-02.sse').unlink()
+        self.request(3,[self.invocation,output(self.invocation,self.feedback)])
+        self.response(3,[])
+        self.result['request_count']=3
+        self.assertEqual(self.smoke_record()['feedback_delivery']['request'],'request-03.json')
+        self.assertEqual(self.summary()['effort']['smoke_feedback_deliveries_observed'],1)
 
     def test_completion_without_a_later_request_is_not_delivery(self):
         (self.folder/'request-02.json').unlink()
@@ -330,6 +369,28 @@ class ExistingProjection(Trace):
         row=self.summary()['inspection_calls'][0]
         self.assertTrue(row['completed'])
         self.assertEqual(row['feedback_delivery']['status'],'not_demonstrated')
+
+    def test_boundary_feedback_in_rejected_or_unanswered_request_is_not_delivered(self):
+        boundary=self.folder/'boundary-tool/call-01'
+        reply=dict(status='observed',artifact_sha256='c'*64,evidence_reference='synthetic-boundary')
+        feedback=dict(reply,feedback_complete=True)
+        write(boundary/'request.json',{});write(boundary/'response.json',reply)
+        write(boundary/'feedback.json',feedback)
+        self.request(2,[self.invocation,output(self.invocation,feedback)])
+        self.events([dict(type='request',id=1),dict(type='boundary_tool_request',frame=dict(id=1))])
+        for rejected in (False, True):
+            with self.subTest(rejected=rejected):
+                if rejected:
+                    self.response(2,[])
+                    write(self.folder/'setup-02.json',dict(matched=False))
+                else:
+                    (self.folder/'response-02.sse').unlink()
+                summary=self.summary()
+                row=summary['inspection_calls'][0]
+                self.assertTrue(row['completed'])
+                self.assertEqual(row['feedback_delivery']['status'],'not_demonstrated')
+                self.assertIsNone(row['complete_feedback_delivered_in'])
+                self.assertEqual(summary['workflow_evidence']['complete_inspection_feedback'],'not_demonstrated')
 
     def test_projection_is_read_only_and_never_grades_physics(self):
         before={p.relative_to(self.folder):p.read_bytes() for p in self.folder.rglob('*') if p.is_file()}
