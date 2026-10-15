@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from builder import boundary_tool, context, route, run as builder, smoke_tool
+from builder import boundary_tool, context, route, run as builder, smoke_tool, trajectory
 from builder.submission import submission
 from evaluator import run as exporter
 from experiments import run as experiment
@@ -34,7 +34,7 @@ def synthetic_body():
 
 
 def launch(test, *, cap=8, profile=None, count=1, assistance='guided_construction',
-           constrain_setup=False, mutate=None, complete=True):
+           constrain_setup=False, mutate=None, complete=True, response_bytes=None):
     fixture = doubles.BuilderDouble(); fixture.setUp(); test.addCleanup(fixture.doCleanups)
     public = fixture.output.parent/'public'; prepare('reflective_pin_cell', public)
     prompt = route.condition_prompt((public/'prompt.txt').read_text(), assistance, request_budget=profile)
@@ -52,7 +52,7 @@ def launch(test, *, cap=8, profile=None, count=1, assistance='guided_constructio
     if complete:
         frames.append(done)
     process.stdout = io.BytesIO(b''.join(json.dumps(f).encode()+b'\n' for f in frames))
-    responder = Mock(return_value=b'SYNTHETIC LOCAL RESPONSE')
+    responder = Mock(return_value=response_bytes if response_bytes is not None else b'SYNTHETIC LOCAL RESPONSE')
     index = fixture.output.parent/'cross_sections.xml'; index.write_text('<cross_sections/>')
     smoke_adapter = Mock(); smoke_adapter.session.cleanup_confirmed = True
     kwargs = dict(smoke_data_index=index) if assistance == 'guided_boundaries_smoke' else {}
@@ -269,6 +269,33 @@ class DispatchBudgets(unittest.TestCase):
         self.assertEqual(responder.call_count,1)
         self.assertFalse(read(folder/'setup-02.json')['matched'])
         self.assertFalse((folder/'request-03.json').exists())
+
+    def test_rejected_feedback_request_is_retained_but_never_projected_as_delivery(self):
+        invocation=dict(type='function_call',call_id='diagnostic',name='local_python',
+                        arguments='{}')
+        feedback=dict(type='function_call_output',call_id='diagnostic',
+                      output='Synthetic diagnostic feedback')
+        stream=('data: '+json.dumps(dict(type='response.completed',
+            response=dict(output=[invocation])))+'\n\n').encode()
+        def change(n, body):
+            if n==2:
+                body['input'].extend([invocation,feedback])
+                body['tools'][0]['description']='changed'
+        folder,result,responder,_,_=launch(self,count=2,cap=16,profile=PROFILE,
+            constrain_setup=True,mutate=change,response_bytes=stream)
+        self.assertEqual(responder.call_count,1)
+        self.assertEqual(result['request_count'],2)
+        self.assertIn(feedback,read(folder/'request-02.json')['input'])
+        self.assertFalse(read(folder/'setup-02.json')['matched'])
+        self.assertFalse((folder/'response-02.sse').exists())
+        self.assertIn('request not forwarded',result['error'])
+        before={p.relative_to(folder):p.read_bytes() for p in folder.rglob('*') if p.is_file()}
+        summary=trajectory.summarize(folder,result)
+        self.assertEqual(len(summary['tool_actions']),1)
+        self.assertIsNone(summary['tool_actions'][0]['output_delivered_in'])
+        self.assertIsNone(summary['tool_actions'][0]['output_sha256'])
+        self.assertEqual(summary['coverage']['retained_requests'],2)
+        self.assertEqual(before,{p.relative_to(folder):p.read_bytes() for p in folder.rglob('*') if p.is_file()})
 
     def test_all_arms_preserve_matched_generic_setup_and_declared_tool_access(self):
         setups=[]

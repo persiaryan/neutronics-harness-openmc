@@ -40,7 +40,7 @@ path, working/diagnostic XML hashes, recorded status and native outcome.
 |---|---|
 | `native_outcome` | Recorded native process result; exit completion alone does not establish validated smoke completion |
 | `status` | Recorded tool outcome, including incomplete validation or refusal |
-| `feedback_delivery` | Whether the retained compact feedback appeared in a later request under a uniquely matched invocation/output |
+| `feedback_delivery` | Whether the retained compact feedback appeared in a later request with completed-response evidence under a uniquely matched invocation/output |
 | `subsequent_actions/responses` | Observable events at or after the delivery request; no claim about interpretation |
 | `scientific_score_effect` | Always `none` |
 
@@ -52,8 +52,19 @@ types are preserved, so `true` cannot match `1`. A long-running command may
 return its feedback through a later `write_stdin` invocation, which is bound
 to its own call ID.
 
-One uniquely matched, complete compact payload establishes `complete`
-delivery. An exactly matched payload marked incomplete is
+The delivery request must also have a retained SSE response with exactly one
+`response.completed` event and no `error`, `response.failed` or
+`response.incomplete` event. If a setup receipt exists, it must explicitly have
+`matched=true`; a rejected request cannot establish delivery even if a response
+file is present. Sessions without setup receipts remain supported.
+
+A retained request, matching setup or upstream diagnostics alone cannot establish
+delivery. Missing or incomplete responses leave delivery `not_demonstrated`,
+including ambiguous network failures. All retained requests still count toward
+inventory and coverage; native tool completion remains separate.
+
+One uniquely matched, complete compact payload in such a request establishes
+`complete` delivery. An exactly matched payload marked incomplete is
 `incomplete_presentation`. Missing, modified, truncated, duplicated or
 ambiguously attributed payloads remain `not_demonstrated`. Repeated history
 in later requests is counted once at the first demonstrated delivery.
@@ -63,6 +74,9 @@ This is a trace projection, not independent execution-receipt verification.
 It describes retained records and cannot prove that an operator has not rewritten
 them. Delivered compact feedback does not establish that full logs were read,
 that feedback was understood, or that a subsequent change was caused by it.
+The completed response is retained operator evidence, not independent provider
+attestation. Existing archived projections are not rewritten; explicit re-projection
+uses the stricter delivery checks with the same output schema.
 Existing working-export recognition remains limited to the literal documented
 recipe and unambiguous recorded command completion.
 

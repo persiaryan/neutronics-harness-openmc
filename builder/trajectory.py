@@ -88,7 +88,7 @@ def complete_value(item, expected):
 
 
 def delivered_output(requests, turn, call):
-    """Bind one output to one exact invocation in a subsequent request."""
+    """Bind output in subsequent requests with completed-response evidence."""
     call_id = call.get('call_id')
     if not isinstance(call_id, str) or not call_id:
         return None, None, None
@@ -129,12 +129,24 @@ def summarize(directory, result):
     runtime, inspection_turns = runtime_items(directory)
     limitations = ['Recognizes the literal documented scratch recipe and literal cmd strings only.',
         'Authoring execution outputs are descriptive; independent final assessment supplies scientific evidence.',
-        'An edit request is not proof of a persisted revision. No understanding or intent is inferred.']
+        'An edit request is not proof of a persisted revision. No understanding or intent is inferred.',
+        'Feedback delivery requires a retained completed response for its request; forwarding alone is not inferred.']
+    streams, completed_turns = [], set()
     for path in sorted(directory.glob('response-*.sse')):
         turn = int(path.stem.split('-')[-1])
         events = [event_frame(b) for b in path.read_text().replace('\r\n','\n').split('\n\n') if b.strip()]
         events = [e for e in events if isinstance(e, dict)]
         completed = [e['response'] for e in events if e.get('type') == 'response.completed']
+        setup = directory / f'setup-{turn:02d}.json'
+        setup_matched = not setup.exists() or json.loads(setup.read_bytes()).get('matched') is True
+        if (len(completed) == 1 and setup_matched and not any(e.get('type') in
+                ('error', 'response.failed', 'response.incomplete') for e in events)):
+            completed_turns.add(turn)
+        streams.append((turn, path, events, completed))
+    # Retained requests alone do not establish forwarding. Keep their full
+    # inventory for coverage, but only completed responses can establish delivery.
+    delivery_requests = [r for r in requests if r[0] in completed_turns]
+    for turn, path, events, completed in streams:
         items = response_items(events)
         if len(completed) == 1:
             usage = completed[-1].get('usage', {})
@@ -147,7 +159,7 @@ def summarize(directory, result):
                 continue
             code = call.get('input', call.get('arguments', ''))
             commands = [json.loads(m.group(1)) for m in re.finditer(r'(?:\bcmd\b|"cmd")\s*:\s*("(?:[^"\\]|\\.)*")', code)]
-            number, delivered, reply = delivered_output(requests, turn, call)
+            number, delivered, reply = delivered_output(delivery_requests, turn, call)
             calls.append((turn, call, number, delivered, reply))
             values = output_values(reply) if reply else []
             outcomes = [v for v in values if 'exit_code' in v and 'output' in v]
