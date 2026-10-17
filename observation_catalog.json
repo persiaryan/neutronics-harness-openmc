@@ -54,6 +54,23 @@
         "boundary-tool",
         "smoke-tool"
       ]
+    },
+    {
+      "id": "D",
+      "version": "1",
+      "assistance": "guided_construction_region_ownership",
+      "condition": "generic_coding_guided_construction_region_ownership_v1",
+      "label": {
+        "en": "D",
+        "fr": "D"
+      },
+      "description": {
+        "en": "Guided construction + preloaded region ownership procedure",
+        "fr": "Construction guidée + procédure préchargée de conservation des régions"
+      },
+      "tools": [
+        "coding"
+      ]
     }
   ],
   "tools": [

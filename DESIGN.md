@@ -210,6 +210,24 @@ neither scientific proof nor protection against an operator rewriting all record
 Docker, the host controller, OS, images and data provider remain trusted. Candidate
 containers receive no reference mount, credentials or host Docker socket.
 
+## Preloaded region-ownership condition D
+
+`guided_construction_region_ownership` adds the complete allowlisted
+`openmc-region-ownership-v1` procedure to A's guided authoring prompt. It uses
+A's tools, request profiles and time allowance; the independent evaluator and
+scientific scoring do not change. This tests provided procedural guidance,
+not native skill discovery. The runtime's catalog/memory exclusions remain.
+
+Preparation and authoring retain the procedure bytes and identity. Execution
+checks the prepared binding before dispatch, and retained-submission review
+checks the snapshot, reconstructed prompt and first request. The procedure is
+not silently inherited by A/B/C. Exact historical prompt hashes are portable
+regression controls. A separately selected `region-ownership-ad-v1` campaign
+prepares 36 A/D development assignments; it does not run during preparation.
+Small real-OpenMC region controls verify the programming mechanism without
+transport. Neither they nor portable integration tests demonstrate skill efficacy.
+See [scope, commands and evidence](docs/experiments/region-ownership-skill-v1.md).
+
 ## Public/private separation
 
 The optional local [operator dashboard](dashboard/README.md) reads retained run

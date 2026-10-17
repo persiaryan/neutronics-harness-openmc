@@ -77,6 +77,15 @@ See [the architecture walkthrough](DESIGN.md),
 [trajectory projection](builder/TRAJECTORY.md) and
 [scoring](evaluation/benchmark_suite/SCORING.md).
 
+## Preloaded region-ownership procedure (D)
+
+A prospective condition D adds one targeted, preloaded skill to A's guided
+construction, with the same generic tools and budgets. It addresses shared
+mutable OpenMC region construction; it does not add a detector, native skill
+discovery, or a scientific scoring rule. Its efficacy has not been tested.
+See [the skill, OpenMC mechanism controls and offline A/D preparation](docs/experiments/region-ownership-skill-v1.md).
+A/B/C prompts and the historical campaign outcomes retain their original meaning.
+
 ## Experimental results
 
 **Campaign 2 — October 2026 Request-16 campaign, completed 2026-10-03.**

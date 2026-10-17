@@ -16,7 +16,7 @@ import uuid
 
 from builder.context import request_inventory, request_setup as observed_setup, sha256, write_json
 from builder.route import CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS
-from builder import openmc_python
+from builder import openmc_python, region_skill
 from builder.relay import forward, load_auth, validate_request
 from prompts.prepare import CASE_FILES
 from evaluator.profiles import BOUNDARY_PROTOCOL
@@ -106,7 +106,8 @@ def cleanup(name):
 def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='generic',
         mode='subscription', max_requests=8, wall_seconds=600, auth_path=None, responder=None,
         contract='openmc-model-factory-v1', execution_profile='factory-serial-v1',
-        evaluator_protocol=BOUNDARY_PROTOCOL, smoke_data_index=None, request_setup=None, request_budget=None):
+        evaluator_protocol=BOUNDARY_PROTOCOL, smoke_data_index=None, request_setup=None, request_budget=None,
+        expected_region_skill=None):
     output = Path(output)
     if mode not in {'mock', 'subscription'} or (mode == 'mock') != (responder is not None):
         raise ValueError('A local responder is required only in mock mode')
@@ -116,8 +117,13 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
     if output.exists():
         raise FileExistsError('Refusing to overwrite an existing run directory')
     from builder.route import prepare, condition_prompt
+    skill = region_skill.material() if assistance == region_skill.ASSISTANCE else None
+    if expected_region_skill is not None and (skill is None or expected_region_skill != skill[1]):
+        raise ValueError('Prepared region skill changed before builder dispatch')
     prompt, assessment_route = prepare(case, contract, execution_profile, evaluator_protocol, prepared_input)
     prompt = condition_prompt(prompt, assistance, request_budget=request_budget)
+    if skill is not None and not prompt.endswith(region_skill.HEADER + skill[0].decode('utf-8')):
+        raise ValueError('Region skill changed during prompt construction')
     inspect_boundaries = assistance in BOUNDARY_CONDITIONS
     smoke_enabled = assistance in SMOKE_CONDITIONS
     if smoke_enabled != (smoke_data_index is not None):
@@ -172,6 +178,10 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
         manifest['required_request_setup'] = request_setup
     if request_budget is not None:
         manifest['request_budget_profile'] = request_budget
+    if skill is not None:
+        raw, identity = skill
+        (output / region_skill.SNAPSHOT).write_bytes(raw)
+        manifest['region_ownership_skill'] = identity
     write_json(output / "manifest.json", manifest)
     lifecycle = {"container_name": name, "state": "creating"}
     write_json(output / "lifecycle.json", lifecycle)

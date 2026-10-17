@@ -1,7 +1,7 @@
 """Verify this adapter's retained submission; scientific assessment is provider-neutral."""
 import json
 from pathlib import Path
-from builder import openmc_python, boundary_tool
+from builder import openmc_python, boundary_tool, region_skill
 from builder.context import sha256, request_inventory, request_setup
 from builder.route import condition_prompt, CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS, request_limit
 from builder.run import verify_container
@@ -29,6 +29,7 @@ def submission(directory, case, *, recorded_protocol=None):
         route['evaluator_protocol'] = recorded_protocol
     route['prompt_sha256'] = sha256(base.encode())
     assistance = manifest['assistance']
+    region_skill.verify(directory, manifest, assistance)
     expected_prompt = condition_prompt(base, assistance, request_budget=manifest.get('request_budget_profile'))
     expected_condition = CONDITIONS[assistance]
     expected = expected_prompt.encode()
@@ -69,6 +70,13 @@ def submission(directory, case, *, recorded_protocol=None):
         request = read(f'request-{number:02d}.json')
         require(request.get('model') == manifest['model'], 'Requested model changed')
         require(request_inventory(request) == read(f'inventory-{number:02d}.json'), 'Request inventory changed')
+        if assistance == region_skill.ASSISTANCE and number == 1:
+            inventory = request_inventory(request)
+            require(not inventory['skills_catalog_present'] and not inventory['memory_block_present']
+                    and len(inventory['user_texts']) == 2
+                    and inventory['user_texts'][0].startswith('<environment_context>')
+                    and inventory['user_texts'][-1] == expected_prompt,
+                    'Region skill first-request prompt changed')
         if 'required_request_setup' in manifest:
             expected_setup = manifest['required_request_setup']
             require(request_setup(request) == expected_setup and
@@ -78,8 +86,11 @@ def submission(directory, case, *, recorded_protocol=None):
     source = read_regular(directory/'candidate.py', limit=1_000_000)
     require(source == read_regular(directory/'answer.txt') and sha256(source) == result['answer_sha256']
             and len(source) == result['answer_bytes'], 'Builder answer/source identity mismatch')
-    return source, dict(actor='llm_builder' if manifest['mode']=='subscription' else 'local_test_double',
+    provenance = dict(actor='llm_builder' if manifest['mode']=='subscription' else 'local_test_double',
         case=case, model=manifest['model'], adapter='codex_subscription', condition=manifest['condition'],
         prompt_sha256=manifest['prompt_sha256'], source_sha256=sha256(source), assessment_route=route,
         manifest_sha256=sha256(read_regular(directory/'manifest.json')),
         result_sha256=sha256(read_regular(directory/'result.json')))
+    if assistance == region_skill.ASSISTANCE:
+        provenance['region_ownership_skill'] = manifest['region_ownership_skill']
+    return source, provenance
