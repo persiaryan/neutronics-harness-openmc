@@ -51,7 +51,7 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
         raise ValueError('Invalid condition or task inventory')
     if (assistance in SMOKE_CONDITIONS)!=(smoke_data_index is not None):
         raise ValueError('Declare smoke data only with the explicit smoke condition')
-    skill = region_skill.material() if assistance == region_skill.ASSISTANCE else None
+    skill = region_skill.material(assistance) if assistance in region_skill.ENABLED else None
     smoke_config=None
     if smoke_data_index is not None:
         from builder.smoke_tool import identity
@@ -73,8 +73,12 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
     if skill is not None:
         raw, identity = skill
         (output / region_skill.SNAPSHOT).write_bytes(raw)
+        if assistance == region_skill.SELECTIVE:
+            (output / region_skill.CATALOG_SNAPSHOT).write_text(region_skill.catalog(raw))
         plan['region_ownership_skill'] = identity
-        plan['tool_use_policy'] = 'Guided working export plus a preloaded region-ownership procedure; no extra tools or scientific credit.'
+        plan['tool_use_policy'] = ('Guided working export plus an optional native skill catalog; body loading is selected by the agent, never scored.'
+            if assistance == region_skill.SELECTIVE else
+            'Guided working export plus a preloaded region-ownership procedure; no extra tools or scientific credit.')
     if smoke_config:
         plan.update(smoke=smoke_config,authoring_native_transport=True,
             resource_policy='Same 8-request/600-second session, including boundary and smoke calls. Separate declared per-tool caps. No automatic retries.',
@@ -115,7 +119,7 @@ def execute(output, *, responder=None, request_setup=None):
         raise ValueError('Unknown assistance condition')
     region_skill.verify(output, plan, plan['assistance'])
     smoke_kwargs={}
-    if plan['assistance'] == region_skill.ASSISTANCE:
+    if plan['assistance'] in region_skill.ENABLED:
         smoke_kwargs['expected_region_skill'] = plan['region_ownership_skill']
     if plan['assistance'] in SMOKE_CONDITIONS:
         from builder.smoke_tool import identity

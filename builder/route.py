@@ -45,10 +45,11 @@ CONDITIONS = {
     'guided_boundaries': 'generic_coding_guided_boundaries_v3',
     'guided_boundaries_smoke': 'generic_coding_guided_boundaries_smoke_v1',
     region_skill.ASSISTANCE: 'generic_coding_guided_construction_region_ownership_v1',
+    region_skill.SELECTIVE: 'generic_coding_guided_construction_region_skill_selective_v1',
 }
 SMOKE_CONDITIONS = frozenset({'guided_boundaries_smoke'})
 BOUNDARY_CONDITIONS = frozenset({'boundaries', 'guided_boundaries'}) | SMOKE_CONDITIONS
-GUIDED_CONDITIONS = frozenset({'guided_construction', 'guided_boundaries', region_skill.ASSISTANCE}) | SMOKE_CONDITIONS
+GUIDED_CONDITIONS = frozenset({'guided_construction', 'guided_boundaries', *region_skill.ENABLED}) | SMOKE_CONDITIONS
 CONSTRUCTION_POLICY = Path(__file__).with_name('guided_construction.md')
 GUIDED_POLICY = Path(__file__).with_name('guided_authoring.md')
 

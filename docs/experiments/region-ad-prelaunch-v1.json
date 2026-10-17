@@ -1,0 +1,89 @@
+{
+  "format": "public-region-ad-prelaunch-v1",
+  "date": "2026-10-17",
+  "status": "ready",
+  "scientific_protocol_sha256": "9973ba09cc920007d8287fda8a3442c5a1b76b7bbd5d5115c26b0bb22d1b7ab9",
+  "skill": {
+    "bytes": 1747,
+    "delivery": "preloaded_prompt",
+    "id": "openmc-region-ownership",
+    "sha256": "93a7cb7746b7baaa22bad948473ddd596d6c2807079bd92596fdb1f4e3a9d416",
+    "version": "1"
+  },
+  "sessions": 36,
+  "maximum_pilot_requests": 576,
+  "provider_qualification_requests": 4,
+  "portable_tests_passed": 435,
+  "checks": {
+    "frozen_dependency_identity": "passed",
+    "local_dependencies": "passed",
+    "native_controls": "passed",
+    "provider_controls": "passed"
+  },
+  "pilot_dispatched": false,
+  "neutron_transport_during_qualification": false,
+  "grading_enabled": false,
+  "scientific_review": "pending_owner_review",
+  "provider_controls": [
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "status": "passed",
+      "response_model": "gpt-5.6-luna",
+      "skill_sha256": null,
+      "request_sha256": "04ff24dc4d7bc9cb573c76445f6f24cada3c2030224367eb24d92a6a3b9613e0",
+      "response_sha256": "f6604188c55745739044dd04d0694e6d2d110f008d56fc340782bd5c25ed908c",
+      "usage": {
+        "input_tokens": 7619,
+        "output_tokens": 688,
+        "total_tokens": 8307
+      },
+      "interpretation": "Initial-prompt transmission; one-request cap; model quality not evaluated"
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "D",
+      "status": "passed",
+      "response_model": "gpt-5.6-luna",
+      "skill_sha256": "93a7cb7746b7baaa22bad948473ddd596d6c2807079bd92596fdb1f4e3a9d416",
+      "request_sha256": "85f3178eb1d46c6fac7d4eff0555b34f601341907ea1a3a05dbccd71a81b1ff0",
+      "response_sha256": "8383cbdb1d33cb283bbf7ad79c0f9c75cb017680aaacbe245782a744d6f7217a",
+      "usage": {
+        "input_tokens": 7995,
+        "output_tokens": 3056,
+        "total_tokens": 11051
+      },
+      "interpretation": "Initial-prompt transmission; one-request cap; model quality not evaluated"
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "A",
+      "status": "passed",
+      "response_model": "gpt-5.6-sol",
+      "skill_sha256": null,
+      "request_sha256": "8b0f4bb044329ca402c23b1500260546020251bcb613ad38fb44488d87a9163f",
+      "response_sha256": "caba5cf089a3ab1460c1fef50dbacfb17f5edd89f4c42d86e32a5b63f4e40bd4",
+      "usage": {
+        "input_tokens": 9139,
+        "output_tokens": 1977,
+        "total_tokens": 11116
+      },
+      "interpretation": "Initial-prompt transmission; one-request cap; model quality not evaluated"
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "status": "passed",
+      "response_model": "gpt-5.6-sol",
+      "skill_sha256": "93a7cb7746b7baaa22bad948473ddd596d6c2807079bd92596fdb1f4e3a9d416",
+      "request_sha256": "d5e46234973e07877001478ce5efbca39ac3904249e3c96b5b8c3ce711e910ee",
+      "response_sha256": "4d604ffda6417a7a7de34787476ac8bebeaeb3542bdd0237ddc7238d3fc5ebba",
+      "usage": {
+        "input_tokens": 9515,
+        "output_tokens": 133,
+        "total_tokens": 9648
+      },
+      "interpretation": "Initial-prompt transmission; one-request cap; model quality not evaluated"
+    }
+  ]
+}

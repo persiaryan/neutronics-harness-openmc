@@ -79,14 +79,23 @@ See [the architecture walkthrough](DESIGN.md),
 
 ## Preloaded region-ownership procedure (D)
 
-A prospective condition D adds one targeted procedure, maintained in a SKILL.md
-file and preloaded in full, to A's guided construction, with the same tools and
-budgets. It addresses shared mutable OpenMC region construction; it does not
-add a detector or scientific scoring rule. Agent-selected skill discovery and
-on-demand loading are **not implemented or tested**. D tests provided procedural
-instructions; its efficacy has not been tested.
+Condition D adds one targeted procedure, maintained in a SKILL.md file and
+preloaded in full, to A's guided construction, with the same tools and budgets.
+It addresses shared mutable OpenMC region construction without adding a detector
+or scientific scoring rule. The 36-assignment A/D development pilot completed
+on 2026-10-17: Luna A 6/9 versus D 7/9, Sol A 8/9 versus D 9/9, with no
+infrastructure incidents. These are descriptive reused-task results; general
+efficacy and confirmed mechanism effects remain unestablished.
+See the [complete results and evidence limits](docs/experiments/region-ad-pilot-result-v1.md).
+A separate condition **E** now exposes native skill metadata and lets the builder
+choose whether to read the body. Offline real-CLI controls use scripted responses;
+spontaneous LLM selection and efficacy remain **untested**.
+See [E, its evidence limits and A/D/E preparation](docs/experiments/region-skill-selective-v1.md).
 See [the skill, OpenMC mechanism controls and offline A/D preparation](docs/experiments/region-ownership-skill-v1.md).
 A/B/C prompts and the historical campaign outcomes retain their original meaning.
+The [frozen A/D pilot workflow](docs/experiments/region-ad-pilot-v1.md) adds a
+36-slot manifest, explicit mechanism annotations and technical qualification
+gates before any separately budgeted live launch.
 
 ## Experimental results
 

@@ -1,0 +1,668 @@
+{
+  "format": "region-ad-public-pilot-summary-v1",
+  "status": "complete",
+  "started": "2026-10-17T14:07:36.809231+00:00",
+  "finished": "2026-10-17T17:25:01.721769+00:00",
+  "protocol_sha256": "9973ba09cc920007d8287fda8a3442c5a1b76b7bbd5d5115c26b0bb22d1b7ab9",
+  "campaign_manifest_sha256": "b9b56eecc60de03064dc51014b68966da6f3b7ca144e2ec99f8a5f9031a4c125",
+  "skill_sha256": "93a7cb7746b7baaa22bad948473ddd596d6c2807079bd92596fdb1f4e3a9d416",
+  "conditions": {
+    "A": "guided_construction",
+    "D": "same_setup_plus_full_preloaded_region_ownership_procedure"
+  },
+  "model_configurations": [
+    {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "medium"
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "low"
+    }
+  ],
+  "planned": 36,
+  "consumed": 36,
+  "outcomes": {
+    "protocol_success": 30,
+    "evaluated_failure": 6,
+    "unscored_incident": 0,
+    "pending": 0
+  },
+  "groups": [
+    {
+      "arm": "A",
+      "case": "two_composition_5x5",
+      "conditional_success_fraction_scored": 0.3333333333333333,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 328.644
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 142.46800000000002
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 15
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 15
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-luna",
+      "outcomes": {
+        "evaluated_failure": 2,
+        "pending": 0,
+        "protocol_success": 1,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 0.3333333333333333
+    },
+    {
+      "arm": "D",
+      "case": "two_composition_5x5",
+      "conditional_success_fraction_scored": 0.6666666666666666,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 597.632
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 133.865
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 11
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 11
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-luna",
+      "outcomes": {
+        "evaluated_failure": 1,
+        "pending": 0,
+        "protocol_success": 2,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 0.6666666666666666
+    },
+    {
+      "arm": "A",
+      "case": "axially_zoned_5x5",
+      "conditional_success_fraction_scored": 0.6666666666666666,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 687.13
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 131.886
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-luna",
+      "outcomes": {
+        "evaluated_failure": 1,
+        "pending": 0,
+        "protocol_success": 2,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 0.6666666666666666
+    },
+    {
+      "arm": "D",
+      "case": "axially_zoned_5x5",
+      "conditional_success_fraction_scored": 1.0,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 1007.069
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 149.902
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 14
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 14
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-luna",
+      "outcomes": {
+        "evaluated_failure": 0,
+        "pending": 0,
+        "protocol_success": 3,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 1.0
+    },
+    {
+      "arm": "A",
+      "case": "reflective_pin_cell",
+      "conditional_success_fraction_scored": 1.0,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 953.597
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 133.273
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 16
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 16
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-luna",
+      "outcomes": {
+        "evaluated_failure": 0,
+        "pending": 0,
+        "protocol_success": 3,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 1.0
+    },
+    {
+      "arm": "D",
+      "case": "reflective_pin_cell",
+      "conditional_success_fraction_scored": 0.6666666666666666,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 965.941
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 144.791
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 20
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 20
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-luna",
+      "outcomes": {
+        "evaluated_failure": 1,
+        "pending": 0,
+        "protocol_success": 2,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 0.6666666666666666
+    },
+    {
+      "arm": "A",
+      "case": "two_composition_5x5",
+      "conditional_success_fraction_scored": 1.0,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 845.356
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 168.487
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 11
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 11
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-sol",
+      "outcomes": {
+        "evaluated_failure": 0,
+        "pending": 0,
+        "protocol_success": 3,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 1.0
+    },
+    {
+      "arm": "D",
+      "case": "two_composition_5x5",
+      "conditional_success_fraction_scored": 1.0,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 921.9010000000001
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 159.333
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 11
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 11
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-sol",
+      "outcomes": {
+        "evaluated_failure": 0,
+        "pending": 0,
+        "protocol_success": 3,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 1.0
+    },
+    {
+      "arm": "A",
+      "case": "axially_zoned_5x5",
+      "conditional_success_fraction_scored": 0.6666666666666666,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 689.409
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 159.543
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-sol",
+      "outcomes": {
+        "evaluated_failure": 1,
+        "pending": 0,
+        "protocol_success": 2,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 0.6666666666666666
+    },
+    {
+      "arm": "D",
+      "case": "axially_zoned_5x5",
+      "conditional_success_fraction_scored": 1.0,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 1136.099
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 150.78300000000002
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 9
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 9
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-sol",
+      "outcomes": {
+        "evaluated_failure": 0,
+        "pending": 0,
+        "protocol_success": 3,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 1.0
+    },
+    {
+      "arm": "A",
+      "case": "reflective_pin_cell",
+      "conditional_success_fraction_scored": 1.0,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 979.3340000000001
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 125.981
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-sol",
+      "outcomes": {
+        "evaluated_failure": 0,
+        "pending": 0,
+        "protocol_success": 3,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 1.0
+    },
+    {
+      "arm": "D",
+      "case": "reflective_pin_cell",
+      "conditional_success_fraction_scored": 1.0,
+      "consumed": 3,
+      "effort": {
+        "assessment_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 991.077
+        },
+        "authoring_seconds": {
+          "available": 3,
+          "missing": 0,
+          "total": 125.636
+        },
+        "completed_provider_responses": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        },
+        "requests_received": {
+          "available": 3,
+          "missing": 0,
+          "total": 10
+        }
+      },
+      "mechanism_counts": {
+        "demonstrated": 0,
+        "not_observed_within_reviewed_scope": 0,
+        "pending": 3,
+        "unassessable": 0
+      },
+      "model": "gpt-5.6-sol",
+      "outcomes": {
+        "evaluated_failure": 0,
+        "pending": 0,
+        "protocol_success": 3,
+        "unscored_incident": 0
+      },
+      "planned": 3,
+      "protocol_success_fraction": 1.0
+    }
+  ],
+  "comparisons": [
+    {
+      "D_minus_A": 0.11111111111111105,
+      "complete": true,
+      "model": "gpt-5.6-luna",
+      "task_weighted_rates": {
+        "A": 0.6666666666666666,
+        "D": 0.7777777777777777
+      }
+    },
+    {
+      "D_minus_A": 0.11111111111111116,
+      "complete": true,
+      "model": "gpt-5.6-sol",
+      "task_weighted_rates": {
+        "A": 0.8888888888888888,
+        "D": 1.0
+      }
+    }
+  ],
+  "resource_totals_by_model_arm": [
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "assignments": 9,
+      "requests_received": 41,
+      "reported_token_sums": {
+        "input_tokens": 392277,
+        "output_tokens": 39809,
+        "total_tokens": 432086
+      },
+      "token_usage_complete_records": 9,
+      "authoring_median_seconds": 44.335,
+      "authoring_total_seconds": 407.627,
+      "assessment_total_seconds": 1969.371
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "D",
+      "assignments": 9,
+      "requests_received": 45,
+      "reported_token_sums": {
+        "input_tokens": 470775,
+        "output_tokens": 42340,
+        "total_tokens": 513115
+      },
+      "token_usage_complete_records": 9,
+      "authoring_median_seconds": 45.479,
+      "authoring_total_seconds": 428.558,
+      "assessment_total_seconds": 2570.642
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "A",
+      "assignments": 9,
+      "requests_received": 31,
+      "reported_token_sums": {
+        "input_tokens": 326057,
+        "output_tokens": 31003,
+        "total_tokens": 357060
+      },
+      "token_usage_complete_records": 9,
+      "authoring_median_seconds": 52.865,
+      "authoring_total_seconds": 454.01099999999997,
+      "assessment_total_seconds": 2514.099
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "assignments": 9,
+      "requests_received": 30,
+      "reported_token_sums": {
+        "input_tokens": 328751,
+        "output_tokens": 31287,
+        "total_tokens": 360038
+      },
+      "token_usage_complete_records": 9,
+      "authoring_median_seconds": 49.828,
+      "authoring_total_seconds": 435.752,
+      "assessment_total_seconds": 3049.077
+    }
+  ],
+  "requests": {
+    "pilot_received": 147,
+    "pilot_provider_http_responses": 147,
+    "pilot_complete_provider_responses": 147,
+    "maximum_pilot": 576,
+    "qualification_provider_requests_excluded": 4
+  },
+  "integrity": {
+    "coherent_assessments": 36,
+    "actual_exposure_audits_passed": 36,
+    "frozen_dependency_bindings_passed": 36,
+    "scripted_native_controls_passed": 4,
+    "real_transmission_controls_passed": 4,
+    "portable_tests_passed": 435
+  },
+  "mechanism_review": {
+    "source_proposals_prepared": 36,
+    "confirmed_secondary_labels": 0,
+    "anonymous_sources_prepared": 36,
+    "status": "pending_human_review",
+    "source_proposals_are_not_confirmed_endpoints": true
+  },
+  "scientific_review": "pending_owner_review",
+  "grading_enabled": false,
+  "limits": [
+    "Three reused development tasks, three repeats per model/task/arm; descriptive pilot.",
+    "D adds a full procedure and extra context; no length-matched placebo.",
+    "No held-out confirmation or spontaneous E skill-selection test was run.",
+    "Reported token usage is not a monetary cost estimate."
+  ],
+  "retained_evidence_sha256": {
+    "analysis-terminal.json": "6ed6e9891bd78e2c5312e56af4c65a26e8dc2ff8fb9b69b87f62d6211626d1ad",
+    "resource-ledger.json": "4fea242b0cd20e2e2c31ad24270fda4790179fb81f11a7c61c5e766f3aa0b903",
+    "exposure-audit.json": "af49320c68c604810ade098631b1e1eb1666b33994cee05842bc0caf0ed82880",
+    "frozen-dependency-binding.json": "e4930ee9e692d3d5e34a0d0ff5cac109bd6ccbedd979316fd03078638a5d5d71",
+    "proposal-traceability-check.json": "9cf15c7727187409f3d3d45e49e93b7165075250b4d10dcb5fcc85a3510b6273"
+  }
+}

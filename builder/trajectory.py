@@ -284,6 +284,10 @@ def summarize(directory, result):
         smoke_native_completions=observed_completions if outcomes_complete else None,
         smoke_native_completions_observed=observed_completions,
         smoke_feedback_deliveries_observed=sum(r['feedback_delivery']['status']=='complete' for r in smoke))
+    from builder.skill_exposure import summarize as skill_exposure
+    exposure = skill_exposure(directory, requests, completed_turns, calls, actions)
+    if exposure is not None:
+        summary['region_skill'] = exposure
     return summary
 
 

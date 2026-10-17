@@ -216,10 +216,21 @@ containers receive no reference mount, credentials or host Docker socket.
 `openmc-region-ownership-v1` procedure to A's guided authoring prompt. It uses
 A's tools, request profiles and time allowance; the independent evaluator and
 scientific scoring do not change. This tests provided procedural guidance,
-not native skill discovery. Agent selection from name/description and subsequent
-on-demand reading of the skill body are not implemented or tested. The runtime's
-catalog/memory exclusions remain. A future selective-loading experiment needs a
-separate condition identity; it must not silently replace D.
+not native skill discovery. A/B/C/D retain the runtime's catalog/memory
+exclusions. Separate condition E (`guided_construction_region_skill_selective`)
+uses A's exact task prompt and one allowlisted native skill catalog. The same
+procedure is staged in the ephemeral container; only metadata enters the initial
+request. The agent can read its body with existing coding tools. Snapshots,
+staging receipt, first context and reviewed per-arm request setups bind this
+assistance. No reference or evaluator code enters the builder.
+
+Offline real-CLI controls with scripted responses verify discovery, a no-read
+path and exact full-body delivery after a read. Automatic LLM selection,
+application and efficacy remain untested. A conservative operator trace records
+exposure without scientific credit; unsupported read variants remain unresolved.
+An opt-in `region-ownership-ade-v1` prepares 54 assignments using separately
+reviewed A/D/E setups, without dispatching. It leaves the previous comparisons
+unchanged. See [E and its limits](docs/experiments/region-skill-selective-v1.md).
 
 Preparation and authoring retain the procedure bytes and identity. Execution
 checks the prepared binding before dispatch, and retained-submission review
@@ -230,6 +241,21 @@ prepares 36 A/D development assignments; it does not run during preparation.
 Small real-OpenMC region controls verify the programming mechanism without
 transport. Neither they nor portable integration tests demonstrate skill efficacy.
 See [scope, commands and evidence](docs/experiments/region-ownership-skill-v1.md).
+
+The explicit `experiments.region_ad` workflow freezes the scientific protocol,
+procedure and 36-slot manifest, verifies local runtime/data/private-reference
+identities, and requires separate native and live transmission controls before
+launch. Complete independent protocol success remains primary; hash-bound manual
+annotations of damaging shared-region mutations are secondary. Read-only analysis
+preserves incidents, pending assignments and missing evidence. This leaves the
+evaluator/rubric unchanged and scientific approval pending. See the
+[A/D pilot protocol](docs/experiments/region-ad-pilot-v1.md).
+The [completed development pilot](docs/experiments/region-ad-pilot-result-v1.md)
+retains all 36 assignments, with 30 complete successes, six evaluated failures
+and no infrastructure incidents. It provides descriptive A/D evidence, without
+confirming human mechanism labels, held-out generalization or E's spontaneous
+skill selection.
+
 
 ## Public/private separation
 

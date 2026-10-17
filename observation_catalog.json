@@ -71,6 +71,23 @@
       "tools": [
         "coding"
       ]
+    },
+    {
+      "id": "E",
+      "version": "1",
+      "assistance": "guided_construction_region_skill_selective",
+      "condition": "generic_coding_guided_construction_region_skill_selective_v1",
+      "label": {
+        "en": "E",
+        "fr": "E"
+      },
+      "description": {
+        "en": "Guided construction + optional native region skill",
+        "fr": "Construction guidée + skill native de régions à chargement facultatif"
+      },
+      "tools": [
+        "coding"
+      ]
     }
   ],
   "tools": [

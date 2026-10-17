@@ -1,0 +1,102 @@
+{
+  "format": "region-ad-scientific-protocol-v1",
+  "id": "region-ownership-ad-pilot-v1",
+  "version": 1,
+  "scientific_status": "exploratory_development_protocol_pending_owner_review",
+  "question": "Does providing the frozen region-ownership procedure improve complete independent protocol success relative to guided construction alone?",
+  "comparison": "region-ownership-ad-v1",
+  "arms": {
+    "A": "guided_construction",
+    "D": "guided_construction_region_ownership"
+  },
+  "models": [
+    "gpt-5.6-luna",
+    "gpt-5.6-sol"
+  ],
+  "cases": [
+    "two_composition_5x5",
+    "axially_zoned_5x5",
+    "reflective_pin_cell"
+  ],
+  "repeats": 3,
+  "assignments": 36,
+  "request_limit": 16,
+  "authoring_seconds": 600,
+  "maximum_model_requests": 576,
+  "automatic_retries": 0,
+  "order_seed": 20261016,
+  "skill": {
+    "id": "openmc-region-ownership",
+    "version": "1",
+    "delivery": "preloaded_prompt",
+    "sha256": "93a7cb7746b7baaa22bad948473ddd596d6c2807079bd92596fdb1f4e3a9d416",
+    "bytes": 1747
+  },
+  "primary": {
+    "id": "complete_protocol_success",
+    "unit": "assignment",
+    "rule": "Independent coherent review with strict_correct true and an assessed final report; no credit for skill mention or tool use.",
+    "denominator": "All 36 assigned slots, with consumed, pending, scored and incident counts explicit. No completed-campaign rate while assignments are pending.",
+    "stratification": [
+      "model",
+      "case",
+      "arm"
+    ],
+    "aggregation": "Equal task weights within each model. Report D minus A descriptively, not a powered hypothesis test.",
+    "missing": "An unscored incident is not an evaluated model failure. Report all-assigned success and conditional scored success separately; unstarted slots remain pending."
+  },
+  "secondary": {
+    "id": "damaging_shared_region_mutation",
+    "scope": "Final submitted source; working revisions are separate process evidence.",
+    "positive_requires": [
+      "Object sharing or aliasing demonstrated before mutation, including a cell or a nested child referring to that region.",
+      "An in-place operation demonstrably changes that same shared Intersection or Union object.",
+      "A downstream cell, complement or derived expression observes the changed object.",
+      "The resulting geometry conflicts with the public task or the preserved construction meaning; cite independent geometry evidence or an explicit semantic derivation."
+    ],
+    "statuses": [
+      "pending",
+      "demonstrated",
+      "not_observed_within_reviewed_scope",
+      "unassessable"
+    ],
+    "negative": "Requires documented review of sharing, mutations, nested components and downstream uses throughout the submitted geometry construction. No absence claim from syntax alone.",
+    "uncertainty": "Missing source, unresolved dynamic behavior, unsupported geometry or insufficient consequence evidence stays unassessable.",
+    "exclusions": [
+      "Presence of &= or |= alone.",
+      "Intentional in-place construction of an unshared region.",
+      "A new outer expression alone as proof that nested children were copied.",
+      "Skill exposure, acknowledgement or use as proof of correct geometry."
+    ],
+    "annotation": "Manual source/evidence review, tied to source and artifact hashes. Review blinded to arm where feasible; adjudicate uncertain positive cases before reporting them.",
+    "denominator": "Show demonstrated, reviewed-without-observed-defect, unassessable and pending counts over all assigned slots; conditional assessed-source fractions are secondary."
+  },
+  "other_measures": [
+    "Independent geometry and settings findings, preserving unresolved checks.",
+    "Builder/final-export/assessment incidents and stop stages.",
+    "Received requests and forwarded requests separately; available tokens, authoring time and assessment time with missing counts."
+  ],
+  "stop_policy": "Pause on provider, infrastructure or evaluator incident. Preserve consumed slots and evidence. No automatic retries, replacements or automatic continuation.",
+  "provider_controls": {
+    "purpose": "Transmission qualification only, excluded from pilot outcomes and tuning.",
+    "cases": [
+      "two_composition_5x5"
+    ],
+    "arms": [
+      "A",
+      "D"
+    ],
+    "models": [
+      "gpt-5.6-luna",
+      "gpt-5.6-sol"
+    ],
+    "maximum_requests": 4,
+    "max_requests_per_session": 1,
+    "wall_seconds_per_session": 120,
+    "completion": "One complete provider response to the exact initial A/D prompt with matched setup. Authoring may stop at its one-request cap; no successful model submission is claimed."
+  },
+  "confirmation": {
+    "status": "not_defined_or_run",
+    "requirement": "After this development pilot, justify sample size and freeze a separate held-out task manifest and analysis before any confirmatory model calls. Do not tune on confirmation outcomes."
+  }
+}

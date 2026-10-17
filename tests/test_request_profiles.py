@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from builder import boundary_tool, context, route, run as builder, smoke_tool, trajectory
+from builder import boundary_tool, context, region_skill, route, run as builder, smoke_tool, trajectory
 from builder.submission import submission
 from evaluator import run as exporter
 from experiments import run as experiment
@@ -39,6 +39,9 @@ def launch(test, *, cap=8, profile=None, count=1, assistance='guided_constructio
     public = fixture.output.parent/'public'; prepare('reflective_pin_cell', public)
     prompt = route.condition_prompt((public/'prompt.txt').read_text(), assistance, request_budget=profile)
     body = synthetic_body(); body['input'][-1]['content'][0]['text'] = prompt
+    if assistance == region_skill.SELECTIVE:
+        body['input'].insert(1, dict(type='message', role='developer', content=[
+            dict(type='input_text', text=region_skill.catalog(region_skill.material(assistance)[0]))]))
     expected = context.request_setup(body)
     source = 'def build_model():\n    return None\n'
     process = fixture.fake_process(body, source)

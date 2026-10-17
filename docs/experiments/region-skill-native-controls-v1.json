@@ -1,0 +1,91 @@
+{
+  "format": "public-region-skill-native-controls-v1",
+  "date": "2026-10-17",
+  "cli_version": "codex-cli 0.153.4",
+  "actor": "scripted_test_double",
+  "model_inference": false,
+  "live_provider_calls": 0,
+  "neutron_transport": false,
+  "automatic_agent_selection_tested": false,
+  "skill_efficacy_tested": false,
+  "skill": {
+    "id": "openmc-region-ownership",
+    "version": "1",
+    "delivery": "native_skill_catalog",
+    "sha256": "93a7cb7746b7baaa22bad948473ddd596d6c2807079bd92596fdb1f4e3a9d416",
+    "bytes": 1747,
+    "path": "/work/.agents/skills/openmc-region-ownership/SKILL.md",
+    "catalog_sha256": "c868dd7d697ccd8b814e4e8db3067388f9f67ef1533f14404982172984e94b4b",
+    "staging_sha256": "5c337470c366307b042066658a998040252301f5385faa456b66fb1c270283a3"
+  },
+  "source_sha256": {
+    "builder/region_skill.py": "fccada1e1709b7ed934de809c1f8fa708b7e927ad0ccd6a7dab31ac817bdb768",
+    "builder/skill_exposure.py": "1187d3c18a2f7dee804f29d9d3e9c5e7c9b3d2d9bc445fb2bc178ae40666dd3d",
+    "builder/region_skill_qualification.py": "fdab2ef4f345baa863e1a6cd6e7820102b32bcefa8bffc32318ca8fe919a576a",
+    "tests/fixtures/responses.py": "00356c3ea56265d005082ba8f5bc2023ed653052cd2edb800231b4915fd7aca6"
+  },
+  "configurations": [
+    {
+      "requested_model": "gpt-5.6-luna",
+      "image_id": "sha256:8dfbafd6160d9833111ac51d0b066126066f1690d3c315261583baf5f12b81a5",
+      "entry_sha256": "02ea1fb478da02b94ce7e2582b5ea569b686f6981ebb893457a7ebf54009062f",
+      "controls": [
+        {
+          "control": "A",
+          "status": "passed",
+          "synthetic_requests": 1,
+          "catalog_delivery": null,
+          "body_loading": null,
+          "cleanup_confirmed": true
+        },
+        {
+          "control": "E-no-read",
+          "status": "passed",
+          "synthetic_requests": 1,
+          "catalog_delivery": "complete",
+          "body_loading": "not_demonstrated",
+          "cleanup_confirmed": true
+        },
+        {
+          "control": "E-read",
+          "status": "passed",
+          "synthetic_requests": 2,
+          "catalog_delivery": "complete",
+          "body_loading": "observed",
+          "cleanup_confirmed": true
+        }
+      ]
+    },
+    {
+      "requested_model": "gpt-5.6-sol",
+      "image_id": "sha256:8dfbafd6160d9833111ac51d0b066126066f1690d3c315261583baf5f12b81a5",
+      "entry_sha256": "02ea1fb478da02b94ce7e2582b5ea569b686f6981ebb893457a7ebf54009062f",
+      "controls": [
+        {
+          "control": "A",
+          "status": "passed",
+          "synthetic_requests": 1,
+          "catalog_delivery": null,
+          "body_loading": null,
+          "cleanup_confirmed": true
+        },
+        {
+          "control": "E-no-read",
+          "status": "passed",
+          "synthetic_requests": 1,
+          "catalog_delivery": "complete",
+          "body_loading": "not_demonstrated",
+          "cleanup_confirmed": true
+        },
+        {
+          "control": "E-read",
+          "status": "passed",
+          "synthetic_requests": 2,
+          "catalog_delivery": "complete",
+          "body_loading": "observed",
+          "cleanup_confirmed": true
+        }
+      ]
+    }
+  ]
+}

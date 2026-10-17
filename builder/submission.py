@@ -70,13 +70,9 @@ def submission(directory, case, *, recorded_protocol=None):
         request = read(f'request-{number:02d}.json')
         require(request.get('model') == manifest['model'], 'Requested model changed')
         require(request_inventory(request) == read(f'inventory-{number:02d}.json'), 'Request inventory changed')
-        if assistance == region_skill.ASSISTANCE and number == 1:
-            inventory = request_inventory(request)
-            require(not inventory['skills_catalog_present'] and not inventory['memory_block_present']
-                    and len(inventory['user_texts']) == 2
-                    and inventory['user_texts'][0].startswith('<environment_context>')
-                    and inventory['user_texts'][-1] == expected_prompt,
-                    'Region skill first-request prompt changed')
+        if assistance in region_skill.ENABLED and number == 1:
+            require(region_skill.initial_context(request, expected_prompt, assistance),
+                    'Region skill first-request context changed')
         if 'required_request_setup' in manifest:
             expected_setup = manifest['required_request_setup']
             require(request_setup(request) == expected_setup and
@@ -91,6 +87,9 @@ def submission(directory, case, *, recorded_protocol=None):
         prompt_sha256=manifest['prompt_sha256'], source_sha256=sha256(source), assessment_route=route,
         manifest_sha256=sha256(read_regular(directory/'manifest.json')),
         result_sha256=sha256(read_regular(directory/'result.json')))
-    if assistance == region_skill.ASSISTANCE:
+    if assistance == region_skill.SELECTIVE:
+        require(read('region-skill-staging.json') == region_skill.staging_receipt(region_skill.material(assistance)[0]),
+                'Region skill staging receipt changed')
+    if assistance in region_skill.ENABLED:
         provenance['region_ownership_skill'] = manifest['region_ownership_skill']
     return source, provenance

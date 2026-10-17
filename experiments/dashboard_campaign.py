@@ -8,6 +8,7 @@ import shutil
 import uuid
 
 from builder.submission import submission
+from builder import region_skill
 from evaluation.candidates.run import evaluate
 from evaluation.candidates.verify import review_assessment
 from evaluator.public_runtime import load
@@ -19,6 +20,7 @@ ARMS = {'A':'guided_construction','B':'guided_boundaries','C':'guided_boundaries
 MODELS = ('gpt-5.6-luna','gpt-5.6-sol')
 TASKS = ('reflective_pin_cell','reflected_7x7','two_composition_5x5','axially_zoned_5x5','asymmetric_5x5')
 REGION_COMPARISON = 'region-ownership-ad-v1'
+SELECTIVE_COMPARISON = 'region-ownership-ade-v1'
 REGION_ARMS = {'A': 'guided_construction', 'D': 'guided_construction_region_ownership'}
 REGION_TASKS = ('two_composition_5x5', 'axially_zoned_5x5', 'reflective_pin_cell')
 
@@ -37,7 +39,7 @@ def sources():
 
 
 def prepare_campaign(output, *, pilot, data_index, setup_file, runtime_path=None, comparison=None):
-    if comparison not in (None, REGION_COMPARISON) or (comparison is not None and pilot):
+    if comparison not in (None, REGION_COMPARISON, SELECTIVE_COMPARISON) or (comparison is not None and pilot):
         raise ValueError('Use the explicit region comparison separately from the public integration pilot')
     output=Path(output).resolve()
     if output.exists(): raise ValueError('Use a fresh campaign directory')
@@ -45,9 +47,13 @@ def prepare_campaign(output, *, pilot, data_index, setup_file, runtime_path=None
     runtime=load(runtime_path) if pilot else None
     setups=json.loads(Path(setup_file).read_text())
     if set(setups)!=set(MODELS): raise ValueError('Declare both reviewed model request setups')
+    arms = (dict(REGION_ARMS, E=region_skill.SELECTIVE) if comparison == SELECTIVE_COMPARISON
+            else REGION_ARMS if comparison else ARMS)
+    if comparison == SELECTIVE_COMPARISON:
+        for model in MODELS:
+            region_skill.reviewed_setups(setups[model])
     output.mkdir(parents=True)
     rows=[]
-    arms = REGION_ARMS if comparison else ARMS
     cases = REGION_TASKS if comparison else TASKS[:1] if pilot else TASKS
     repeats = 3 if comparison else 1 if pilot else 5
     order=[(r,t,m,a) for r in range(1,repeats+1) for t in cases for m in MODELS for a in arms]
@@ -68,7 +74,7 @@ def prepare_campaign(output, *, pilot, data_index, setup_file, runtime_path=None
         minimum_free_bytes=10*1024**3,study_type='Repeated development tasks; descriptive comparison, not holdout confirmation.')
     if comparison:
         manifest.update(comparison=comparison,
-            study_type='Exploratory A/D intervention on reused development tasks; not a powered or held-out efficacy study.')
+            study_type='Exploratory '+('/'.join(arms))+' intervention on reused development tasks; not a powered or held-out efficacy study.')
     atomic_json(output/'manifest.json',manifest)
     atomic_json(output/'progress.json',dict(state='prepared',rows=rows))
     atomic_json(output/'dashboard-campaign.json',dict(campaigns=['manifest.json']))
@@ -81,6 +87,10 @@ def run_campaign(output):
     if (output/'launch.json').exists(): raise ValueError('Campaign launch already consumed; no automatic resume')
     if manifest['source_sha256']!=sources() or sha(manifest['data_index'])!=manifest['data_index_sha256']:
         raise ValueError('Frozen implementation or data index changed')
+    if 'region_ad_protocol' in manifest:
+        from experiments.region_ad import readiness
+        if readiness(output)['status'] != 'ready':
+            raise ValueError('A/D qualification incomplete; no pilot slot dispatched')
     atomic_json(output/'launch.json',dict(started=now(),manifest_sha256=sha(output/'manifest.json')))
     progress=dict(state='running',started=now(),rows=manifest['rows'])
     try:
@@ -100,7 +110,10 @@ def run_campaign(output):
             atomic_json(output/'progress.json',progress)
             print(json.dumps(dict(event='started',id=row['id'],time=now())),flush=True)
             try:
-                summary=execute(folder,request_setup=manifest['request_setups'][row['model']])
+                setup = manifest['request_setups'][row['model']]
+                if manifest.get('comparison') == SELECTIVE_COMPARISON:
+                    setup = setup[row['arm']]
+                summary=execute(folder,request_setup=setup)
                 taskrow=summary['tasks'][0]
                 if taskrow['builder_status']!='completed':
                     raise RuntimeError('Builder did not complete; slot consumed without retry')
@@ -147,7 +160,7 @@ if __name__=='__main__':
     parser.add_argument('--data-index',type=Path)
     parser.add_argument('--setups',type=Path)
     parser.add_argument('--runtime',type=Path)
-    parser.add_argument('--comparison',choices=(REGION_COMPARISON,))
+    parser.add_argument('--comparison',choices=(REGION_COMPARISON, SELECTIVE_COMPARISON))
     args=parser.parse_args()
     if args.action=='prepare':
         if not args.data_index or not args.setups: parser.error('Preparation needs --data-index and --setups')

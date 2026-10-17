@@ -117,12 +117,12 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
     if output.exists():
         raise FileExistsError('Refusing to overwrite an existing run directory')
     from builder.route import prepare, condition_prompt
-    skill = region_skill.material() if assistance == region_skill.ASSISTANCE else None
+    skill = region_skill.material(assistance) if assistance in region_skill.ENABLED else None
     if expected_region_skill is not None and (skill is None or expected_region_skill != skill[1]):
         raise ValueError('Prepared region skill changed before builder dispatch')
     prompt, assessment_route = prepare(case, contract, execution_profile, evaluator_protocol, prepared_input)
     prompt = condition_prompt(prompt, assistance, request_budget=request_budget)
-    if skill is not None and not prompt.endswith(region_skill.HEADER + skill[0].decode('utf-8')):
+    if assistance == region_skill.ASSISTANCE and not prompt.endswith(region_skill.HEADER + skill[0].decode('utf-8')):
         raise ValueError('Region skill changed during prompt construction')
     inspect_boundaries = assistance in BOUNDARY_CONDITIONS
     smoke_enabled = assistance in SMOKE_CONDITIONS
@@ -181,6 +181,8 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
     if skill is not None:
         raw, identity = skill
         (output / region_skill.SNAPSHOT).write_bytes(raw)
+        if assistance == region_skill.SELECTIVE:
+            (output / region_skill.CATALOG_SNAPSHOT).write_text(region_skill.catalog(raw))
         manifest['region_ownership_skill'] = identity
     write_json(output / "manifest.json", manifest)
     lifecycle = {"container_name": name, "state": "creating"}
@@ -233,6 +235,9 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                         boundary_adapter=boundary_tool.AttachedSession(container_id,output/'boundary-tool',events)
                     if smoke_enabled:
                         smoke_adapter=smoke_tool.AttachedSession(container_id,output/'smoke-tool',events,smoke_data_index)
+                    if assistance == region_skill.SELECTIVE:
+                        receipt = region_skill.stage(docker, container_id, skill[0], min(30, remaining))
+                        write_json(output / 'region-skill-staging.json', receipt)
                     ready = True
                     send(process, {"prompt": prompt, "model": model})
                 elif kind == "request":
@@ -245,10 +250,7 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
                     body = event["body"]
                     validate_request(body, model)
                     inventory = request_inventory(body)
-                    if count == 1 and (inventory["skills_catalog_present"] or inventory["memory_block_present"]
-                                       or len(inventory["user_texts"]) != 2
-                                       or not inventory["user_texts"][0].startswith("<environment_context>")
-                                       or inventory["user_texts"][-1:] != [prompt]):
+                    if count == 1 and not region_skill.initial_context(body, prompt, assistance):
                         raise ValueError("First request contains unexpected context or a changed task")
                     write_json(output / f"request-{count:02d}.json", body)
                     write_json(output / f"inventory-{count:02d}.json", inventory)

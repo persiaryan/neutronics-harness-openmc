@@ -8,7 +8,7 @@ procedure. It has A's tools and budgets, without boundary inspection, native
 smoke, a detector, automatic repair or scientific credit.
 
 This is provided instruction assistance maintained as a skill, not native skill
-discovery. The builder still rejects a skills catalog and personal memory in its
+discovery. In D, the builder rejects a skills catalog and personal memory in its
 first request. Only the allowlisted procedure enters its ordinary prompt; the
 repository and private evaluation are not exposed.
 
@@ -42,6 +42,11 @@ condition should preserve D as its own preloaded-instruction comparison, carry
 a new configuration identity, and distinguish catalog exposure, observed body
 loading, and behavioral effects. This dated checkpoint remains historical if
 those capabilities are subsequently implemented.
+
+A later implementation on 2026-10-17 adds separate [condition E](region-skill-selective-v1.md)
+for native metadata discovery and optional reading. Its offline controls are
+scripted; automatic LLM selection and efficacy remain untested. The table above
+describes the earlier checkpoint and is intentionally preserved.
 
 ## Critical path and evidence
 
@@ -127,7 +132,10 @@ python3 -B -m experiments.dashboard_campaign prepare \
 
 Only preparation is authorized by these commands. The separate run action makes
 live model calls and native final assessments; it is **not part of offline
-validation**. No live D authoring or A/D efficacy campaign has run. Portable tests
+validation**. The initial implementation was validated offline; the subsequent
+[frozen A/D workflow](region-ad-pilot-v1.md) records real provider qualification
+and the separately executed development pilot. See its
+[completed results](region-ad-pilot-result-v1.md). Portable tests
 prepare a complete synthetic campaign. Their placeholder data and setups are
 test doubles, not provider or nuclear-data qualification.
 
@@ -157,3 +165,7 @@ Before a live pilot: review the frozen skill, qualify effective provider setting
 check private reference/data/runtime readiness and explicitly authorize execution.
 Before a confirmatory paper: freeze mechanism annotation, analysis and sample size;
 review references/thresholds; use held-out tasks without tuning on their outcomes.
+
+The subsequent [frozen A/D pilot workflow](region-ad-pilot-v1.md) implements the
+scientific protocol, dependency checks, separate transmission controls and
+annotation/analysis preparation. Its live launch remains a separate operation.
