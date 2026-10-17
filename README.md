@@ -93,6 +93,12 @@ spontaneous LLM selection and efficacy remain **untested**.
 See [E, its evidence limits and A/D/E preparation](docs/experiments/region-skill-selective-v1.md).
 See [the skill, OpenMC mechanism controls and offline A/D preparation](docs/experiments/region-ownership-skill-v1.md).
 A/B/C prompts and the historical campaign outcomes retain their original meaning.
+
+A separate [twelve-task candidate suite](docs/experiments/region-confirmation-tasks-v1.md)
+now provides new public specifications and offline prompt preparation. References,
+observer coverage and native execution remain unqualified; no confirmation
+campaign has been launched.
+
 The [frozen A/D pilot workflow](docs/experiments/region-ad-pilot-v1.md) adds a
 36-slot manifest, explicit mechanism annotations and technical qualification
 gates before any separately budgeted live launch.

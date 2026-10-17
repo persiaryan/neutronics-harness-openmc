@@ -1,8 +1,10 @@
 # Proposed confirmation after the A/D development pilot
 
-Status: **design proposal only**. No held-out task, new reference, sample size or
-confirmation run is created or approved by this document. The current experiment
-remains the frozen 36-slot development pilot.
+Status: **design proposal; twelve unqualified candidate specifications created
+on 2026-10-18**. See the [candidate suite and qualification plan](region-confirmation-tasks-v1.md).
+No qualified held-out reference set, justified sample size or confirmation run
+has been created. The completed experiment remains the frozen 36-slot development
+pilot. The candidate suite does not modify that pilot or its historical records.
 
 ## Decision after the pilot
 
