@@ -216,7 +216,10 @@ containers receive no reference mount, credentials or host Docker socket.
 `openmc-region-ownership-v1` procedure to A's guided authoring prompt. It uses
 A's tools, request profiles and time allowance; the independent evaluator and
 scientific scoring do not change. This tests provided procedural guidance,
-not native skill discovery. The runtime's catalog/memory exclusions remain.
+not native skill discovery. Agent selection from name/description and subsequent
+on-demand reading of the skill body are not implemented or tested. The runtime's
+catalog/memory exclusions remain. A future selective-loading experiment needs a
+separate condition identity; it must not silently replace D.
 
 Preparation and authoring retain the procedure bytes and identity. Execution
 checks the prepared binding before dispatch, and retained-submission review

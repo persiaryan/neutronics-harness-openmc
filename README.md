@@ -79,10 +79,12 @@ See [the architecture walkthrough](DESIGN.md),
 
 ## Preloaded region-ownership procedure (D)
 
-A prospective condition D adds one targeted, preloaded skill to A's guided
-construction, with the same generic tools and budgets. It addresses shared
-mutable OpenMC region construction; it does not add a detector, native skill
-discovery, or a scientific scoring rule. Its efficacy has not been tested.
+A prospective condition D adds one targeted procedure, maintained in a SKILL.md
+file and preloaded in full, to A's guided construction, with the same tools and
+budgets. It addresses shared mutable OpenMC region construction; it does not
+add a detector or scientific scoring rule. Agent-selected skill discovery and
+on-demand loading are **not implemented or tested**. D tests provided procedural
+instructions; its efficacy has not been tested.
 See [the skill, OpenMC mechanism controls and offline A/D preparation](docs/experiments/region-ownership-skill-v1.md).
 A/B/C prompts and the historical campaign outcomes retain their original meaning.
 

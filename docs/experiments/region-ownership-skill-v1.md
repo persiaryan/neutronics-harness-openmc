@@ -20,6 +20,29 @@ This change does not automatically diagnose that cause. D's efficacy is
 thresholds and historical results are unchanged. Scientific review is pending
 and grading remains disabled.
 
+## Evidence boundary recorded on 2026-10-17
+
+At implementation commit `32d9ab2`, D supplies the complete procedure in the
+initial authoring prompt. The SKILL.md filename and frontmatter do not make this
+an agent-selected, progressively loaded skill experiment.
+
+| Capability or result | Status at this checkpoint |
+|---|---|
+| Read the allowlisted procedure and preload its complete content in D | Implemented; portable plumbing tests passed |
+| Expose only skill name/description/path initially | Not implemented |
+| Let the builder decide to load the body when relevant | Not implemented or tested |
+| Observe an actual builder loading and applying the skill on demand | Not tested |
+| Demonstrate improved LLM modeling from the preloaded procedure | Not tested |
+| Demonstrate OpenMC region mutation behavior in small controls | Tested separately; no LLM or neutron transport |
+
+No result from this checkpoint may be presented as evidence of automatic skill
+selection, on-demand loading, or skill efficacy. Preloading verifies a different
+intervention: providing specialized instructions. A later automatic-loading
+condition should preserve D as its own preloaded-instruction comparison, carry
+a new configuration identity, and distinguish catalog exposure, observed body
+loading, and behavioral effects. This dated checkpoint remains historical if
+those capabilities are subsequently implemented.
+
 ## Critical path and evidence
 
 1. builder.region_skill.material reads one bounded, non-linked source file.
