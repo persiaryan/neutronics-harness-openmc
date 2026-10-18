@@ -15,7 +15,7 @@ from evaluator import run as exporter
 from evaluator.contracts import FACTORY
 from evaluator.profiles import PROFILE, FACTORY_PROFILE, BOUNDARY_PROTOCOL
 from evaluation.scientific.boundary_scope import task_matrix
-from prompts.prepare import prepare as prepare_prompt, CASE_FILES
+from prompts.prepare import prepare as prepare_prompt, CASE_FILES, all_cases
 
 BUDGETS = dict(model_requests=8, authoring_seconds=600, boundary_calls=2, boundary_seconds=120,
                export_seconds=60, automatic_retries=0)
@@ -47,7 +47,12 @@ def atomic_json(path, value):
 def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_cell','moderated_cylinder'),smoke_data_index=None,
             request_budget=None):
     declared = budgets(assistance, request_budget)
-    if assistance not in CONDITIONS or not cases or len(set(cases)) != len(cases) or set(cases)-set(CASE_FILES):
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    if set(cases)&set(TASKS) and not set(cases)<=set(TASKS):
+        raise ValueError('Prepare confirmation and historical tasks separately')
+    protocol = CONFIRMATION_PROTOCOL if set(cases)<=set(TASKS) else BOUNDARY_PROTOCOL
+    if assistance not in CONDITIONS or not cases or len(set(cases)) != len(cases) or set(cases)-set(all_cases()):
         raise ValueError('Invalid condition or task inventory')
     if (assistance in SMOKE_CONDITIONS)!=(smoke_data_index is not None):
         raise ValueError('Declare smoke data only with the explicit smoke condition')
@@ -62,7 +67,7 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
     plan = dict(format='research-usability-pilot-v2', status='prepared_not_dispatched', model=model,
         batch_id=str(uuid.uuid4()), execution_ids={case:str(uuid.uuid4()) for case in cases},
         adapter='codex_subscription', assistance=assistance, cases=list(cases), prompts=prompts,
-        delivery_contract=FACTORY, execution_profile=PROFILE, evaluator_protocol=BOUNDARY_PROTOCOL,
+        delivery_contract=FACTORY, execution_profile=PROFILE, evaluator_protocol=protocol,
         budgets=declared, maximum_model_requests=len(cases)*declared['model_requests'],
         strict_tool_free_baseline=False, formal_efficacy_study=False, transport=False,
         resource_policy='Same authoring wall/request budgets. Inspection uses this wall budget plus its own call cap. No retries.',
@@ -113,7 +118,10 @@ def execute(output, *, responder=None, request_setup=None):
         raise ValueError('Prepared total request budget changed')
     if plan['status'] != 'prepared_not_dispatched' or plan['budgets'] != declared or plan['execution_profile'] != PROFILE:
         raise ValueError('Pilot plan/budgets changed')
-    if plan['delivery_contract'] != FACTORY or plan['evaluator_protocol'] != BOUNDARY_PROTOCOL or plan['transport'] is not False:
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    protocol = CONFIRMATION_PROTOCOL if set(plan['cases'])<=set(TASKS) else BOUNDARY_PROTOCOL
+    if plan['delivery_contract'] != FACTORY or plan['evaluator_protocol'] != protocol or plan['transport'] is not False:
         raise ValueError('Unexpected pilot contract/protocol')
     if plan['assistance'] not in CONDITIONS:
         raise ValueError('Unknown assistance condition')
@@ -275,7 +283,7 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--assistance', choices=tuple(CONDITIONS), required=True)
     p.add_argument('--model', default='gpt-5.6-luna')
-    p.add_argument('--cases', nargs='+', choices=sorted(CASE_FILES), default=['reflective_pin_cell','moderated_cylinder'])
+    p.add_argument('--cases', nargs='+', choices=sorted(all_cases()), default=['reflective_pin_cell','moderated_cylinder'])
     p.add_argument('--smoke-data-index',type=Path)
     p.add_argument('--request-budget',choices=(EXTENDED_REQUEST_BUDGET,))
     p = sub.add_parser('execute')

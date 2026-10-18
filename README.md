@@ -95,9 +95,13 @@ See [the skill, OpenMC mechanism controls and offline A/D preparation](docs/expe
 A/B/C prompts and the historical campaign outcomes retain their original meaning.
 
 A separate [twelve-task candidate suite](docs/experiments/region-confirmation-tasks-v1.md)
-now provides new public specifications and offline prompt preparation. References,
-observer coverage and native execution remain unqualified; no confirmation
-campaign has been launched.
+now provides new public specifications and offline prompt preparation. Reference
+qualification and end-to-end validation use separately retained evidence; no
+confirmation campaign has been launched. The [new reference/evaluation workflow](docs/experiments/region-confirmation-implementation-v1.md)
+implements separate qualification, readiness checks and an explicitly budgeted launcher.
+The [frozen INDC-USA-107 replacement](docs/experiments/indc107-replacement-v1.md)
+replaces the inconclusive perforated-block task in the current v3 suite; original
+statements and operator evidence remain retained.
 
 The [frozen A/D pilot workflow](docs/experiments/region-ad-pilot-v1.md) adds a
 36-slot manifest, explicit mechanism annotations and technical qualification

@@ -1,4 +1,4 @@
-# Finite mixture cylinder with a void sleeve, version 1
+# Finite mixture cylinder with a void sleeve in a box, version 2
 
 All lengths are in cm. These are synthetic models, not experimental systems.
 Use the listed nuclides and relative atom amounts directly; no natural-element
@@ -16,10 +16,10 @@ material. No components or materials beyond those specified below are present.
 
 Mixture fills r<4, z in [-12,12], where r is distance from the z axis.
 A void sleeve occupies 4<r<4.2 over z in [-12,12].
-The outer domain is the cylinder r<10, z in [-18,18].
+The outer domain is the box x,y in [-10,10], z in [-18,18].
 Water fills the remaining domain: r>4.2 over the central height and the
-complete disks r<10 in both axial end regions. The void has no axial caps.
-The outer curved wall and both outer end planes are vacuum.
+complete square cross sections in both axial end regions. The void has no axial caps.
+All six outer plane faces are vacuum.
 There is no structural vessel.
 
 Use OpenMC 0.15.3 continuous-energy eigenvalue mode with the supplied

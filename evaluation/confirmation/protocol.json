@@ -1,0 +1,52 @@
+{
+  "format": "confirmation-reference-protocol-v1",
+  "id": "confirmation-qualification-v1",
+  "scientific_review": "pending_owner_review",
+  "grading_enabled": false,
+  "criteria_status": "diagnostic_inherited_pilot_criteria_not_calibrated_scientific_limits",
+  "primary_seeds": [
+    11,
+    23,
+    37
+  ],
+  "control_seed": 53,
+  "source_seed": 71,
+  "sampling": {
+    "particles": 10000,
+    "batches": 400,
+    "inactive": 100,
+    "generations_per_batch": 2,
+    "source": "uniform"
+  },
+  "long_inactive": {
+    "batches": 600,
+    "inactive": 300
+  },
+  "maximum_transport_seconds": 1800,
+  "maximum_primary_mean_sigma_pcm": 30,
+  "maximum_pair_z": 3,
+  "qualification_calls_per_case": 5,
+  "qualification_transport_calls": 60,
+  "end_to_end_calls": 12,
+  "automatic_retries": 0,
+  "primary_endpoint": "Complete independently verified protocol success",
+  "secondary_endpoint": "Hash-bound source review of damaging shared region mutation",
+  "sample_size": {
+    "tasks": 12,
+    "models": 2,
+    "arms": [
+      "A",
+      "D"
+    ],
+    "repeats": 5,
+    "assignments": 240,
+    "maximum_model_requests": 3840,
+    "status": "proposal_requires_precision_or_power_justification"
+  },
+  "stopping": "No automatic replacement or retry. Preserve failed evidence; block the affected reference. Pause dispatch on infrastructure/evaluator incidents.",
+  "limitations": [
+    "Inherited 150 pcm equivalence and 0.02-bit entropy screens remain diagnostic and uncalibrated.",
+    "Three seeds and two initialization controls cannot prove source convergence.",
+    "Owner scientific review and campaign budget approval remain explicit."
+  ]
+}

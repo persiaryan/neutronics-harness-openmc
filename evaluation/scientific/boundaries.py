@@ -79,6 +79,8 @@ def missing_material_failure(directory, xml):
 
 
 def requirements(case):
+    from evaluation.confirmation import cases as confirmation
+    if case in confirmation.SPECS:return confirmation.requirements(case)
     package=json.loads(REQUIREMENTS.read_bytes())
     if case not in package['tasks']:
         raise ValueError('Task has no qualified boundary requirement set')

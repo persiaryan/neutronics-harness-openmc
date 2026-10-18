@@ -6,11 +6,11 @@ from pathlib import Path
 
 from prompts import prepare as public
 
-MANIFEST = 'confirmation_v1/manifest.json'
+MANIFEST = 'confirmation_v2/manifest.json'
 TASKS = (
     'offset_plate_bank', 'staggered_seven_pin_cluster',
     'three_annular_fuel_channels', 'separated_twin_bundles',
-    'cross_shaped_mixture', 'perforated_mixture_block',
+    'cross_shaped_mixture', 'indc107_reflective_pin',
     'stepped_axial_mixture', 'wrapped_eight_pin_channel',
     'mixed_boundary_fuel_slab', 'cylindrical_void_sleeve',
     'dual_temperature_pin_pair', 'restricted_source_nine_pin',
@@ -40,9 +40,9 @@ def suite():
     if template.count('{{TASK_SPECIFICATION}}') != 1:
         raise ValueError('Template must contain exactly one task marker')
     for index, record in enumerate(records):
-        expected = 'confirmation_v1/cases/' + TASKS[index] + '.md'
+        expected = ('confirmation_v2/cases/' if index == 5 else 'confirmation_v1/cases/') + TASKS[index] + '.md'
         if (record.get('path') != expected
-                or record.get('family') != ('reuse' if index < 4 else 'transfer' if index < 8 else 'control')
+                or record.get('family') != ('external_control' if index == 5 else 'reuse' if index < 4 else 'transfer' if index < 8 else 'control')
                 or record.get('assessment_ready') is not False
                 or record.get('reference_status') != 'not_created'):
             raise ValueError('Unexpected candidate task path or qualification')
@@ -50,6 +50,16 @@ def suite():
         if digest(task) != record['sha256'] or len(task.encode()) != record['bytes']:
             raise ValueError('Candidate task specification changed: ' + record['id'])
     return value, digest(text)
+
+
+def build_prompt(case):
+    if case not in TASKS:
+        raise ValueError('Unknown confirmation candidate task')
+    inventory, _ = suite()
+    record = next(r for r in inventory['tasks'] if r['id'] == case)
+    template = public.read_public_text('template_factory_v1.md')
+    task = public.read_public_text(record['path'])
+    return template.replace('{{TASK_SPECIFICATION}}', task.rstrip()).rstrip() + '\n'
 
 
 def prepare(case, output):

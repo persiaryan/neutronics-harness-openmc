@@ -34,9 +34,17 @@ def read_public_text(relative):
     return path.read_text(encoding="utf-8")
 
 
+def all_cases():
+    from prompts.confirmation import TASKS
+    return tuple(CASE_FILES) + TASKS
+
+
 def build_prompt(case, *, contract='openmc-model-factory-v1'):
     """Return exactly the reviewed generic instructions plus one public task."""
     if case not in CASE_FILES:
+        from prompts import confirmation
+        if case in confirmation.TASKS and contract == 'openmc-model-factory-v1':
+            return confirmation.build_prompt(case)
         raise ValueError(f"Unknown case: {case!r}")
     templates = {'openmc-model-factory-v1': 'template_factory_v1.md'}
     if contract not in templates:
@@ -51,6 +59,11 @@ def build_prompt(case, *, contract='openmc-model-factory-v1'):
 
 def prepare(case, output, *, contract='openmc-model-factory-v1'):
     """Write a fresh, data-only bundle; no private paths or answers are inputs."""
+    if case not in CASE_FILES:
+        from prompts import confirmation
+        if contract != 'openmc-model-factory-v1':
+            raise ValueError('Unknown delivery contract')
+        return confirmation.prepare(case, output)
     prompt = build_prompt(case, contract=contract)
     messages = [{"role": "user", "content": prompt}]
     messages_json = json.dumps(messages, indent=2, ensure_ascii=False) + "\n"
@@ -78,7 +91,7 @@ def prepare(case, output, *, contract='openmc-model-factory-v1'):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--case", required=True, choices=sorted(CASE_FILES))
+    parser.add_argument("--case", required=True, choices=sorted(all_cases()))
     parser.add_argument("--output", type=Path, required=True,
                         help="New directory for the builder-input bundle")
     parser.add_argument('--contract', choices=('openmc-model-factory-v1',), default='openmc-model-factory-v1')

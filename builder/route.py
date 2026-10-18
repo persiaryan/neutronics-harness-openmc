@@ -12,6 +12,10 @@ from builder import region_skill
 def prepare(case, contract, profile, protocol, prepared_input):
     if contract != FACTORY or case is None or prepared_input is None:
         raise ValueError('Factory route requires a public case and prepared input')
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    if (case in TASKS) != (protocol == CONFIRMATION_PROTOCOL):
+        raise ValueError('Select the confirmation protocol explicitly for confirmation tasks')
     route = assessment_route(contract, profile, protocol)
     directory = Path(prepared_input)
     if directory.is_symlink() or any((directory / n).is_symlink() for n in ('prompt.txt', 'manifest.json', 'messages.json')):

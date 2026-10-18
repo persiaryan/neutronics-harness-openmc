@@ -1,6 +1,6 @@
 {
   "format": "region-confirmation-task-suite-v1",
-  "id": "region-confirmation-candidates-v1",
+  "id": "region-confirmation-candidates-v2",
   "created": "2026-10-18",
   "status": "specifications_created_unqualified",
   "task_count": 12,
@@ -68,7 +68,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "staggered_seven_pin_cluster",
@@ -109,7 +110,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "three_annular_fuel_channels",
@@ -150,7 +152,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "separated_twin_bundles",
@@ -191,7 +194,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "cross_shaped_mixture",
@@ -232,7 +236,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "perforated_mixture_block",
@@ -273,7 +278,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "stepped_axial_mixture",
@@ -314,7 +320,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "wrapped_eight_pin_channel",
@@ -355,7 +362,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "mixed_boundary_fuel_slab",
@@ -396,14 +404,15 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "cylindrical_void_sleeve",
       "family": "control",
       "path": "confirmation_v1/cases/cylindrical_void_sleeve.md",
-      "sha256": "ff9042971cd8d6e4c771176070a08f67dc5404a84e42a539c40d5aa34bd7caf8",
-      "bytes": 2133,
+      "sha256": "298cf200df12998d663912afcd8aa07a394b569ca5ec90eb132641eaf60c654d",
+      "bytes": 2137,
       "source_box": {
         "lower_left": [
           -4,
@@ -437,7 +446,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 2
     },
     {
       "id": "dual_temperature_pin_pair",
@@ -478,7 +488,8 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
     },
     {
       "id": "restricted_source_nine_pin",
@@ -519,7 +530,16 @@
       "reference_status": "not_created",
       "observer_coverage": "unqualified",
       "transport_status": "not_run",
-      "assessment_ready": false
+      "assessment_ready": false,
+      "version": 1
+    }
+  ],
+  "qualification_tracking": "Release-time states; live qualification is recorded separately in operator evidence.",
+  "revisions": [
+    {
+      "case": "cylindrical_void_sleeve",
+      "previous_path": "confirmation_v1/archive/cylindrical_void_sleeve-v1.md",
+      "reason": "Use a box exterior within the qualified boundary-observer scope; preserve cylindrical fuel and void sleeve."
     }
   ]
 }

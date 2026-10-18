@@ -1,0 +1,49 @@
+{
+  "format": "indc107-upstream-lock-v1",
+  "repository": "https://github.com/mit-crpg/benchmarks",
+  "commit": "ba41bee54320ada0b4ac39a0dd2ca3c1d090a450",
+  "files": {
+    "geometry.xml": {
+      "upstream_path": "indc-usa-107/openmc/problem1/geometry.xml",
+      "bytes": 801,
+      "sha256": "1aaa05c09ed3165d84a99ca50edbd7f5737a5de0d545854df87272ab5542ce92"
+    },
+    "materials.xml": {
+      "upstream_path": "indc-usa-107/openmc/problem1/materials.xml",
+      "bytes": 780,
+      "sha256": "a19e86bda48438ee371638801428a2ce2ebf7e0d765b95aa0b7a554682e6f732"
+    },
+    "settings.xml": {
+      "upstream_path": "indc-usa-107/openmc/problem1/settings.xml",
+      "bytes": 630,
+      "sha256": "a189f3901b8a67e61018913fda4a1b45e66ce4bb741850a2082c16235cd34ac2"
+    },
+    "tallies.xml": {
+      "upstream_path": "indc-usa-107/openmc/problem1/tallies.xml",
+      "bytes": 8928,
+      "sha256": "8b053c30bc1335cd1a6d98f23f21985d1e9a86a6a4bc8836b0518555e81b0a69"
+    },
+    "LICENSE": {
+      "upstream_path": "LICENSE",
+      "bytes": 1083,
+      "sha256": "9c910879ae6067082d50855d455a1ae6e28ca4ea019a705301cc154ffe0f0741"
+    },
+    "upstream-readme.rst": {
+      "upstream_path": "readme.rst",
+      "bytes": 2526,
+      "sha256": "349c6085aca4b84f4b9de429e3b27046c845473cef9b38a78694383d9eb7ed0a"
+    }
+  },
+  "scope": "Computational variant derived from INDC-USA-107 problem 1; no experimental validation or published keff reproduced.",
+  "adaptation": {
+    "axial_domain_cm": [
+      -1.0,
+      1.0
+    ],
+    "axial_boundary": "reflective",
+    "temperature_K": 293.6,
+    "energy_mode": "continuous-energy",
+    "source": "Original box retained; explicit fissionable resampling, isotropic direction and Watt spectrum.",
+    "sampling": "Harness sampling and entropy mesh replace upstream run settings; original spectral tallies are outside this task."
+  }
+}

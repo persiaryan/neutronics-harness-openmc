@@ -20,7 +20,10 @@ def submission(directory, case, *, recorded_protocol=None):
             raise ValueError(message)
     manifest, result, life = [read(n) for n in ('manifest.json','result.json','lifecycle.json')]
     base = build_prompt(case)
-    route = assessment_route(FACTORY, FACTORY_PROFILE, BOUNDARY_PROTOCOL)
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    protocol = CONFIRMATION_PROTOCOL if case in TASKS else BOUNDARY_PROTOCOL
+    route = assessment_route(FACTORY, FACTORY_PROFILE, protocol)
     if recorded_protocol is not None:
         # Explicit read-only migration binding. Dispatch still accepts only the
         # current protocol; retained authoring is never relabelled as a new run.

@@ -1,7 +1,10 @@
 # Twelve candidate tasks for region-procedure confirmation
 
-Created on 2026-10-18 at the owner's request. Status: **public specifications
-created; references, observer coverage and native execution unqualified**.
+Created on 2026-10-18 at the owner's request. The initial specification release
+was unqualified. A [versioned implementation and qualification workflow](region-confirmation-implementation-v1.md)
+now connects the new suite to native controls, private references and independent
+end-to-end assessment. Actual readiness comes from selected qualification evidence,
+not from this release-time description.
 No agent generation or confirmation campaign has been run on this suite.
 These tasks are candidates for a future frozen study, not an already qualified
 held-out benchmark. The existing six-task catalog, frozen references, development
@@ -30,7 +33,7 @@ correct representations. They do not prescribe Python operators or skill use.
 | Transfer | stepped_axial_mixture | Different transverse footprints in touching axial sections |
 | Transfer | wrapped_eight_pin_channel | Pin envelopes, a central tube and a square wrapper shell |
 | Control | mixed_boundary_fuel_slab | Different boundary types on different axes |
-| Control | cylindrical_void_sleeve | A finite void sleeve and water-filled axial ends |
+| Control | cylindrical_void_sleeve | Version 2: finite void sleeve in a rectangular water exterior |
 | Control | dual_temperature_pin_pair | Same composition at two effective fuel temperatures |
 | Control | restricted_source_nine_pin | Initial source support different from entropy-mesh support |
 
@@ -46,9 +49,10 @@ remove their status as unused confirmation candidates.
 statement and the existing factory template by SHA-256. It records source/entropy
 boxes, group membership and explicit unqualified states. It contains no reference
 implementation, expected eigenvalue, private path or grading answer.
-The renderer reads only allowlisted public files. It does not enter the historical
-CASE_FILES catalog: the existing experiment executor and evaluator therefore
-continue to reject these new case IDs until a separately reviewed integration.
+The renderer reads only allowlisted public files. The historical CASE_FILES
+catalog remains the original six tasks. The new IDs are admitted through the
+explicit confirmation protocol; a mismatched historical protocol is rejected
+before authoring dispatch.
 
 ~~~sh
 python3 -B -m prompts.confirmation --check
@@ -62,10 +66,14 @@ directory. The prompt contains the existing factory contract and one complete
 task statement. Family labels, planned arms and qualification notes stay outside
 the agent message. No provider, Docker, OpenMC or private reference is accessed.
 
-Verified on 2026-10-18: the 12 specification/template bindings pass the inventory
+At the initial release checkpoint on 2026-10-18, the 12 specification/template bindings passed the inventory
 check; all 12 prompt bundles pass the targeted tests, including changed-byte,
 private-path, symlink and overwrite rejection. All 441 portable tests pass.
-No native geometry or transport check was run for these new tasks.
+No native check had run at that initial checkpoint. Native qualification is now a separate recorded workflow; consult its retained status before claiming readiness.
+
+The original cylindrical-exterior statement is retained in
+`prompts/confirmation_v1/archive/cylindrical_void_sleeve-v1.md`. Its replacement
+was made before evaluated-agent generations; no curved-boundary extension is claimed.
 
 The historical pilot's 94 frozen implementation files match commit
 `72a9895` exactly. Adding this suite changes the current campaign source
@@ -94,13 +102,13 @@ Specific independent geometric or semantic checks to include:
 | stepped_axial_mixture | Mixture volume 1128 cm3; water on both exposed steps; no artificial separating gaps |
 | wrapped_eight_pin_channel | Eight fuel pins; water central bore; wrapper volume 74.6496 cm3; water above/below open ends |
 | mixed_boundary_fuel_slab | Fuel volume 12 cm3; vacuum only on x; reflective on y,z |
-| cylindrical_void_sleeve | Mixture volume 384*pi cm3; void volume 39.36*pi cm3; end disks completely water |
+| cylindrical_void_sleeve | Mixture volume 384*pi cm3; void volume 39.36*pi cm3; end square sections completely water |
 | dual_temperature_pin_pair | Effective left/right fuel 293.6/600 K; unchanged recipe/density; water/clad 293.6 K; required tables available at 1 K tolerance |
 | restricted_source_nine_pin | Source volume 0.4 cm3, entirely inside central fuel; source limits distinct from full entropy mesh |
 
 These formulas are design-review aids. They are not native geometry observations
 or proof that the existing evaluator can assess these tasks. In particular the
-curved exterior, nonrectangular bodies, material partitions, temperature and source
+nonrectangular internal bodies, material partitions, temperature and source
 semantics need explicit observer qualification. Missing coverage must remain
 unresolved; do not weaken acceptance criteria to admit these cases.
 
@@ -125,3 +133,11 @@ other failures, incidents and resource consumption. E's spontaneous skill select
 remains a separate hypothesis and is not tested by this candidate suite.
 
 See [the confirmation design](region-ad-confirmation-plan-v1.md).
+
+## Owner-selected public replacement
+
+The current renderer uses confirmation_v2/manifest.json, suite
+region-confirmation-candidates-v3. Its sixth task is indc107_reflective_pin
+(external_control) instead of perforated_mixture_block. This document's original
+twelve-task table describes the retained release. The replacement and its
+changed coverage are described in [the frozen-source record](indc107-replacement-v1.md).

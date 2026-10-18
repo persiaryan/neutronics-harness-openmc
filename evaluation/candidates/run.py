@@ -17,7 +17,7 @@ from evaluation.scientific.records import inspection_record, leakage
 from evaluation.candidates import assessment, receipts
 from evaluation.candidates.phase_evidence import export_outcome
 from evaluator.contracts import CONTRACTS, FACTORY
-from prompts.prepare import build_prompt, CASE_FILES
+from prompts.prepare import build_prompt, CASE_FILES, all_cases
 from evaluator.profiles import BOUNDARY_PROTOCOL, FACTORY_PROFILE, assessment_route
 from evaluation.scientific import boundaries
 from evaluation.candidates import boundary_assessment
@@ -38,6 +38,10 @@ def clean_resources():
 
 
 def target(case, *, reference=None, runtime=None):
+    from prompts.confirmation import TASKS
+    if case in TASKS:
+        from evaluation.confirmation.references import target as confirmation_target
+        return confirmation_target(case, reference, runtime)
     require(case in CASE_FILES, 'Unknown public case')
     if reference is not None:
         from evaluation.public_reference import target as public_target
@@ -110,7 +114,11 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
     route = assessment_route(contract, execution_profile, evaluator_protocol, runtime=runtime)
     route['prompt_sha256'] = exporter.digest(build_prompt(case, contract=contract).encode())
     budgets = route['execution_profile']['budgets']
-    require(case in CASE_FILES, 'Unknown public case')
+    require(case in all_cases(), 'Unknown public case')
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    require((case in TASKS) == (evaluator_protocol == CONFIRMATION_PROTOCOL),
+            'Select the versioned confirmation evaluator for new tasks')
     boundary_spec = boundaries.requirements(case) if case != 'moderated_cylinder' else None
     output = Path(output).absolute()
     require(not output.exists(), 'Refusing to overwrite candidate evidence')
@@ -148,7 +156,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         snapshots.mkdir()
         for file in Path(__file__).parent.glob('*.py'):
             (snapshots / file.name).write_bytes(file.read_bytes())
-        report['assignment'] = dict(case=case, case_version=1, provenance=provenance, source_sha256=source_hash,
+        report['assignment'] = dict(case=case, case_version=SPECS[case].get('version',1), provenance=provenance, source_sha256=source_hash,
                                     frozen_index_sha256=goal['index']['manifest_sha256'], reference=goal['reference'],
                                     rubric=scoring.identity(), budgets=budgets, sampling=dict(particles=10000, batches=SPECS[case]['batches'],
                                                                   inactive=100, generations_per_batch=2, seed=1, source='uniform'))
@@ -246,7 +254,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
             gate(name, True, detail='Native completion and finite k-effective/statepoint evidence verified')
         leak = leakage(read_regular(output / 'transport/openmc-stdout.txt').decode())
         leak_checks = dict(leakage_probability=0 <= leak['mean'] <= 1 and leak['std_dev'] >= 0,
-                           leakage_boundary_consistency=leak['mean'] == 0 if case == 'reflective_pin_cell' else leak['mean'] > 0)
+                           leakage_boundary_consistency=leak['mean'] == 0 if SPECS[case]['boundary'] == 'reflective' else leak['mean'] > 0)
         report['comparison'] = assessment.complete_checks(report['checks'], record, goal['reference']['primary_mean'],
                                                           leak_checks)
         report['candidate_keff'] = record['keff']
@@ -282,7 +290,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--case', required=True, choices=sorted(CASE_FILES))
+    parser.add_argument('--case', required=True, choices=sorted(all_cases()))
     parser.add_argument('--candidate', type=Path, required=True)
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--data-index', required=True, type=Path)

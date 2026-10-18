@@ -18,7 +18,7 @@ from builder.context import request_inventory, request_setup as observed_setup, 
 from builder.route import CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS
 from builder import openmc_python, region_skill
 from builder.relay import forward, load_auth, validate_request
-from prompts.prepare import CASE_FILES
+from prompts.prepare import CASE_FILES, all_cases
 from evaluator.profiles import BOUNDARY_PROTOCOL
 from observability import now, record
 
@@ -347,7 +347,7 @@ def run(output, *, case, prepared_input, model="gpt-5.6-luna", assistance='gener
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--case', required=True, choices=sorted(CASE_FILES))
+    parser.add_argument('--case', required=True, choices=sorted(all_cases()))
     parser.add_argument('--prepared-input', required=True, type=Path)
     parser.add_argument('--assistance', choices=tuple(CONDITIONS), required=True)
     parser.add_argument('--model', default='gpt-5.6-luna')

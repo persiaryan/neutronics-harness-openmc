@@ -316,3 +316,24 @@ as a hidden grading answer for an agent study.
 The private historical test count is not the public test count. Passing local
 doubles does not imply native transport, calibrated uncertainty, independent
 reference qualification or harness efficacy.
+
+## Confirmation task route
+
+The explicit `factory-assessment-confirmation-v1` route extends task-specific
+expectations to the twelve new public specifications while reusing isolated
+factory export, XML-only workers, native transport and retained-evidence review.
+It adds location-dependent temperature expectations, separate source and entropy
+bounds and boundary-driven leakage checks. The historical six-task reference
+catalog and previous assessment identities retain their meaning. The revised
+cylindrical-void task has a box exterior; curved exterior observation remains
+outside the qualified scope. Reference constructors and sealed answers remain
+operator-private. See [qualification and launch contracts](docs/experiments/region-confirmation-implementation-v1.md).
+Scientific criteria remain diagnostic and scientific approval is not inferred
+from portable tests, native execution or sealed package hashes.
+
+The current candidate suite v3 includes an explicitly adapted public
+INDC-USA-107 problem-1 reflective slice. Upstream code/assets are pinned; its
+metal and water recipes are independently checked. The original v2 manifest
+and failed perforated-block evidence remain historical. Prior reference
+admission uses exact generation identities and unchanged finite physical
+contracts; it does not silently rebind arbitrary prior evaluator versions.

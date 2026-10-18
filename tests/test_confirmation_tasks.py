@@ -17,7 +17,7 @@ class ConfirmationTaskTests(unittest.TestCase):
         self.assertEqual(len(public.CASE_FILES), 6)
         self.assertTrue(set(confirmation.TASKS).isdisjoint(public.CASE_FILES))
         self.assertEqual([r['family'] for r in value['tasks']],
-                         ['reuse']*4 + ['transfer']*4 + ['control']*4)
+                         ['reuse']*4 + ['transfer','external_control','transfer','transfer'] + ['control']*4)
         self.assertFalse(value['assessment_ready'])
         self.assertEqual(value['reference_status'], 'not_created')
         self.assertEqual(value['agent_generations'], 0)
@@ -46,6 +46,7 @@ class ConfirmationTaskTests(unittest.TestCase):
     def copied_public(self, root):
         destination = root/'prompts'
         shutil.copytree(public.PROMPT_ROOT/'confirmation_v1', destination/'confirmation_v1')
+        shutil.copytree(public.PROMPT_ROOT/'confirmation_v2', destination/'confirmation_v2')
         shutil.copy(public.PROMPT_ROOT/'template_factory_v1.md', destination)
         return destination
 

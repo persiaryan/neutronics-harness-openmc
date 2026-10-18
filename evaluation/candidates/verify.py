@@ -67,9 +67,13 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
     contract = assignment['delivery_contract']
     require(contract in CONTRACTS, 'Unknown assessment delivery contract')
     route = assignment['assessment_route']
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
     boundary_spec = None
     from evaluator.profiles import assessment_route
     expected_route = assessment_route(contract, route['execution_profile']['id'], route['evaluator_protocol'], runtime=runtime)
+    require((assignment['case'] in TASKS) == (route['evaluator_protocol'] == CONFIRMATION_PROTOCOL),
+            'Confirmation evaluation route mismatch')
     expected_route['prompt_sha256'] = digest(build_prompt(assignment['case'], contract=contract).encode())
     require(route == expected_route and assignment['budgets'] == route['execution_profile']['budgets'],
             'Assessment execution profile/protocol changed')
@@ -88,6 +92,8 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
                 'Assessment/export execution profiles differ')
     require(assignment == report['assignment'], 'Assessment assignment changed')
     require(report['case'] == assignment['case'], 'Assessment case changed')
+    require(assignment['case_version']==run.SPECS[assignment['case']].get('version',1),
+            'Assessment task version changed')
     source = (directory / 'candidate.py').read_bytes()
     require(digest(source) == assignment['source_sha256'], 'Submission changed')
     require(assignment['provenance']['source_sha256'] == assignment['source_sha256'], 'Assignment source provenance changed')
@@ -197,7 +203,7 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
     checks = assessment.fidelity_checks(assignment['case'], fidelity, obs)
     leak = leakage((directory / 'transport/openmc-stdout.txt').read_text())
     leak_checks = dict(leakage_probability=0 <= leak['mean'] <= 1 and leak['std_dev'] >= 0,
-                       leakage_boundary_consistency=leak['mean'] == 0 if assignment['case'] == 'reflective_pin_cell' else leak['mean'] > 0)
+                       leakage_boundary_consistency=leak['mean'] == 0 if run.SPECS[assignment['case']]['boundary'] == 'reflective' else leak['mean'] > 0)
     comparison = assessment.complete_checks(checks, record, goal['reference']['primary_mean'], leak_checks)
     gates = {name: dict(passed=True, cause=None) for name in scoring.RUBRIC['hard_gates']}
     require(all(v['passed'] is True and v['cause'] is None for v in report['gates'].values()), 'Full assessment has nonpassing gates')
