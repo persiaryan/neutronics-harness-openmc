@@ -100,6 +100,9 @@ qualification and end-to-end validation use separately retained evidence. The
 first 240-assignment exploratory A/D campaign stopped after eleven successes
 and one unscored native termination; see the [lost-particle qualification](docs/experiments/lost-particle-qualification-v1.md). The [new reference/evaluation workflow](docs/experiments/region-confirmation-implementation-v1.md)
 implements separate qualification, readiness checks and an explicitly budgeted launcher.
+The [versioned verdict revision](docs/experiments/verdict-migration-v1.md) reconstructs
+the twelve consumed trials as eleven successes and one model failure; the original
+reports remain retained and campaign continuation is separate.
 The [frozen INDC-USA-107 replacement](docs/experiments/indc107-replacement-v1.md)
 replaces the inconclusive perforated-block task in the current v3 suite; original
 statements and operator evidence remain retained.
