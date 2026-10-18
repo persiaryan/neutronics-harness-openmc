@@ -104,6 +104,8 @@ The [versioned verdict revision](docs/experiments/verdict-migration-v1.md) recon
 the twelve consumed trials as eleven successes and one model failure; the original
 reports remain retained. The [explicit continuation controller](docs/experiments/confirmation-continuation-v1.md)
 resumes the remaining assignments under the same revised verdict policy.
+The [restart at 031](docs/experiments/confirmation-resume-031-v1.md) retains
+the subsequent stream incident at 030 as consumed and unscored.
 The [frozen INDC-USA-107 replacement](docs/experiments/indc107-replacement-v1.md)
 replaces the inconclusive perforated-block task in the current v3 suite; original
 statements and operator evidence remain retained.
