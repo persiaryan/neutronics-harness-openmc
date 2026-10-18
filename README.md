@@ -102,7 +102,8 @@ and one unscored native termination; see the [lost-particle qualification](docs/
 implements separate qualification, readiness checks and an explicitly budgeted launcher.
 The [versioned verdict revision](docs/experiments/verdict-migration-v1.md) reconstructs
 the twelve consumed trials as eleven successes and one model failure; the original
-reports remain retained and campaign continuation is separate.
+reports remain retained. The [explicit continuation controller](docs/experiments/confirmation-continuation-v1.md)
+resumes the remaining assignments under the same revised verdict policy.
 The [frozen INDC-USA-107 replacement](docs/experiments/indc107-replacement-v1.md)
 replaces the inconclusive perforated-block task in the current v3 suite; original
 statements and operator evidence remain retained.
