@@ -96,8 +96,9 @@ A/B/C prompts and the historical campaign outcomes retain their original meaning
 
 A separate [twelve-task candidate suite](docs/experiments/region-confirmation-tasks-v1.md)
 now provides new public specifications and offline prompt preparation. Reference
-qualification and end-to-end validation use separately retained evidence; no
-confirmation campaign has been launched. The [new reference/evaluation workflow](docs/experiments/region-confirmation-implementation-v1.md)
+qualification and end-to-end validation use separately retained evidence. The
+first 240-assignment exploratory A/D campaign stopped after eleven successes
+and one unscored native termination; see the [lost-particle qualification](docs/experiments/lost-particle-qualification-v1.md). The [new reference/evaluation workflow](docs/experiments/region-confirmation-implementation-v1.md)
 implements separate qualification, readiness checks and an explicitly budgeted launcher.
 The [frozen INDC-USA-107 replacement](docs/experiments/indc107-replacement-v1.md)
 replaces the inconclusive perforated-block task in the current v3 suite; original

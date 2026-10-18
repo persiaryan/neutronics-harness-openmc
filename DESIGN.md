@@ -337,3 +337,8 @@ metal and water recipes are independently checked. The original v2 manifest
 and failed perforated-block evidence remain historical. Prior reference
 admission uses exact generation identities and unchanged finite physical
 contracts; it does not silently rebind arbitrary prior evaluator versions.
+
+The explicit [lost-particle qualification](docs/experiments/lost-particle-qualification-v1.md)
+adds a separately invoked, receipt-verified native failure attribution. Historical
+run/verify defaults, reports and scores remain unchanged. Activation in a resumed
+campaign requires a versioned migration and uniform review of consumed trials.
