@@ -1,0 +1,104 @@
+{
+  "format": "confirmation-mechanism-preliminary-v1",
+  "aggregate_sha256": "943071068bc5a9ca81a3cb1a856af21b3652c062a80a124bd70c2f97eef46485",
+  "reviewer": "Codex",
+  "reviewer_type": "ai",
+  "blinded": false,
+  "review_scope": "AST-assisted screen of all 238 sources; explicit source-flow inspection of all 36 bitwise-augmentation cases; lexical receiver audit of 662 append/extend calls",
+  "human_adjudication": "pending",
+  "canonical_human_annotations_changed": false,
+  "source_count": 238,
+  "missing_submission_ids": [
+    "030",
+    "236"
+  ],
+  "syntax_groups": [
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "assigned": 60,
+      "sources": 59,
+      "sources_with_bitwise_augmented_assignment": 16,
+      "primary_outcomes_with_that_syntax": {
+        "protocol_success": 14,
+        "evaluated_failure": 1,
+        "unscored_incident": 1
+      }
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "D",
+      "assigned": 60,
+      "sources": 60,
+      "sources_with_bitwise_augmented_assignment": 0,
+      "primary_outcomes_with_that_syntax": {}
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "A",
+      "assigned": 60,
+      "sources": 60,
+      "sources_with_bitwise_augmented_assignment": 20,
+      "primary_outcomes_with_that_syntax": {
+        "protocol_success": 17,
+        "unscored_incident": 3
+      }
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "assigned": 60,
+      "sources": 59,
+      "sources_with_bitwise_augmented_assignment": 0,
+      "primary_outcomes_with_that_syntax": {}
+    }
+  ],
+  "ai_proposed_mechanism_groups": [
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "assigned": 60,
+      "pending": 0,
+      "demonstrated": 0,
+      "not_observed_within_reviewed_scope": 59,
+      "unassessable": 1
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "arm": "D",
+      "assigned": 60,
+      "pending": 0,
+      "demonstrated": 0,
+      "not_observed_within_reviewed_scope": 60,
+      "unassessable": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "A",
+      "assigned": 60,
+      "pending": 0,
+      "demonstrated": 0,
+      "not_observed_within_reviewed_scope": 60,
+      "unassessable": 0
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "assigned": 60,
+      "pending": 0,
+      "demonstrated": 0,
+      "not_observed_within_reviewed_scope": 59,
+      "unassessable": 1
+    }
+  ],
+  "assistant_draft_sha256": "f0890d1b04385f5a1fdd6120f54f7d44215f016acc0e1ec372edbf6eb214d66b",
+  "receiver_audit_sha256": "7106cc745a1ec848ea36633b0c184d9b69815e27de5a77ea965e7ae33b9a49fe",
+  "anonymous_packet_inventory_sha256": "17d098b3991ab8c5102630b17ef6b26ab0d8296bc28875c57a9aa40908341f74",
+  "native_candidate_execution": false,
+  "new_observer_runs": 0,
+  "new_transport_runs": 0,
+  "original_verdicts_modified": false,
+  "conclusion": "No four-link damaging shared-region mutation demonstrated by the assistant within reviewed scope; this is not a human-confirmed negative endpoint or evidence that D prevented errors.",
+  "review_index_sha256": "5827c4a7349c93500507fd76a723503de8b879c5164dfeb2a041602c5264e3a3",
+  "measurement_definition_sha256": "120cf153048f194aa2f6c85dd8523736b33b7adfd400a18108c643b72519b1aa"
+}
