@@ -50,7 +50,8 @@ def fidelity_checks(case, fidelity, observation=None):
     if not s['unassessed_options']:
         result['physics_settings'] = dict(
             physics=field_checks(s['checks'], ['run_mode', 'energy_mode', 'temperature_method',
-                                              'temperature_tolerance', 'temperature_multipole']),
+                                              'temperature_tolerance', 'temperature_multipole'] +
+                (['temperature_default'] if SPECS[case]['shape']=='confirmation' else [])),
             sampling=field_checks(s['checks'], ['particles', 'batches', 'inactive', 'generations_per_batch', 'seed']),
             source=field_checks(s['checks'], ['source_count', 'source_type', 'source_particle', 'source_space',
                                             'source_parameters', 'source_fissionable', 'source_rejection',

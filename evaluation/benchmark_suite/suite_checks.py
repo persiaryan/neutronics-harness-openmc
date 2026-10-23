@@ -1,6 +1,7 @@
 """Case-specific fidelity assessment from independently observed XML semantics."""
 from evaluation.scientific.records import close
 from evaluation.scientific import source_space, source_angle
+from evaluation.confirmation import cases as confirmation
 from evaluation.benchmark_suite.suite_cases import SPECS, probes, expected, check_materials
 
 
@@ -18,6 +19,8 @@ def settings_checks(case, root, sampling):
                                 ('temperature_method','nearest','nearest')]: check(name,s.findtext(name,default),target)
     for name,default in [('particles','0'),('batches','0'),('inactive','0'),('generations_per_batch','1'),('seed','1')]:
         check(name,float(s.findtext(name,default)),sampling[name])
+    if case in confirmation.SPECS:
+        check('temperature_default',float(s.findtext('temperature_default','293.6')),293.6)
     check('temperature_tolerance',float(s.findtext('temperature_tolerance','10')),1.)
     check('temperature_multipole',s.findtext('temperature_multipole','false') in ('true','1'),False)
     allowed={'run_mode','energy_mode','particles','batches','inactive','generations_per_batch','seed','source',
@@ -33,7 +36,7 @@ def settings_checks(case, root, sampling):
             spatial = source_space.observe(space)
             if len(source.findall('space')) != 1:
                 spatial['limitations'].append('missing_or_duplicate_spatial_description')
-            checks.extend(source_space.compare(spatial, spec['active']))
+            checks.extend(source_space.compare(spatial, spec.get('source_bounds',spec['active'])))
         else:
             check('source_space',kind=='point',True)
             check('source_parameters',None if space is None else numbers(space.findtext('parameters')),spec['point'])
@@ -55,12 +58,12 @@ def settings_checks(case, root, sampling):
     if len(meshes)==1:
         m=meshes[0];check('entropy_mesh_type',m.get('type','regular'),'regular')
         check('entropy_dimensions',numbers(m.findtext('dimension')),spec['mesh'])
-        check('entropy_lower_left',numbers(m.findtext('lower_left')),spec['active'][:3])
+        check('entropy_lower_left',numbers(m.findtext('lower_left')),spec.get('entropy_bounds',spec['active'])[:3])
         upper=numbers(m.findtext('upper_right'))
         if upper is None and m.find('width') is not None:
             low,width,dim=[numbers(m.findtext(t)) for t in ('lower_left','width','dimension')]
             if low and width and dim: upper=[a+b*c for a,b,c in zip(low,width,dim)]
-        check('entropy_upper_right',upper,spec['active'][3:])
+        check('entropy_upper_right',upper,spec.get('entropy_bounds',spec['active'])[3:])
     statepoints=numbers(s.findtext('state_point/batches'))
     check('final_statepoint',statepoints is None or sampling['batches'] in statepoints,True)
     return dict(status='discrepancy' if any(c['passed'] is False for c in checks) else
@@ -87,7 +90,8 @@ def assess(case, root, observation, sampling, *, boundary_result):
         count=counts.setdefault(group,dict(probes=0,failures=0));count['probes']+=1;count['failures']+=actual!=target
         invalid_geometry+=state in ('overlap','missing','gap','lost') or (state=='outside' and target!='outside')
         temperatures=[t for m,t in leaves if m is not None]
-        wrong=any(t is not None and not close(t,293.6) for t in temperatures)
+        target_temperature=confirmation.temperature(case,p) if case in confirmation.SPECS else 293.6
+        wrong=any(t is not None and not close(t,target_temperature) for t in temperatures)
         unknown=any(t is None for t in temperatures)
         thermal=not wrong and not unknown
         temp_failures+=wrong;temp_unresolved+=unknown

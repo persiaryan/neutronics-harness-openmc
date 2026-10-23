@@ -1,0 +1,177 @@
+{
+  "format": "public-confirmation-verdict-migration-v1",
+  "version": "confirmation-verdict-revision-v1-lost-particles",
+  "policy": "native-lost-particle-attribution-v1",
+  "status": "passed",
+  "counts": {
+    "protocol_success": 11,
+    "evaluated_failure": 1,
+    "unscored_incident": 0,
+    "pending": 228
+  },
+  "changed_ids": [
+    "012"
+  ],
+  "original_manifest_sha256": "7b3e8926ae45bfa515a836748a246577a676184c30b59bd05aac22eaa9a12624",
+  "original_progress_sha256": "08b73ebccb1ad138853d5526fd41489227fb8cabcbb2b0898250b9305b24eb92",
+  "original_evidence_files_verified": 3382,
+  "original_evidence_unchanged": true,
+  "new_model_calls": 0,
+  "new_native_transports": 0,
+  "campaign_resumed": false,
+  "portable_tests_passed": 486,
+  "migration_tests_passed": 14,
+  "migration_report_sha256": "eb887d27feef678daabcb7a2e42012d4a21f2ce8dcb2a61c202a14ec53f56bdb",
+  "verification_log_sha256": "2700165975f68815c97d605c56eca8e90d497ade1264b6282401d13fee99ac27",
+  "test_log_sha256": "2888e55211b295e609b5ac8a85a77b608ea4c5c67de911cd1f615e206a20aa0d",
+  "implementation": {
+    "evaluation/candidates/verdict_migration.py": "be098a05b18b16c3172fb9b3eeb1f7a6c7fe702ce26f11f9e0fd2c05c8438882",
+    "experiments/migrate_confirmation_verdicts.py": "6558074da97d3a43a87d527b8098901b9882649d679bfd246891f712c2f5c21c"
+  },
+  "rows": [
+    {
+      "id": "001",
+      "case": "staggered_seven_pin_cluster",
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "2ee96881ebf6eb9d3dbf3445c7fec9357d1df799c1760b7f88757fbbf790f597"
+    },
+    {
+      "id": "002",
+      "case": "dual_temperature_pin_pair",
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "828d7ec4516040c101a5859942df35efa06f65d2ad1d30373880e756754af103"
+    },
+    {
+      "id": "003",
+      "case": "offset_plate_bank",
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "276f27aaf80247f46840e85e88ecb0e9f24c198db42ef245d0fa2527d64bc16e"
+    },
+    {
+      "id": "004",
+      "case": "restricted_source_nine_pin",
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "1ab550d234999aebb54ebb8aa64ee472fd8e564f8335e128960692b5cdea74be"
+    },
+    {
+      "id": "005",
+      "case": "restricted_source_nine_pin",
+      "model": "gpt-5.6-sol",
+      "arm": "D",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "924da2c44aa76db1d1cfbf273c58c09cfd97bd3a9eec365ec8bdf320a5aa51f1"
+    },
+    {
+      "id": "006",
+      "case": "separated_twin_bundles",
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "20f44ad233e13e6babda311d26b2245cec90bbb399751eab2ca226202026c47a"
+    },
+    {
+      "id": "007",
+      "case": "mixed_boundary_fuel_slab",
+      "model": "gpt-5.6-sol",
+      "arm": "A",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "1415f8bea00e8454716ff09fab54e3a090e94889707f352230b7e4efd9ff1d21"
+    },
+    {
+      "id": "008",
+      "case": "stepped_axial_mixture",
+      "model": "gpt-5.6-luna",
+      "arm": "D",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "25b75a18a2ebe17087f0946ce00d75b7746f419330d1401775bdf3b795ef0c3e"
+    },
+    {
+      "id": "009",
+      "case": "three_annular_fuel_channels",
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "b427a31f6ef7bc1c1b3975c38808ca78696f8a2878e5e082cba2ae065a15e899"
+    },
+    {
+      "id": "010",
+      "case": "separated_twin_bundles",
+      "model": "gpt-5.6-luna",
+      "arm": "D",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "2e80a43980697e2a5097e77c0f96e14e63d4bee47599d5506407105c14e31493"
+    },
+    {
+      "id": "011",
+      "case": "cross_shaped_mixture",
+      "model": "gpt-5.6-sol",
+      "arm": "A",
+      "original_evidence_status": "coherent",
+      "original_score": 100.0,
+      "revised_score": 100.0,
+      "strict_correct": true,
+      "decision": "unchanged_after_reconstruction",
+      "revision_sha256": "80da490ff64f1ebaeb0c0ebcb6cefb1e77dbf055246f97db44a20de369059de9"
+    },
+    {
+      "id": "012",
+      "case": "cylindrical_void_sleeve",
+      "model": "gpt-5.6-luna",
+      "arm": "A",
+      "original_evidence_status": "insufficient",
+      "original_score": null,
+      "revised_score": 0.0,
+      "strict_correct": false,
+      "decision": "qualified_lost_particle_model_failure",
+      "revision_sha256": "5952bc4973ed735083579624e1de016c85724f86bbe07fc8d1c9c4850e39ff58"
+    }
+  ]
+}

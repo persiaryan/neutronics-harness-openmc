@@ -210,6 +210,53 @@ neither scientific proof nor protection against an operator rewriting all record
 Docker, the host controller, OS, images and data provider remain trusted. Candidate
 containers receive no reference mount, credentials or host Docker socket.
 
+## Preloaded region-ownership condition D
+
+`guided_construction_region_ownership` adds the complete allowlisted
+`openmc-region-ownership-v1` procedure to A's guided authoring prompt. It uses
+A's tools, request profiles and time allowance; the independent evaluator and
+scientific scoring do not change. This tests provided procedural guidance,
+not native skill discovery. A/B/C/D retain the runtime's catalog/memory
+exclusions. Separate condition E (`guided_construction_region_skill_selective`)
+uses A's exact task prompt and one allowlisted native skill catalog. The same
+procedure is staged in the ephemeral container; only metadata enters the initial
+request. The agent can read its body with existing coding tools. Snapshots,
+staging receipt, first context and reviewed per-arm request setups bind this
+assistance. No reference or evaluator code enters the builder.
+
+Offline real-CLI controls with scripted responses verify discovery, a no-read
+path and exact full-body delivery after a read. Automatic LLM selection,
+application and efficacy remain untested. A conservative operator trace records
+exposure without scientific credit; unsupported read variants remain unresolved.
+An opt-in `region-ownership-ade-v1` prepares 54 assignments using separately
+reviewed A/D/E setups, without dispatching. It leaves the previous comparisons
+unchanged. See [E and its limits](docs/experiments/region-skill-selective-v1.md).
+
+Preparation and authoring retain the procedure bytes and identity. Execution
+checks the prepared binding before dispatch, and retained-submission review
+checks the snapshot, reconstructed prompt and first request. The procedure is
+not silently inherited by A/B/C. Exact historical prompt hashes are portable
+regression controls. A separately selected `region-ownership-ad-v1` campaign
+prepares 36 A/D development assignments; it does not run during preparation.
+Small real-OpenMC region controls verify the programming mechanism without
+transport. Neither they nor portable integration tests demonstrate skill efficacy.
+See [scope, commands and evidence](docs/experiments/region-ownership-skill-v1.md).
+
+The explicit `experiments.region_ad` workflow freezes the scientific protocol,
+procedure and 36-slot manifest, verifies local runtime/data/private-reference
+identities, and requires separate native and live transmission controls before
+launch. Complete independent protocol success remains primary; hash-bound manual
+annotations of damaging shared-region mutations are secondary. Read-only analysis
+preserves incidents, pending assignments and missing evidence. This leaves the
+evaluator/rubric unchanged and scientific approval pending. See the
+[A/D pilot protocol](docs/experiments/region-ad-pilot-v1.md).
+The [completed development pilot](docs/experiments/region-ad-pilot-result-v1.md)
+retains all 36 assignments, with 30 complete successes, six evaluated failures
+and no infrastructure incidents. It provides descriptive A/D evidence, without
+confirming human mechanism labels, held-out generalization or E's spontaneous
+skill selection.
+
+
 ## Public/private separation
 
 The optional local [operator dashboard](dashboard/README.md) reads retained run
@@ -269,3 +316,29 @@ as a hidden grading answer for an agent study.
 The private historical test count is not the public test count. Passing local
 doubles does not imply native transport, calibrated uncertainty, independent
 reference qualification or harness efficacy.
+
+## Confirmation task route
+
+The explicit `factory-assessment-confirmation-v1` route extends task-specific
+expectations to the twelve new public specifications while reusing isolated
+factory export, XML-only workers, native transport and retained-evidence review.
+It adds location-dependent temperature expectations, separate source and entropy
+bounds and boundary-driven leakage checks. The historical six-task reference
+catalog and previous assessment identities retain their meaning. The revised
+cylindrical-void task has a box exterior; curved exterior observation remains
+outside the qualified scope. Reference constructors and sealed answers remain
+operator-private. See [qualification and launch contracts](docs/experiments/region-confirmation-implementation-v1.md).
+Scientific criteria remain diagnostic and scientific approval is not inferred
+from portable tests, native execution or sealed package hashes.
+
+The current candidate suite v3 includes an explicitly adapted public
+INDC-USA-107 problem-1 reflective slice. Upstream code/assets are pinned; its
+metal and water recipes are independently checked. The original v2 manifest
+and failed perforated-block evidence remain historical. Prior reference
+admission uses exact generation identities and unchanged finite physical
+contracts; it does not silently rebind arbitrary prior evaluator versions.
+
+The explicit [lost-particle qualification](docs/experiments/lost-particle-qualification-v1.md)
+adds a separately invoked, receipt-verified native failure attribution. Historical
+run/verify defaults, reports and scores remain unchanged. Activation in a resumed
+campaign requires a versioned migration and uniform review of consumed trials.

@@ -277,6 +277,8 @@ class BuilderDouble(unittest.TestCase):
                      if args[2] == launcher.IMAGE else {})
             return json.dumps([{"Id": launcher.IMAGE, "Config": {"Labels": label}}])
         if args[0] == "exec":
+            if launcher.region_skill.STAGE in args:
+                return json.dumps(launcher.region_skill.staging_receipt(launcher.region_skill.material()[0]))
             enabled = any(c[:3] == ('image', 'inspect', launcher.IMAGE) for c in self.calls)
             return json.dumps({'openmc_version': '0.15.3' if enabled else None,
                                'openmc_init_sha256': 'fixture-hash' if enabled else None,

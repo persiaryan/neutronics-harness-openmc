@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "assigned_cell_observes_mutation": true,
+    "derived_intersection_has_requested_membership": true,
+    "initial_slab_membership": true,
+    "intersection_alias_mutates_base": true,
+    "mutated_complement_includes_original_interior": true,
+    "nested_child_initial_membership": true,
+    "new_expression_still_shares_children": true,
+    "new_intersection_preserves_base": true,
+    "new_union_preserves_base": true,
+    "preserved_complement_excludes_interior": true,
+    "union_alias_mutates_base": true,
+    "unshared_inplace_can_be_intentional": true
+  },
+  "format": "openmc-region-ownership-controls-v1",
+  "neutron_transport": "not_run",
+  "nuclear_data": "not_used",
+  "openmc": "0.15.3",
+  "skill_efficacy": "not_tested",
+  "image_id": "sha256:8dfbafd6160d9833111ac51d0b066126066f1690d3c315261583baf5f12b81a5",
+  "source_sha256": "aa347df79b916f0cfc8e3415ec75f2b2fb0c9e7d9a7e784e9265977190a65e6b",
+  "exit_code": 0,
+  "network": "none",
+  "host_mounts": []
+}

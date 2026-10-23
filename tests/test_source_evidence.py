@@ -76,7 +76,7 @@ class SourceEvidence(unittest.TestCase):
         prompt = verify.build_prompt(self.case, contract=FACTORY).encode()
         route['prompt_sha256'] = digest(prompt)
         specification = verify.boundaries.requirements(self.case)
-        assignment = dict(case=self.case, rubric=scoring.identity(), delivery_contract=FACTORY,
+        assignment = dict(case=self.case, case_version=1, rubric=scoring.identity(), delivery_contract=FACTORY,
             assessment_route=route, budgets=PROFILE['budgets'], sampling=sampling,
             scientific_boundary=dict(observer=verify.boundaries.VERSION,
                 comparison=verify.boundaries.COMPARISON,

@@ -77,6 +77,85 @@ See [the architecture walkthrough](DESIGN.md),
 [trajectory projection](builder/TRAJECTORY.md) and
 [scoring](evaluation/benchmark_suite/SCORING.md).
 
+## Preloaded region-ownership procedure (D)
+
+Condition D adds one targeted procedure, maintained in a SKILL.md file and
+preloaded in full, to A's guided construction, with the same tools and budgets.
+It addresses shared mutable OpenMC region construction without adding a detector
+or scientific scoring rule. The 36-assignment A/D development pilot completed
+on 2026-10-17: Luna A 6/9 versus D 7/9, Sol A 8/9 versus D 9/9, with no
+infrastructure incidents. These are descriptive reused-task results; general
+efficacy and confirmed mechanism effects remain unestablished.
+See the [complete results and evidence limits](docs/experiments/region-ad-pilot-result-v1.md).
+A separate condition **E** now exposes native skill metadata and lets the builder
+choose whether to read the body. Offline real-CLI controls use scripted responses;
+spontaneous LLM selection and efficacy remain **untested**.
+See [E, its evidence limits and A/D/E preparation](docs/experiments/region-skill-selective-v1.md).
+See [the skill, OpenMC mechanism controls and offline A/D preparation](docs/experiments/region-ownership-skill-v1.md).
+A/B/C prompts and the historical campaign outcomes retain their original meaning.
+
+A separate [twelve-task candidate suite](docs/experiments/region-confirmation-tasks-v1.md)
+now provides new public specifications and offline prompt preparation. Reference
+qualification and end-to-end validation use separately retained evidence. The
+first 240-assignment exploratory A/D campaign stopped after eleven successes
+and one unscored native termination; see the [lost-particle qualification](docs/experiments/lost-particle-qualification-v1.md). The [new reference/evaluation workflow](docs/experiments/region-confirmation-implementation-v1.md)
+implements separate qualification, readiness checks and an explicitly budgeted launcher.
+The [versioned verdict revision](docs/experiments/verdict-migration-v1.md) reconstructs
+the twelve consumed trials as eleven successes and one model failure; the original
+reports remain retained. The [explicit continuation controller](docs/experiments/confirmation-continuation-v1.md)
+resumes the remaining assignments under the same revised verdict policy.
+The [restart at 031](docs/experiments/confirmation-resume-031-v1.md) retains
+the subsequent stream incident at 030 as consumed and unscored.
+The [prepared continuation at 040](docs/experiments/confirmation-resume-040-v1.md)
+preserves the coherent unscored boundary-capability limit at 039; live launch is separate.
+The [prepared continuation at 051](docs/experiments/confirmation-resume-051-v1.md)
+retains the matching unscored outcome at 050 and binds the remaining 190 assignments.
+The [explicit continuation at 067](docs/experiments/confirmation-resume-067-v1.md)
+preserves 066 as an unscored source-constraint capability limit and binds the
+remaining 174 assignments without changing the evaluator or replaying any slot.
+The [explicit continuation at 118](docs/experiments/confirmation-resume-118-v1.md)
+preserves the unscored domain-constraint outcome at 117 and binds the remaining
+123 assignments under the same evaluation and incident-stop policy.
+The [explicit continuation at 119](docs/experiments/confirmation-resume-119-v1.md)
+preserves the unscored boundary-capability outcome at 118 and binds the remaining
+122 assignments without changing the frozen experiment.
+The [explicit continuation at 120](docs/experiments/confirmation-resume-120-v1.md)
+retains the matching unscored boundary outcome at 119 and binds the remaining
+121 assignments under the same frozen protocol and incident-stop policy.
+The [frozen INDC-USA-107 replacement](docs/experiments/indc107-replacement-v1.md)
+replaces the inconclusive perforated-block task in the current v3 suite; original
+statements and operator evidence remain retained.
+The [explicit continuation at 121](docs/experiments/confirmation-resume-121-v1.md)
+preserves 120 consumed assignments and its latest boundary incident unscored,
+records the exact effort difference and authorizes only the remaining 120 slots.
+
+The [continuation at 133](docs/experiments/confirmation-resume-133-v1.md) introduces
+the explicitly authorized [deferred anomaly policy v1](docs/experiments/confirmation-deferred-anomalies-v1.md).
+Coherent completed assessments with unresolved scientific checks remain unscored
+and allow collection to continue; execution and evidence-integrity incidents still stop.
+
+The [final continuation at 237](docs/experiments/confirmation-resume-237-v1.md)
+preserves the failed provider/relay slot 236 unscored and binds only the last four
+assignments under the unchanged deferred-diagnosis policy.
+
+The [frozen A/D pilot workflow](docs/experiments/region-ad-pilot-v1.md) adds a
+36-slot manifest, explicit mechanism annotations and technical qualification
+gates before any separately budgeted live launch.
+
+## Completed 240-assignment A/D comparison
+
+The provided-procedure comparison completed on 2026-10-22: **202 complete protocol
+successes, 20 evaluated failures and 18 unscored outcomes**, with all 240 original
+assignments consumed. A and D each record 101/120 successes. Within setups,
+Luna records A 44/60 versus D 50/60, while Sol records A 57/60 versus D 51/60.
+This mixed descriptive result establishes no general benefit or equivalence.
+
+See the [frozen closeout, task-level data and measurement limits](docs/experiments/confirmation-240-closeout-v1.md).
+Thirteen unscored outcomes concern the wrapped eight-pin task; canonical
+mechanism annotations and scientific review remain pending. D preloads the
+procedure and does not test spontaneous skill selection. Original outcomes and
+all-assigned denominators remain unchanged.
+
 ## Experimental results
 
 **Campaign 2 — October 2026 Request-16 campaign, completed 2026-10-03.**

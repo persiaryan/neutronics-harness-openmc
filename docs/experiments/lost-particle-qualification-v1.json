@@ -1,0 +1,41 @@
+{
+  "format": "public-lost-particle-qualification-v1",
+  "date": "2026-10-18",
+  "policy": "native-lost-particle-attribution-v1",
+  "status": "passed",
+  "native_controls": 2,
+  "native_controls_passed": 2,
+  "provider_calls": 0,
+  "automatic_retries": 0,
+  "portable_tests": 472,
+  "portable_tests_status": "passed",
+  "original_evidence_files_verified": 127,
+  "original_evidence_unchanged": true,
+  "retained_trial_attribution": "model",
+  "campaign_score_assigned": false,
+  "campaign_resumed": false,
+  "original_campaign_counts": {
+    "finished": 11,
+    "incident": 1,
+    "pending": 228
+  },
+  "legacy_default_unchanged": true,
+  "implementation": {
+    "evaluation/candidates/lost_particles.py": "af4b29490cb46936c549bc6958f1677932564ded71cd2019a081a2f88b110895",
+    "evaluation/candidates/phase_evidence.py": "98abbf29652c9a2c1eb58f24edb18b67a33ffdc336aadc3b35ae727de18b77d4",
+    "experiments/qualify_lost_particles.py": "dc90dc8ed9e67d5ce40e898e13b4b67f4127d4412c8c4205884fe640fd9b2b46",
+    "tests/test_lost_particles.py": "4311bb299da90a2f6724d6afc35c1ad4f4eeb1540971e53d2b296d102847c9bc"
+  },
+  "evidence_sha256": {
+    "report.json": "3834e0cc79d455489e68b1811b3aef0c79c9398491ba281fdd2d2c0daa1fce54",
+    "original-evidence-sha256.json": "debdbb6098abc353b05324790e54ba9676322d73268cc01952d9c23e138fad37",
+    "geometry-witness.json": "ccc33f5f2fc72a3a72b6d181ad17cf6001e72528589f708067a1daae438b96f6",
+    "final-reconstruction.json": "bad2dbe2377e7d2633e9b0b2e9881d380228c212b23573a72703400022e5febf"
+  },
+  "tests_log_sha256": "7e259dd2f08383b80af441954753e980fce33cd0901c8de496f72def8deef20c",
+  "limits": [
+    "Qualification of the pinned serial runtime only.",
+    "No exact neutron trajectory reconstruction or mechanism attribution.",
+    "Historical scores and campaign state are not migrated."
+  ]
+}

@@ -6,7 +6,7 @@ import tempfile
 import uuid
 from pathlib import Path
 from observation_contracts import describe_configuration
-from builder import run as agent
+from builder import run as agent, region_skill
 from builder.submission import submission
 from builder.route import CONDITIONS, GUIDED_CONDITIONS, BOUNDARY_CONDITIONS, SMOKE_CONDITIONS, condition_prompt, request_limit, EXTENDED_REQUEST_BUDGET
 from builder.trajectory import summarize as trajectory
@@ -15,7 +15,7 @@ from evaluator import run as exporter
 from evaluator.contracts import FACTORY
 from evaluator.profiles import PROFILE, FACTORY_PROFILE, BOUNDARY_PROTOCOL
 from evaluation.scientific.boundary_scope import task_matrix
-from prompts.prepare import prepare as prepare_prompt, CASE_FILES
+from prompts.prepare import prepare as prepare_prompt, CASE_FILES, all_cases
 
 BUDGETS = dict(model_requests=8, authoring_seconds=600, boundary_calls=2, boundary_seconds=120,
                export_seconds=60, automatic_retries=0)
@@ -47,10 +47,16 @@ def atomic_json(path, value):
 def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_cell','moderated_cylinder'),smoke_data_index=None,
             request_budget=None):
     declared = budgets(assistance, request_budget)
-    if assistance not in CONDITIONS or not cases or len(set(cases)) != len(cases) or set(cases)-set(CASE_FILES):
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    if set(cases)&set(TASKS) and not set(cases)<=set(TASKS):
+        raise ValueError('Prepare confirmation and historical tasks separately')
+    protocol = CONFIRMATION_PROTOCOL if set(cases)<=set(TASKS) else BOUNDARY_PROTOCOL
+    if assistance not in CONDITIONS or not cases or len(set(cases)) != len(cases) or set(cases)-set(all_cases()):
         raise ValueError('Invalid condition or task inventory')
     if (assistance in SMOKE_CONDITIONS)!=(smoke_data_index is not None):
         raise ValueError('Declare smoke data only with the explicit smoke condition')
+    skill = region_skill.material(assistance) if assistance in region_skill.ENABLED else None
     smoke_config=None
     if smoke_data_index is not None:
         from builder.smoke_tool import identity
@@ -61,7 +67,7 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
     plan = dict(format='research-usability-pilot-v2', status='prepared_not_dispatched', model=model,
         batch_id=str(uuid.uuid4()), execution_ids={case:str(uuid.uuid4()) for case in cases},
         adapter='codex_subscription', assistance=assistance, cases=list(cases), prompts=prompts,
-        delivery_contract=FACTORY, execution_profile=PROFILE, evaluator_protocol=BOUNDARY_PROTOCOL,
+        delivery_contract=FACTORY, execution_profile=PROFILE, evaluator_protocol=protocol,
         budgets=declared, maximum_model_requests=len(cases)*declared['model_requests'],
         strict_tool_free_baseline=False, formal_efficacy_study=False, transport=False,
         resource_policy='Same authoring wall/request budgets. Inspection uses this wall budget plus its own call cap. No retries.',
@@ -69,6 +75,15 @@ def prepare(output, *, assistance, model='gpt-5.6-luna', cases=('reflective_pin_
     if assistance in GUIDED_CONDITIONS:
         plan['tool_use_policy'] = ('Guided working export; boundary inspection additionally instructed only in '
                                    'guided_boundaries. Workflow is not guaranteed or scientifically scored.')
+    if skill is not None:
+        raw, identity = skill
+        (output / region_skill.SNAPSHOT).write_bytes(raw)
+        if assistance == region_skill.SELECTIVE:
+            (output / region_skill.CATALOG_SNAPSHOT).write_text(region_skill.catalog(raw))
+        plan['region_ownership_skill'] = identity
+        plan['tool_use_policy'] = ('Guided working export plus an optional native skill catalog; body loading is selected by the agent, never scored.'
+            if assistance == region_skill.SELECTIVE else
+            'Guided working export plus a preloaded region-ownership procedure; no extra tools or scientific credit.')
     if smoke_config:
         plan.update(smoke=smoke_config,authoring_native_transport=True,
             resource_policy='Same 8-request/600-second session, including boundary and smoke calls. Separate declared per-tool caps. No automatic retries.',
@@ -103,11 +118,17 @@ def execute(output, *, responder=None, request_setup=None):
         raise ValueError('Prepared total request budget changed')
     if plan['status'] != 'prepared_not_dispatched' or plan['budgets'] != declared or plan['execution_profile'] != PROFILE:
         raise ValueError('Pilot plan/budgets changed')
-    if plan['delivery_contract'] != FACTORY or plan['evaluator_protocol'] != BOUNDARY_PROTOCOL or plan['transport'] is not False:
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    protocol = CONFIRMATION_PROTOCOL if set(plan['cases'])<=set(TASKS) else BOUNDARY_PROTOCOL
+    if plan['delivery_contract'] != FACTORY or plan['evaluator_protocol'] != protocol or plan['transport'] is not False:
         raise ValueError('Unexpected pilot contract/protocol')
     if plan['assistance'] not in CONDITIONS:
         raise ValueError('Unknown assistance condition')
+    region_skill.verify(output, plan, plan['assistance'])
     smoke_kwargs={}
+    if plan['assistance'] in region_skill.ENABLED:
+        smoke_kwargs['expected_region_skill'] = plan['region_ownership_skill']
     if plan['assistance'] in SMOKE_CONDITIONS:
         from builder.smoke_tool import identity
         config=plan['smoke'];index=Path(config['data_index'])
@@ -262,7 +283,7 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--assistance', choices=tuple(CONDITIONS), required=True)
     p.add_argument('--model', default='gpt-5.6-luna')
-    p.add_argument('--cases', nargs='+', choices=sorted(CASE_FILES), default=['reflective_pin_cell','moderated_cylinder'])
+    p.add_argument('--cases', nargs='+', choices=sorted(all_cases()), default=['reflective_pin_cell','moderated_cylinder'])
     p.add_argument('--smoke-data-index',type=Path)
     p.add_argument('--request-budget',choices=(EXTENDED_REQUEST_BUDGET,))
     p = sub.add_parser('execute')

@@ -6,6 +6,7 @@ import math
 import random
 
 from evaluation.scientific.records import close
+from evaluation.confirmation import cases as confirmation
 
 SPECS = {
     'reflective_pin_cell': dict(shape='pin', active=[-.63,-.63,-.63,.63,.63,.63],
@@ -29,7 +30,11 @@ SPECS = {
 }
 
 
+SPECS.update(confirmation.SPECS)
+
+
 def materials(case):
+    if case in confirmation.SPECS:return confirmation.materials(case)
     water = dict(density=.997, atoms={'H1':2.,'O16':1.}, sab=[['c_H_in_H2O',1.]])
     if case == 'moderated_cylinder':
         return {'mixture':dict(density=3., atoms={'U235':.04,'U238':.96,'O16':12.,'H1':20.},
@@ -49,6 +54,7 @@ def in_box(point, bounds):
 
 
 def expected(case, point):
+    if case in confirmation.SPECS:return confirmation.expected(case,point)
     s = SPECS[case]; x,y,z = point
     if not in_box(point,s['outer']): return 'outside'
     if s['shape'] == 'cylinder':
@@ -69,6 +75,7 @@ def expected(case, point):
 
 
 def probes(case):
+    if case in confirmation.SPECS:return confirmation.probes(case)
     s=SPECS[case]; points=[]; groups=[]
     def add(group,p): points.append([float(v) for v in p]);groups.append(group)
     if s['shape']=='cylinder':

@@ -6,11 +6,16 @@ from pathlib import Path
 from evaluator.contracts import FACTORY
 from evaluator.profiles import assessment_route
 from prompts.prepare import build_prompt
+from builder import region_skill
 
 
 def prepare(case, contract, profile, protocol, prepared_input):
     if contract != FACTORY or case is None or prepared_input is None:
         raise ValueError('Factory route requires a public case and prepared input')
+    from prompts.confirmation import TASKS
+    from evaluator.profiles import CONFIRMATION_PROTOCOL
+    if (case in TASKS) != (protocol == CONFIRMATION_PROTOCOL):
+        raise ValueError('Select the confirmation protocol explicitly for confirmation tasks')
     route = assessment_route(contract, profile, protocol)
     directory = Path(prepared_input)
     if directory.is_symlink() or any((directory / n).is_symlink() for n in ('prompt.txt', 'manifest.json', 'messages.json')):
@@ -43,10 +48,12 @@ CONDITIONS = {
     'guided_construction': 'generic_coding_guided_construction_v1',
     'guided_boundaries': 'generic_coding_guided_boundaries_v3',
     'guided_boundaries_smoke': 'generic_coding_guided_boundaries_smoke_v1',
+    region_skill.ASSISTANCE: 'generic_coding_guided_construction_region_ownership_v1',
+    region_skill.SELECTIVE: 'generic_coding_guided_construction_region_skill_selective_v1',
 }
 SMOKE_CONDITIONS = frozenset({'guided_boundaries_smoke'})
 BOUNDARY_CONDITIONS = frozenset({'boundaries', 'guided_boundaries'}) | SMOKE_CONDITIONS
-GUIDED_CONDITIONS = frozenset({'guided_construction', 'guided_boundaries'}) | SMOKE_CONDITIONS
+GUIDED_CONDITIONS = frozenset({'guided_construction', 'guided_boundaries', *region_skill.ENABLED}) | SMOKE_CONDITIONS
 CONSTRUCTION_POLICY = Path(__file__).with_name('guided_construction.md')
 GUIDED_POLICY = Path(__file__).with_name('guided_authoring.md')
 
@@ -92,4 +99,7 @@ def condition_prompt(prompt, assistance, *, request_budget=None):
         # Change only existing budget declarations in guidance, never public physics.
         guidance = result[len(prompt):].replace('eight-request', 'sixteen-request').replace('8-request', '16-request')
         result = prompt + guidance
+    if assistance == region_skill.ASSISTANCE:
+        raw, _ = region_skill.material()
+        result += region_skill.HEADER + raw.decode('utf-8')
     return result

@@ -156,16 +156,21 @@ def export_outcome(folder, image, index, source_hash, *, runtime=None):
     return dict(cause='model' if reason else None, reason=reason)
 
 
-def transport_failure(directory, goal, index, source_hash):
+def transport_failure(directory, goal, index, source_hash, *, allow_lost_particles=False):
     """Verify existing native model-rejection receipts; no candidate Python here.
 
     Other terminations remain insufficient for an attributed model failure. This
-    preserves the existing native classification policy, without adding physics.
+    preserves the existing native classification policy by default. The explicit
+    lost-particle qualification switch is not used by historical assessment review.
     """
     from evaluation.candidates.run import native_model_failure
     folder = directory / 'transport'
     value = receipts.container_phase(folder, goal['protocol']['transport_image'], index, source_hash, transport=True)
-    if not native_model_failure(value, folder):
+    recognized = native_model_failure(value, folder)
+    if allow_lost_particles:
+        from evaluation.candidates.lost_particles import diagnostic
+        recognized = recognized or diagnostic(value, folder)
+    if not recognized:
         raise InsufficientEvidence('Native termination has no established model-failure attribution')
     xml, identity = receipts.accepted_export(directory / 'export')
     provenance = receipts.read(folder / 'export-provenance.json')

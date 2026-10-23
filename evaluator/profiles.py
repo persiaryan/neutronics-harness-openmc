@@ -4,6 +4,7 @@ from evaluator.contracts import FACTORY
 
 FACTORY_PROFILE = 'factory-serial-v1'
 BOUNDARY_PROTOCOL = 'factory-assessment-boundaries-v4-temperature-source-v1'
+CONFIRMATION_PROTOCOL = 'factory-assessment-confirmation-v1'
 PROFILE = dict(id=FACTORY_PROFILE, delivery_contract=FACTORY,
     budgets=dict(export=60, inspection=120, transport=1800, automatic_retries=0),
     observer_completion_grace=10, export_prerequisite_seconds=30, retrieval_seconds=30,
@@ -26,6 +27,6 @@ def execution_profile(identifier, contract, *, runtime=None):
 
 def assessment_route(contract, profile, protocol, *, runtime=None):
     value = execution_profile(profile, contract, runtime=runtime)
-    if protocol != BOUNDARY_PROTOCOL:
+    if protocol not in (BOUNDARY_PROTOCOL, CONFIRMATION_PROTOCOL):
         raise ValueError('Unsupported evaluator protocol for factory execution')
     return dict(delivery_contract=contract, execution_profile=value, evaluator_protocol=protocol)
