@@ -1,0 +1,88 @@
+{
+  "format": "confirmation-next-evaluator-control-matrix-v1",
+  "status": "specified_not_qualified",
+  "active_campaign_route_changed": false,
+  "original_outcomes_reassessed": false,
+  "controls": [
+    {
+      "id": "boundary-equivalent-water",
+      "family": "boundary",
+      "positive": "Compact and partitioned correct water regions with independent set/face proofs",
+      "negative": "Deliberately missing material/domain slab",
+      "required": "Correct supported representations agree; demonstrated missing domain fails",
+      "status": "not_run"
+    },
+    {
+      "id": "boundary-reordered-identities",
+      "family": "boundary",
+      "positive": "Cell/surface ID and Boolean term reordering with same physical domain",
+      "negative": "Changed physical face location with preserved IDs",
+      "required": "Identifier changes preserve verdict; physical mismatch remains visible",
+      "status": "not_run"
+    },
+    {
+      "id": "boundary-nested-regions",
+      "family": "boundary",
+      "positive": "Equivalent nested CSG with bounded coverage",
+      "negative": "A gap or overlap with an independent witness",
+      "required": "No equivalence claim from finite probes alone; unsupported proof stays unknown",
+      "status": "not_run"
+    },
+    {
+      "id": "boundary-unbounded-root",
+      "family": "boundary",
+      "positive": "Explicit finite axial slab",
+      "negative": "Missing lower plane, with outside-domain witness",
+      "required": "Qualified demonstration of domain mismatch; no inherited success from native completion",
+      "status": "not_run"
+    },
+    {
+      "id": "boundary-coincident-same",
+      "family": "boundary",
+      "positive": "Coincident participating faces with identical effective behavior",
+      "negative": "Conflicting active behavior with no qualified resolution",
+      "required": "Conformity only when effective behavior is established; unresolved conflict stays unknown",
+      "status": "not_run"
+    },
+    {
+      "id": "source-cell-domain",
+      "family": "source",
+      "positive": "Supported domain constraints that sample the requested fissionable region",
+      "negative": "Demonstrated restriction to the wrong physical domain",
+      "required": "Follow sampling semantics and effective geometry, not literal cell IDs",
+      "status": "not_run"
+    },
+    {
+      "id": "source-renumbered-domain",
+      "family": "source",
+      "positive": "Equivalent supported cell/material domain after renumbering",
+      "negative": "Same numeric ID assigned to wrong physical region",
+      "required": "Physical identity is checked; nominal ID coincidence is insufficient",
+      "status": "not_run"
+    },
+    {
+      "id": "source-unknown-with-mismatch",
+      "family": "source",
+      "positive": "All supported source options match",
+      "negative": "Known fissionability mismatch beside an unsupported option",
+      "required": "Preserve detailed false assertion and explicit unknown; never award conformity by omission",
+      "status": "not_run"
+    },
+    {
+      "id": "retained-evidence-negative",
+      "family": "integrity",
+      "positive": "Complete matching worker/container/cleanup and input bindings",
+      "negative": "Missing, changed or contradictory receipts",
+      "required": "Reject scientific credit and automatic resumption where evidence is unresolved",
+      "status": "not_run"
+    },
+    {
+      "id": "frozen-route-regression",
+      "family": "integrity",
+      "positive": "Original route and outcomes stay byte-bound",
+      "negative": "Attempted relabeling or overwrite of an original verdict",
+      "required": "Separate new version/artifacts; original 202/20/18 remains immutable",
+      "status": "not_run"
+    }
+  ]
+}

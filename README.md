@@ -152,8 +152,9 @@ This mixed descriptive result establishes no general benefit or equivalence.
 
 See the [frozen closeout, task-level data and measurement limits](docs/experiments/confirmation-240-closeout-v1.md).
 Thirteen unscored outcomes concern the wrapped eight-pin task; canonical
-mechanism annotations and scientific review remain pending. D preloads the
-procedure and does not test spontaneous skill selection. Original outcomes and
+mechanism annotations and scientific review remain pending. The separate
+[assistant source pre-review and masked human-review workflow](docs/experiments/confirmation-mechanism-preliminary-v1.md)
+retain that distinction and the original results. D preloads the procedure and does not test spontaneous skill selection. Original outcomes and
 all-assigned denominators remain unchanged.
 
 ## Experimental results
