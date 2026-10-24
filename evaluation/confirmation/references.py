@@ -37,6 +37,7 @@ def identity():
         'evaluation/scientific/source_space.py','evaluation/scientific/source_angle.py',
         'evaluation/candidates/representation.py','evaluation/scientific/source_domains.py',
         'evaluation/scientific/source_domains_worker_v1.py','evaluation/scientific/boundary_worker_v3.py',
+        'evaluation/representation/references.py','experiments/confirmation_reference_review.py',
         'evaluator/profiles.py','evaluator/transport.py','evaluator/runtime/transport_worker.py')]
     return {str(p.relative_to(ROOT)):digest(p.read_bytes()) for p in sorted(set(paths))}
 
