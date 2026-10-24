@@ -319,6 +319,14 @@ reference qualification or harness efficacy.
 
 ## Confirmation task route
 
+The opt-in `factory-assessment-confirmation-v2-representation-v1` route selects
+boundary observer v3 and a separately receipted flat-cell source-domain observer.
+It adds conservative halfspace-bound propagation, accepted-support comparison,
+and explicit conformance/coverage conclusions in v6 reports. The default v1 route
+and weighted score rules retain their semantics. Revised implementation identities
+require newly qualified reference packages; old receipts use the original verifier.
+See [scope, controls and evidence limits](docs/experiments/representation-evaluator-v1.md).
+
 The explicit `factory-assessment-confirmation-v1` route extends task-specific
 expectations to the twelve new public specifications while reusing isolated
 factory export, XML-only workers, native transport and retained-evidence review.

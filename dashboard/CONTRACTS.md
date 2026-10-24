@@ -57,6 +57,9 @@ Supported inputs:
 
 - `private-candidate-diagnostic-v5`: current reports with an embedded definition,
   or historical reports matching the frozen legacy rubric identity.
+- `private-candidate-diagnostic-v6`: prospective representation reports, requiring
+  their embedded definition and a well-formed conformance/coverage conclusion.
+  A trusted review must bind both the complete report and that conclusion.
 - `evaluation-report-v1`: a future presentation contract exercised by synthetic
   tests. It requires an embedded `evaluation-definition-v1`, a `score` object
   (`value`, `strict_correct`, `status`) and a `criteria` list. Each criterion has
