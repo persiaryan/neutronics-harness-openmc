@@ -34,7 +34,10 @@ class ConfirmationVersionTests(unittest.TestCase):
     def test_compatibility_rejects_physical_or_criteria_changes(self):
         current=references.identity()
         previous=references.compatibility()['previous_identities'][1]
-        self.assertTrue(references.identity_matches('cross_shaped_mixture',previous))
+        # The representation revision changes the scientific implementation.
+        # Prelaunch compatibility must not silently admit it as the old grader.
+        self.assertFalse(references.identity_matches('cross_shaped_mixture',previous))
+        self.assertTrue(references.identity_matches('cross_shaped_mixture',current))
         self.assertFalse(references.identity_matches('indc107_reflective_pin',previous))
         bad=copy.deepcopy(previous);bad['evaluation/confirmation/protocol.json']='0'*64
         self.assertFalse(references.identity_matches('cross_shaped_mixture',bad))

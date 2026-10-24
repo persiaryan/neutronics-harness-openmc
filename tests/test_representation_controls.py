@@ -9,8 +9,8 @@ from evaluation.scientific.inspection import admit
 class RepresentationControls(unittest.TestCase):
     def test_public_xml_is_admitted_and_variants_are_distinct(self):
         rows = controls.boundary_controls()
-        self.assertEqual(len({r['id'] for r in rows}), 14)
-        self.assertEqual(len({r['xml'] for r in rows}), 14)
+        self.assertEqual(len({r['id'] for r in rows}), 16)
+        self.assertEqual(len({r['xml'] for r in rows}), 16)
         for row in rows:
             with self.subTest(row=row['id']):
                 admit(row['xml'])

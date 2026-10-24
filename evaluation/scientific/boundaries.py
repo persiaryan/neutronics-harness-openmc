@@ -13,25 +13,31 @@ from evaluation.scientific import inspection
 from evaluation.scientific.records import require
 
 VERSION = 'effective-boundary-observation-v2'
+NEXT_VERSION = 'effective-boundary-observation-v3'
 COMPARISON = 'effective-boundary-comparison-v1'
 WORKER = Path(__file__).with_name('boundary_worker_v2.py')
 REQUIREMENTS = Path(__file__).with_name('boundary_requirements_v1.json')
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def observe(xml, output, *, wall_seconds=120, image=inspection.IMAGE):
-    return inspection.inspect_xml(xml, [], output, wall_seconds=wall_seconds, capability='effective-boundary-v2', image=image)
+def observe(xml, output, *, wall_seconds=120, image=inspection.IMAGE, version=VERSION):
+    require(version in (VERSION, NEXT_VERSION), 'Unknown boundary observer version')
+    return inspection.inspect_xml(xml, [], output, wall_seconds=wall_seconds,
+                                  capability='effective-boundary-'+version.rsplit('-', 1)[1], image=image)
 
 
-def execution_record(directory, xml, *, image=inspection.IMAGE):
+def execution_record(directory, xml, *, image=inspection.IMAGE, version=VERSION):
     """Bind worker output to an externally completed, cleaned-up XML inspection.
 
     A failed worker response is execution evidence, never a boundary observation.
     """
     directory = Path(directory)
     read = lambda n: json.loads(read_regular(directory/n))
-    manifest=read('manifest.json'); payload=read_regular(directory/'input.json'); worker=WORKER.read_bytes()
-    require(manifest['format']=='private-boundary-inspection-v2' and manifest['image_id']==image,
+    require(version in (VERSION, NEXT_VERSION), 'Unknown boundary observer version')
+    suffix=version.rsplit('-', 1)[1]
+    manifest=read('manifest.json'); payload=read_regular(directory/'input.json')
+    worker=WORKER.with_name('boundary_worker_'+suffix+'.py').read_bytes()
+    require(manifest['format']=='private-boundary-inspection-'+suffix and manifest['image_id']==image,
             'Unknown boundary observation protocol')
     require(manifest['candidate_python_access'] is False and manifest['nuclear_data_access'] is False and
             manifest['host_mounts'] is False and manifest['native_transport']=='not_run' and manifest['points']==0,
@@ -49,11 +55,11 @@ def execution_record(directory, xml, *, image=inspection.IMAGE):
     return stdout
 
 
-def record(directory, xml, *, image=inspection.IMAGE):
-    stdout=execution_record(directory, xml, image=image)
+def record(directory, xml, *, image=inspection.IMAGE, version=VERSION):
+    stdout=execution_record(directory, xml, image=image, version=version)
     if stdout.get('status')!='inspected':
         raise InsufficientEvidence('Boundary observer did not complete with confirmed cleanup')
-    require(stdout['observer_version']==VERSION and stdout['openmc_version']=='0.15.3' and
+    require(stdout['observer_version']==version and stdout['openmc_version']=='0.15.3' and
             stdout['model_xml_sha256']==digest(xml), 'Boundary semantic identity changed')
     return stdout
 
@@ -116,7 +122,7 @@ def equal(actual, expected, rule):
 def compare(observation, specification):
     # The requirement comparator is unchanged. Reading a historical observation
     # here does not verify its receipts or upgrade it to a current assessment.
-    require(observation['observer_version'] in ('effective-boundary-observation-v1',VERSION),
+    require(observation['observer_version'] in ('effective-boundary-observation-v1',VERSION,NEXT_VERSION),
             'Unsupported boundary observations')
     require(specification['format']=='boundary-task-requirements-v1', 'Unsupported boundary requirements')
     surfaces={s['ref']:s for s in observation['surfaces']}
@@ -159,6 +165,18 @@ def compare(observation, specification):
         row['verdict']='conformity_established' if all(equal(v,req['expected'],req['comparison']) for v in row['actual']) else 'nonconforming'
         if row['verdict']=='nonconforming':
             row['cause']='observed_property_mismatch'
+    if observation['observer_version']==NEXT_VERSION:
+        evidence=observation['domain'].get('shape_evidence')
+        if evidence and evidence.get('method')=='complete_arrangement_occupancy' and evidence.get('kind') in ('empty','unbounded','not_a_box'):
+            # The box shape is an explicit requirement of every root_box_face
+            # selector. A complete occupancy proof can refute it even though
+            # individual boundary behaviors cannot be interpreted.
+            require(all(r['selector']['kind']=='root_box_face' for r in specification['requirements']),
+                    'Nonbox evidence requires explicit box requirements')
+            rows.append(dict(requirement_id='root.domain.box_shape', property='domain_shape', expected='finite_nonempty_box',
+                rule=dict(kind='exact'), source=specification['source'], selector=dict(kind='root_domain'),
+                observations_needed=['complete_arrangement_occupancy'], model_xml_sha256=observation['model_xml_sha256'],
+                verdict='nonconforming', cause='established_domain_shape_mismatch', evidence=[evidence], actual=[evidence['kind']]))
     return dict(format=COMPARISON, requirements_sha256=digest(json.dumps(specification,sort_keys=True).encode()),
         model_xml_sha256=observation['model_xml_sha256'], verdicts=rows,
         coverage=observation['coverage'], global_geometry_verdict='not_assessed')

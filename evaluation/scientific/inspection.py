@@ -80,7 +80,7 @@ def verify(info, image=IMAGE):
 def inspect_xml(xml, points, output, *, wall_seconds=60, capability='legacy', image=IMAGE):
     """No retries. Preserve the failed run and refuse leftovers before a new run."""
     output = Path(output)
-    if capability not in ('legacy', 'effective-boundary-v2') or capability != 'legacy' and points:
+    if capability not in ('legacy', 'effective-boundary-v2', 'effective-boundary-v3', 'source-domains-v1') or capability.startswith('effective-boundary-') and points:
         raise ValueError('Unknown inspector capability or unexpected boundary query points')
     if not 1 <= wall_seconds <= 120 or len(points) > 12000:
         raise ValueError('Unsupported inspector budget')
@@ -91,14 +91,16 @@ def inspect_xml(xml, points, output, *, wall_seconds=60, capability='legacy', im
     try:
         admit(xml)
         admitted = True
-        worker = (WORKER if capability == 'legacy' else Path(__file__).with_name('boundary_worker_v2.py')).read_bytes()
+        worker = (WORKER if capability == 'legacy' else Path(__file__).with_name('source_domains_worker_v1.py') if capability=='source-domains-v1' else
+                  Path(__file__).with_name('boundary_worker_'+capability.rsplit('-', 1)[1]+'.py')).read_bytes()
         payload = json.dumps({'xml':xml.decode('utf-8'),'points':points}, separators=(',',':'), allow_nan=False).encode()
         if len(payload) > 4_000_000:
             raise ValueError('Inspector input exceeds byte budget')
         (output/'input.json').write_bytes(payload)
         (output/'worker.py').write_bytes(worker)
         write_json(output/'manifest.json', {'format':('private-scientific-inspection-v3' if capability=='legacy'
-                                                     else 'private-boundary-inspection-v2'),'image_id':image,
+                                                     else 'private-source-domains-inspection-v1' if capability=='source-domains-v1'
+                                                     else 'private-boundary-inspection-'+capability.rsplit('-', 1)[1]),'image_id':image,
             'model_xml_sha256':digest(xml),'worker_sha256':digest(worker),'input_sha256':digest(payload),
             'points':len(points),'wall_seconds':wall_seconds,'candidate_python_access':False,
             'nuclear_data_access':False,'host_mounts':False,'native_transport':'not_run'})
@@ -144,3 +146,39 @@ def inspect_xml(xml, points, output, *, wall_seconds=60, capability='legacy', im
         result['elapsed_seconds'] = round(time.monotonic()-started,3)
         write_json(output/'result.json',result)
     return result
+
+
+def completed_record(directory, xml, points, *, capability='legacy', image=IMAGE):
+    """Verify a completed prospective/source or literal-witness inspection.
+
+    Historical case-probe verification continues to use records.inspection_record.
+    This entry point requires the caller's exact query and never fills gaps.
+    """
+    from evaluator.transport_input import read_regular
+    from evaluator.evidence import InsufficientEvidence
+    from evaluation.scientific.records import require
+    require(capability in ('legacy','source-domains-v1'), 'Unsupported completed inspection')
+    directory=Path(directory)
+    read=lambda name: json.loads(read_regular(directory/name))
+    worker=(WORKER if capability=='legacy' else WORKER.with_name('source_domains_worker_v1.py')).read_bytes()
+    manifest=read('manifest.json'); payload=read_regular(directory/'input.json')
+    expected_format='private-scientific-inspection-v3' if capability=='legacy' else 'private-source-domains-inspection-v1'
+    require(manifest['format']==expected_format and manifest['image_id']==image and
+            manifest['points']==len(points) and 1<=manifest['wall_seconds']<=120, 'Inspection identity/budget changed')
+    require(manifest['candidate_python_access'] is False and manifest['nuclear_data_access'] is False and
+            manifest['host_mounts'] is False and manifest['native_transport']=='not_run', 'Inspection access changed')
+    require(manifest['model_xml_sha256']==digest(xml) and manifest['input_sha256']==digest(payload) and
+            json.loads(payload)==dict(xml=xml.decode(),points=points), 'Inspection input/query changed')
+    require(manifest['worker_sha256']==digest(worker) and read_regular(directory/'worker.py')==worker,
+            'Inspection worker changed')
+    require(verify(read('container-inspect.json'),image)==read('container-checks.json'), 'Inspection containment changed')
+    require(read('execution.json')==dict(exit_code=0,stop_reason=None), 'Inspection process incomplete')
+    result=read('result.json'); stdout=read('stdout.json')
+    if result.get('cleanup_confirmed') is not True:
+        raise InsufficientEvidence('Inspection cleanup is not confirmed')
+    require(all(result.get(k)==v for k,v in stdout.items()), 'Inspection result changed')
+    require(stdout.get('status')=='inspected' and stdout.get('openmc_version')=='0.15.3', 'Inspection unavailable')
+    if capability=='source-domains-v1':
+        require(stdout.get('observer_version')=='source-domain-observation-v1' and
+                stdout.get('model_xml_sha256')==digest(xml), 'Source-domain observation identity changed')
+    return stdout

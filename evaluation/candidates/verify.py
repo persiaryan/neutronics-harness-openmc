@@ -18,6 +18,9 @@ from evaluator.profiles import BOUNDARY_PROTOCOL
 from observation_contracts import evaluation_definition, fingerprint
 from evaluation.scientific import boundaries
 from evaluation.candidates import boundary_assessment
+from evaluation.candidates import representation
+from evaluation.scientific import source_domains
+from evaluator.profiles import REPRESENTATION_PROTOCOL
 
 
 def stopped_verdict(report, gates, checks, phases, stage, cause, reason):
@@ -30,16 +33,26 @@ def stopped_verdict(report, gates, checks, phases, stage, cause, reason):
     computed = scoring.score(gates, checks)
     require(report['checks'] == checks and computed == report['diagnostic_score'], 'Stopped score or checks contradict evidence')
     return dict(status='verified_from_retained_failure', score=computed['score'], strict_correct=False,
-                stop=report['stop'], attribution=cause)
+                stop=report['stop'], attribution=cause,
+                **({'conclusion':report['conclusion']} if 'conclusion' in report else {}))
 
 
 def assessment_report(directory, index, *, reference=None, runtime=None):
     directory = Path(directory)
     report = receipts.read(directory / 'report.json')
-    require(report['format'] == 'private-candidate-diagnostic-v5',
+    protocol=report.get('assignment',{}).get('assessment_route',{}).get('evaluator_protocol',
+        report.get('observation_definition',{}).get('protocol',BOUNDARY_PROTOCOL))
+    prospective=protocol==REPRESENTATION_PROTOCOL
+    semantics=representation if prospective else assessment
+    boundary_version=boundaries.NEXT_VERSION if prospective else boundaries.VERSION
+    require(report['format'] == ('private-candidate-diagnostic-v6' if prospective else 'private-candidate-diagnostic-v5'),
             'Incompatible historical report: use its original protocol verifier; never rescore as current')
+    if prospective:
+        require('observation_definition' in report, 'Prospective assessment requires its evaluation definition')
+        require(report.get('conclusion')==representation.conclusion(report['gates'],report['checks'],report.get('fidelity',{}),
+            report['diagnostic_score'],evidence_available=report['cleanup_confirmed'] and
+            (report['status']=='assessed' or report.get('stop',{}).get('cause')=='model')), 'Conformance/coverage conclusion changed')
     if 'observation_definition' in report:
-        protocol = report.get('assignment', {}).get('assessment_route', {}).get('evaluator_protocol', BOUNDARY_PROTOCOL)
         require(report['observation_definition'] == evaluation_definition(scoring.RUBRIC, scoring.identity()['sha256'], protocol),
                 'Recorded evaluation definition differs from the evaluator rules')
     require('repeat_export' not in report and not any(n.startswith('repeat-') for n in report['phases']),
@@ -72,16 +85,20 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
     boundary_spec = None
     from evaluator.profiles import assessment_route
     expected_route = assessment_route(contract, route['execution_profile']['id'], route['evaluator_protocol'], runtime=runtime)
-    require((assignment['case'] in TASKS) == (route['evaluator_protocol'] == CONFIRMATION_PROTOCOL),
+    require((assignment['case'] in TASKS) == (route['evaluator_protocol'] in (CONFIRMATION_PROTOCOL,REPRESENTATION_PROTOCOL)),
             'Confirmation evaluation route mismatch')
+    if prospective:
+        require(assignment.get('representation_semantics')==representation.identity(), 'Prospective fidelity implementation changed')
+    else:
+        require('representation_semantics' not in assignment and 'conclusion' not in report,
+                'Prospective semantics cannot be attached to a frozen route')
     expected_route['prompt_sha256'] = digest(build_prompt(assignment['case'], contract=contract).encode())
     require(route == expected_route and assignment['budgets'] == route['execution_profile']['budgets'],
             'Assessment execution profile/protocol changed')
     if assignment['case'] != 'moderated_cylinder':
         boundary_spec=boundaries.requirements(assignment['case'])
-        require(report['format']=='private-candidate-diagnostic-v5' and
-                receipts.read(directory/'boundary-requirements.json')==boundary_spec and
-                assignment['scientific_boundary']==dict(observer=boundaries.VERSION,comparison=boundaries.COMPARISON,
+        require(receipts.read(directory/'boundary-requirements.json')==boundary_spec and
+                assignment['scientific_boundary']==dict(observer=boundary_version,comparison=boundaries.COMPARISON,
                     requirements_sha256=digest(json.dumps(boundary_spec,sort_keys=True).encode())),
                 'Scientific boundary protocol/requirements changed')
     require((boundary_spec is not None)==('scientific_boundary' in assignment), 'Boundary observations require explicit protocol selection')
@@ -158,16 +175,26 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
         return stopped_verdict(report, expected, checks, reached, 'export-inspection',
                                failure['cause'], failure['detail'])
     require('material_input_findings' not in report, 'Successful inspection claims material input failure')
-    boundary_observation = boundaries.record(directory / 'export-boundaries', xml, image=goal['protocol']['export_image'])
+    boundary_observation = boundaries.record(directory / 'export-boundaries', xml, image=goal['protocol']['export_image'],version=boundary_version)
     summary = receipts.read(directory / 'export-boundaries/result.json')
     require(report['phases']['export-boundaries'] == {k: summary[k] for k in ('status', 'cleanup_confirmed')},
             'Boundary inspection summary changed')
     reached.add('export-boundaries')
     boundary_result = boundary_assessment.evaluate(boundary_observation, boundary_spec, obs)
-    fidelity = assess(assignment['case'], admit(xml), obs, assignment['sampling'], boundary_result=boundary_result)
+    if prospective:
+        source_observation=source_domains.record(directory/'export-source-domains',xml,run.probes(assignment['case'])[0],
+                                                image=goal['protocol']['export_image'])
+        source_summary=receipts.read(directory/'export-source-domains/result.json')
+        require(report['phases']['export-source-domains']=={k:source_summary[k] for k in ('status','cleanup_confirmed')},
+                'Source-domain phase summary changed')
+        reached.add('export-source-domains')
+        fidelity=representation.assess(assignment['case'],admit(xml),obs,assignment['sampling'],
+                                       boundary_result=boundary_result,source_observation=source_observation)
+    else:
+        fidelity=assess(assignment['case'],admit(xml),obs,assignment['sampling'],boundary_result=boundary_result)
     require(fidelity == receipts.read(directory / 'export-fidelity.json') and fidelity == report['fidelity'],
             'Fidelity observations changed')
-    expected_checks = assessment.fidelity_checks(assignment['case'], fidelity, obs)
+    expected_checks = semantics.fidelity_checks(assignment['case'], fidelity, obs)
     if report['status'] != 'assessed' and report['stop']['stage'] == 'export-inspection':
         require(report['checks'] == expected_checks, 'Stopped geometry checks changed')
         require(fidelity['geometry']['invalid_geometry'] > 0 and report['stop']['cause'] == 'model' and
@@ -200,7 +227,7 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
     record = receipts.transport_record(directory, digest(source), goal['protocol']['transport_image'], index)
     require(record['runtime'] == goal['runtime'] and record['data']['index_sha256'] == goal['data']['index_sha256'] and
             all(goal['data']['files'].get(n) == v for n, v in record['data']['files'].items()), 'Native runtime/data changed')
-    checks = assessment.fidelity_checks(assignment['case'], fidelity, obs)
+    checks = semantics.fidelity_checks(assignment['case'], fidelity, obs)
     leak = leakage((directory / 'transport/openmc-stdout.txt').read_text())
     leak_checks = dict(leakage_probability=0 <= leak['mean'] <= 1 and leak['std_dev'] >= 0,
                        leakage_boundary_consistency=leak['mean'] == 0 if run.SPECS[assignment['case']]['boundary'] == 'reflective' else leak['mean'] > 0)
@@ -210,7 +237,8 @@ def assessment_report(directory, index, *, reference=None, runtime=None):
     computed = scoring.score(gates, checks)
     require(checks == report['checks'] and computed == report['diagnostic_score'] and comparison == report['comparison'] and
             record['keff'] == report['candidate_keff'], 'Candidate score or numerical report changed')
-    return dict(status='verified_from_retained_execution', score=computed['score'], strict_correct=computed['strict_correct'])
+    return dict(status='verified_from_retained_execution', score=computed['score'], strict_correct=computed['strict_correct'],
+                **({'conclusion':report['conclusion']} if prospective else {}))
 
 
 def review_assessment(directory, index, *, reference=None, runtime=None):
@@ -233,7 +261,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--assessment', required=True, type=Path)
     parser.add_argument('--data-index', required=True, type=Path)
+    parser.add_argument('--reference', type=Path)
     args = parser.parse_args()
-    result = review_assessment(args.assessment, args.data_index)
+    result = review_assessment(args.assessment, args.data_index, reference=args.reference)
     print(json.dumps(result, indent=2))
     raise SystemExit(0 if result['evidence_status'] == 'coherent' else 1)

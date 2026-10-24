@@ -27,6 +27,10 @@ outside D, witnessed by (-3,-3,-3.5). Moving the x lower face to -4.25 changes
 the domain despite unchanged IDs. A separate water box inside water creates
 an overlap at (-3.25,-3.25,0); its union is still D, so the boundary observer
 alone must not claim to certify nonoverlap. A separate all-cell probe detects it.
+Subtracting that same interior box from water creates a positive-volume hole:
+the enclosing bounding box stays unchanged, but the root domain is not a box.
+Reversing conjunction terms and moving the compact complement before the outer
+planes is a separate equivalence control, independent of declaration order.
 
 ## Coincident planes
 
@@ -37,5 +41,32 @@ No convenient boundary value is selected from the inventory. Native transport
 selection is a separate observation and must never replace this conservative
 rule without a separately qualified interpretation.
 
-All source-domain controls, conformance rules and execution results are
-documented with their implementation; none changes frozen campaign verdicts.
+## Source oracle
+
+The proposal is uniform in (-1,1) x (-0.9,0.9) squared. Two fuel slabs occupy
+-0.8<x<-0.2 and 0.2<x<0.8, with -1<y,z<1, inside a water box of half-width 2.
+Both fuel cells use the same uranium material. The accepted law is the proposal
+conditioned on their union. Equal cell sets prove the same accepted support;
+finite witnesses only refute an identity. Material labels in these synthetic
+controls are literal: material 1 is uranium, 2 water, 3 zirconium. The production
+comparator obtains labels from matched benchmark compositions, never names/IDs.
+
+Fourteen source controls include explicit fissile rejection, both fuel cells,
+the fuel material, redundant restrictions, complete renumbering, water selection,
+omitted fuel, extra water, an unchanged ID reassigned to water, unsupported
+universe constraints, additional unknown restrictions and duplicate fields.
+
+The native sampling control uses 4,096 sites and seed 41. Equivalent supported
+forms must produce identical retained position streams in this pinned runtime;
+all sites must be in fuel and the left fraction between 0.35 and 0.65. This
+wide diagnostic screen and finite stream agreement do not prove arbitrary law
+equivalence. Negative controls must actually sample water or omit the right slab.
+
+For coincident planes, a separate void fixed-source problem sends 20 histories
+straight to the lower face. Equal vacuum behavior must produce leakage 1 with
+zero reported uncertainty. Conflicting behavior may complete or produce the
+specific native lost-particle diagnostic; unrelated crashes/timeouts fail the
+control. The observed order dependence does not upgrade an unknown face verdict.
+
+All qualification commands refuse existing output directories, retain failures,
+make zero provider calls and never read or rescore campaign candidates.

@@ -21,6 +21,8 @@ from prompts.prepare import build_prompt, CASE_FILES, all_cases
 from evaluator.profiles import BOUNDARY_PROTOCOL, FACTORY_PROFILE, assessment_route
 from evaluation.scientific import boundaries
 from evaluation.candidates import boundary_assessment
+from evaluation.candidates import representation
+from evaluation.scientific import source_domains
 from observability import record as observe_progress
 from observation_contracts import evaluation_definition
 
@@ -93,6 +95,12 @@ def markdown(report):
              'Case: `' + report['case'] + '`. Status: **' + report['status'] + '**.', '',
              'Diagnostic score: **' + str(result.get('score')) + '** / 100. Official grading disabled; scientific review pending.', '',
              '| Hard gate | Passed | Cause / evidence |', '|---|---|---|']
+    if 'conclusion' in report:
+        c=report['conclusion']
+        lines[4:4]=[f"Conformance: **{c['conformance']}**. Evaluation complete: **{c['evaluation_complete']}**. "
+                    f"Weighted score complete: **{c['score_complete']}**.", '',
+                    'A demonstrated mismatch can coexist with incomplete scoring. '
+                    'Conformity remains limited to the implemented protocol.', '']
     for name, value in report['gates'].items():
         lines.append(f"| {name} | {value['passed']} | {value.get('cause')} — {value.get('detail', '')} |")
     lines.extend(['', '| Category | Earned / applicable points |', '|---|---:|'])
@@ -116,8 +124,11 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
     budgets = route['execution_profile']['budgets']
     require(case in all_cases(), 'Unknown public case')
     from prompts.confirmation import TASKS
-    from evaluator.profiles import CONFIRMATION_PROTOCOL
-    require((case in TASKS) == (evaluator_protocol == CONFIRMATION_PROTOCOL),
+    from evaluator.profiles import CONFIRMATION_PROTOCOL, REPRESENTATION_PROTOCOL
+    prospective=evaluator_protocol==REPRESENTATION_PROTOCOL
+    boundary_version=boundaries.NEXT_VERSION if prospective else boundaries.VERSION
+    semantics=representation if prospective else assessment
+    require((case in TASKS) == (evaluator_protocol in (CONFIRMATION_PROTOCOL, REPRESENTATION_PROTOCOL)),
             'Select the versioned confirmation evaluator for new tasks')
     boundary_spec = boundaries.requirements(case) if case != 'moderated_cylinder' else None
     output = Path(output).absolute()
@@ -130,6 +141,7 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
                   phases={}, grading_enabled=False, scientific_review='pending_owner_review', builder_feedback='not_sent',
                   candidate_repair=False, host_candidate_execution='not_run', cleanup_confirmed=False)
     report['observation_definition'] = evaluation_definition(scoring.RUBRIC, scoring.identity()['sha256'], evaluator_protocol)
+    report['format']=report['observation_definition']['report_format']
     stage = 'admission'
     def gate(name, passed, cause=None, detail=''):
         report['gates'][name] = dict(passed=passed, cause=cause, detail=detail)
@@ -162,9 +174,10 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
                                                                   inactive=100, generations_per_batch=2, seed=1, source='uniform'))
         report['assignment']['delivery_contract'] = contract
         report['assignment']['assessment_route'] = route
+        if prospective:
+            report['assignment']['representation_semantics']=representation.identity()
         if boundary_spec is not None:
-            report['format'] = 'private-candidate-diagnostic-v5'
-            report['assignment']['scientific_boundary'] = dict(observer=boundaries.VERSION,
+            report['assignment']['scientific_boundary'] = dict(observer=boundary_version,
                 comparison=boundaries.COMPARISON,requirements_sha256=exporter.digest(json.dumps(boundary_spec,sort_keys=True).encode()))
             exporter.write_json(output / 'boundary-requirements.json', boundary_spec)
         exporter.write_json(output / 'assignment.json', report['assignment'])
@@ -206,17 +219,29 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
             stop(**failure)
         stage = 'export-boundaries'
         observe_progress(output, stage, 'started')
-        value = boundaries.observe(xml, output / stage, wall_seconds=budgets['inspection'], image=goal['protocol']['export_image'])
+        value = boundaries.observe(xml, output / stage, wall_seconds=budgets['inspection'], image=goal['protocol']['export_image'], version=boundary_version)
         report['phases'][stage] = {k: value[k] for k in ('status', 'cleanup_confirmed')}
         if value['status'] != 'inspected' or value['cleanup_confirmed'] is not True:
             stop('evaluator', 'Boundary observation incomplete; no model attribution')
-        boundary_observation = boundaries.record(output / stage, xml, image=goal['protocol']['export_image'])
+        boundary_observation = boundaries.record(output / stage, xml, image=goal['protocol']['export_image'], version=boundary_version)
         boundary_result = boundary_assessment.evaluate(boundary_observation, boundary_spec, observation)
+        source_observation=None
+        if prospective:
+            stage='export-source-domains'
+            observe_progress(output, stage, 'started')
+            value=source_domains.observe(xml,probes(case)[0],output/stage,
+                image=goal['protocol']['export_image'],wall_seconds=budgets['inspection'])
+            report['phases'][stage]={k:value[k] for k in ('status','cleanup_confirmed')}
+            if value['status']!='inspected' or value['cleanup_confirmed'] is not True:
+                stop('evaluator','Source-domain observation incomplete; no model attribution')
+            source_observation=source_domains.record(output/stage,xml,probes(case)[0],image=goal['protocol']['export_image'])
         stage = 'export-inspection'
-        fidelity = assess(case, admit(xml), observation, report['assignment']['sampling'], boundary_result=boundary_result)
+        fidelity = (representation.assess(case,admit(xml),observation,report['assignment']['sampling'],
+                    boundary_result=boundary_result,source_observation=source_observation) if prospective else
+                    assess(case,admit(xml),observation,report['assignment']['sampling'],boundary_result=boundary_result))
         exporter.write_json(output / 'export-fidelity.json', fidelity)
         observe_progress(output, 'fidelity', 'recorded')
-        report['checks'] = assessment.fidelity_checks(case, fidelity, observation)
+        report['checks'] = semantics.fidelity_checks(case, fidelity, observation)
         report['fidelity'] = fidelity
         if fidelity['geometry']['invalid_geometry']:
             stop('model', 'Invalid or overlapping geometry detected by finite all-matching-cell probes', 'valid_geometry')
@@ -281,6 +306,10 @@ def evaluate(case, output, *, index, candidate, provenance=None, contract=FACTOR
         if not report['cleanup_confirmed']:
             report['diagnostic_score'] = dict(report['diagnostic_score'], status='unscored', score=None,
                                                strict_correct=False, reason='Cleanup or containment uncertainty')
+        if prospective:
+            report['conclusion']=representation.conclusion(report['gates'],report['checks'],report.get('fidelity',{}),
+                report['diagnostic_score'], evidence_available=report['cleanup_confirmed'] and
+                (report['status']=='assessed' or report.get('stop',{}).get('cause')=='model'))
         report['elapsed_seconds'] = round(time.monotonic() - started, 3)
         exporter.write_json(output / 'report.json', report)
         (output / 'report.md').write_text(markdown(report))
@@ -297,7 +326,10 @@ if __name__ == '__main__':
     parser.add_argument('--contract', choices=CONTRACTS, default=FACTORY)
     parser.add_argument('--execution-profile', default=FACTORY_PROFILE)
     parser.add_argument('--evaluator-protocol', default=BOUNDARY_PROTOCOL)
+    parser.add_argument('--reference', type=Path,
+                        help='Explicit separately qualified reference package for confirmation tasks')
     args = parser.parse_args()
     value = evaluate(args.case, args.output, index=args.data_index, candidate=args.candidate,
-                     contract=args.contract, execution_profile=args.execution_profile, evaluator_protocol=args.evaluator_protocol)
+                     contract=args.contract, execution_profile=args.execution_profile, evaluator_protocol=args.evaluator_protocol,
+                     reference=args.reference)
     print(json.dumps({k: value[k] for k in ('status', 'diagnostic_score', 'cleanup_confirmed')}, indent=2))
