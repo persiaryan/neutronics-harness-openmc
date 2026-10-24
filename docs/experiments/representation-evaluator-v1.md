@@ -153,3 +153,7 @@ retained evidence is reconstructed from execution receipts by the read-only veri
 
 The same AI assistant authored controls and implementation; their literal/set
 oracles are separate from the observer, but independent human review is pending.
+
+The subsequent [qualification follow-through](representation-followthrough-v1.md)
+records explicit retained-reference requalification and fixed end-to-end native
+controls. This document's public JSON remains the original milestone snapshot.

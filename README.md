@@ -92,6 +92,9 @@ adds halfspace-aware geometry coverage, qualified flat-cell source restrictions,
 and separate conformance/completeness results. Its synthetic native controls do
 not reassess the frozen campaigns; new full assessments require separately
 qualified references bound to the revised implementation.
+The [qualification follow-through](docs/experiments/representation-followthrough-v1.md)
+provides retained-reference requalification, fixed native integration controls,
+and a proposed independent next study.
 A separate condition **E** now exposes native skill metadata and lets the builder
 choose whether to read the body. Offline real-CLI controls use scripted responses;
 spontaneous LLM selection and efficacy remain **untested**.
