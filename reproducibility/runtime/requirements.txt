@@ -9,4 +9,4 @@ endf==0.1.9
 ipython==9.2.0
 setuptools==80.9.0
 setuptools-scm==8.3.1
-wheel==0.45.1
+wheel==0.46.2
