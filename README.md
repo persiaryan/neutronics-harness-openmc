@@ -87,6 +87,14 @@ on 2026-10-17: Luna A 6/9 versus D 7/9, Sol A 8/9 versus D 9/9, with no
 infrastructure incidents. These are descriptive reused-task results; general
 efficacy and confirmed mechanism effects remain unestablished.
 See the [complete results and evidence limits](docs/experiments/region-ad-pilot-result-v1.md).
+A separate opt-in [representation evaluator revision](docs/experiments/representation-evaluator-v1.md)
+adds halfspace-aware geometry coverage, qualified flat-cell source restrictions,
+and separate conformance/completeness results. Its synthetic native controls do
+not reassess the frozen campaigns; new full assessments require separately
+qualified references bound to the revised implementation.
+The [qualification follow-through](docs/experiments/representation-followthrough-v1.md)
+provides retained-reference requalification, fixed native integration controls,
+and a proposed independent next study.
 A separate condition **E** now exposes native skill metadata and lets the builder
 choose whether to read the body. Offline real-CLI controls use scripted responses;
 spontaneous LLM selection and efficacy remain **untested**.

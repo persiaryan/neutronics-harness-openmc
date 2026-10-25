@@ -20,6 +20,17 @@ def review(case, package, index):
     package=Path(package)
     goal=references.target(case,package,None)
     value=references.read(package/'manifest.json')
+    review_runs(case,package,index,goal,value)
+    return dict(format='confirmation-reference-evidence-review-v1',case=case,evidence_status='coherent',
+                reference_manifest_sha256=goal['index']['manifest_sha256'],reconstructed_runs=5,
+                evaluator_identity=references.identity(),generation_evaluator_identity=value['evaluator_identity'],
+                generation_identity_compatibility_applied=value['evaluator_identity']!=references.identity(),
+                scientific_review='pending_owner_review')
+
+
+def review_runs(case,package,index,goal,value):
+    """Reconstruct physical/numerical evidence; caller handles package admission."""
+    package=Path(package)
     report=references.read(package/'qualification.json')
     require(value['records']==report['records'] and value['numerical']==report['numerical']
             and value['technical_status']==report['technical_status'],'Reference summary binding changed')
@@ -56,11 +67,6 @@ def review(case, package, index):
                 and actual['sampling']=={k:v for k,v in sampling.items() if k!='source'}
                 and actual['data']==goal['data'] and actual['runtime']==goal['runtime'],
                 'Reference numerical/runtime/data summary contradicts retained execution')
-    return dict(format='confirmation-reference-evidence-review-v1',case=case,evidence_status='coherent',
-                reference_manifest_sha256=goal['index']['manifest_sha256'],reconstructed_runs=5,
-                evaluator_identity=references.identity(),generation_evaluator_identity=value['evaluator_identity'],
-                generation_identity_compatibility_applied=value['evaluator_identity']!=references.identity(),
-                scientific_review='pending_owner_review')
 
 
 def main():

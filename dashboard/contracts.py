@@ -31,7 +31,7 @@ def assessment_state(report):
     if report is None:
         return dict(state='pending')
     if not isinstance(report,dict) or report.get('format') not in (
-            'private-candidate-diagnostic-v5','evaluation-report-v1'):
+            'private-candidate-diagnostic-v5','private-candidate-diagnostic-v6','evaluation-report-v1'):
         return dict(state='unavailable')
     status=report.get('status')
     state='interrupted' if status in ('incomplete','stopped') else 'completed' if status=='assessed' else 'unavailable'
@@ -56,7 +56,7 @@ def normalize_evaluation(report, review):
     try:
         if not isinstance(report,dict): raise ValueError('Report must be an object')
         version=report.get('format')
-        if version not in ('private-candidate-diagnostic-v5','evaluation-report-v1'):
+        if version not in ('private-candidate-diagnostic-v5','private-candidate-diagnostic-v6','evaluation-report-v1'):
             result.update(status='unsupported',reason='Unsupported report format: '+str(version)); return result
         if 'observation_definition' in report:
             definition=deepcopy(validate_evaluation_definition(report['observation_definition']))
@@ -127,10 +127,19 @@ def normalize_evaluation(report, review):
                     any(type(v) not in (int,float) or not math.isfinite(v) for v in interval) or interval[0]>interval[1]):
                 raise ValueError('Malformed comparison interval')
         review=obj(review)
+        if version=='private-candidate-diagnostic-v6':
+            conclusion=obj(report.get('conclusion'))
+            if (conclusion.get('format')!='conformance-and-coverage-v1' or
+                conclusion.get('conformance') not in ('conforming_within_protocol','nonconforming','indeterminate') or
+                any(type(conclusion.get(n)) is not bool for n in ('evidence_available','evaluation_complete','score_complete')) or
+                any(not isinstance(conclusion.get(n),list) or any(not isinstance(v,str) for v in conclusion[n])
+                    for n in ('known_mismatches','unassessed_checks'))):
+                raise ValueError('Malformed conformance/coverage conclusion')
         hash_required=version=='evaluation-report-v1' or 'observation_definition' in report
         binding=review.get('report_sha256')==fingerprint(report) if hash_required or 'report_sha256' in review else True
         all_passed = all(normalized['checks'].get(d, {}).get(n) is True for d, names in definition['checks'].items() for n in names) and all(obj(normalized['gates'].get(n)).get('passed') is True for n in definition['gates'])
         trusted=(score.get('status') in ('scored','model_gate_failure','unscored') and review.get('evidence_status')=='coherent' and binding and review.get('score')==value
+                 and (version!='private-candidate-diagnostic-v6' or review.get('conclusion')==report['conclusion'])
                  and type(review.get('strict_correct')) is bool and review.get('strict_correct')==score.get('strict_correct')
                  and (review.get('strict_correct') is not True or (all_passed and value==maximum and score.get('status')=='scored')))
         for domain,names in definition['checks'].items():

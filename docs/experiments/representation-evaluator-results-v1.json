@@ -1,0 +1,450 @@
+{
+  "format": "representation-evaluator-qualification-results-v1",
+  "date": "2026-10-24",
+  "implementation_commit": "8dfc2d25c3aec4205923355d9573ef1625c9f4d7",
+  "evaluator_protocol": "factory-assessment-confirmation-v2-representation-v1",
+  "implementation": {
+    "format": "representation-fidelity-v1",
+    "files": {
+      "evaluation/candidates/representation.py": "1fcb99d3656e92d13645ad707eb205ec0a8d0db0a97beda539df89d65073c206",
+      "evaluation/scientific/source_domains.py": "f81a3b0a3e9d0f7e9ff58150998fe52e34e69a319269650b47fce7feb352a44e",
+      "evaluation/scientific/source_domains_worker_v1.py": "a59fc369af7472a1f96205facc55fc0d0a7c92e7eb1cc4e2890f703fd3cc47a3",
+      "evaluation/scientific/boundary_worker_v3.py": "b0867fa056f2461992ce290d0e2e60319b3675b08d4986ef6a4bd2325c6e07cc"
+    }
+  },
+  "source_comparison_sha256": "f81a3b0a3e9d0f7e9ff58150998fe52e34e69a319269650b47fce7feb352a44e",
+  "control_author": "AI assistant",
+  "independent_human_review": "pending",
+  "grading_enabled": false,
+  "provider_calls": 0,
+  "campaign_candidates": 0,
+  "original_outcomes_reassessed": false,
+  "reference_qualification": "not_run",
+  "full_prospective_native_assessment": "not_run",
+  "portable_tests": {
+    "passed": 713,
+    "failed": 0
+  },
+  "reports": {
+    "boundary_v2": {
+      "sha256": "c43afcabd8aa8fe3147204421d8651b246920f51624caa2f68a8a8ef652e5438",
+      "status": "failed"
+    },
+    "boundary_v3": {
+      "sha256": "8754823340f7aba69837cdd9e4347cb8db3f0a7c2d216f44bfa2bdecca40a02e",
+      "status": "passed"
+    },
+    "source_domains": {
+      "sha256": "8e4f33c69f4ae1bc972fa7a3072c788496418f7cbf8a9a6e42dba62782dba2d9",
+      "status": "passed"
+    },
+    "native": {
+      "sha256": "40c8f9b3cae4f17703fdf6b9fea47550f757e1f4142515f1c71d4e0307692276",
+      "status": "passed"
+    }
+  },
+  "boundary": {
+    "rows": [
+      {
+        "id": "compact",
+        "expected": "conformity_established",
+        "v2": "indeterminate",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "compact-renumbered",
+        "expected": "conformity_established",
+        "v2": "indeterminate",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "nested",
+        "expected": "conformity_established",
+        "v2": "indeterminate",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "nested-renumbered",
+        "expected": "conformity_established",
+        "v2": "indeterminate",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "partitioned",
+        "expected": "conformity_established",
+        "v2": "conformity_established",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "partitioned-renumbered",
+        "expected": "conformity_established",
+        "v2": "conformity_established",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "compact-reordered-terms",
+        "expected": "conformity_established",
+        "v2": "indeterminate",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "missing-lower-slab",
+        "expected": "nonconforming",
+        "v2": "nonconforming",
+        "v3": "nonconforming",
+        "v3_passed": true
+      },
+      {
+        "id": "unbounded-lower-water",
+        "expected": "nonconforming",
+        "v2": "indeterminate",
+        "v3": "nonconforming",
+        "v3_passed": true
+      },
+      {
+        "id": "moved-face",
+        "expected": "nonconforming",
+        "v2": "nonconforming",
+        "v3": "nonconforming",
+        "v3_passed": true
+      },
+      {
+        "id": "interior-water-hole",
+        "expected": "nonconforming",
+        "v2": "indeterminate",
+        "v3": "nonconforming",
+        "v3_passed": true
+      },
+      {
+        "id": "localized-overlap",
+        "expected": "geometry_overlap",
+        "v2": "conformity_established",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "coincident-vacuum-first",
+        "expected": "conformity_established",
+        "v2": "conformity_established",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "coincident-vacuum-last",
+        "expected": "conformity_established",
+        "v2": "conformity_established",
+        "v3": "conformity_established",
+        "v3_passed": true
+      },
+      {
+        "id": "coincident-transmission-first",
+        "expected": "indeterminate",
+        "v2": "indeterminate",
+        "v3": "indeterminate",
+        "v3_passed": true
+      },
+      {
+        "id": "coincident-transmission-last",
+        "expected": "indeterminate",
+        "v2": "indeterminate",
+        "v3": "indeterminate",
+        "v3_passed": true
+      }
+    ]
+  },
+  "source_domains": [
+    {
+      "id": "fissionable-flag",
+      "xml_sha256": "1bf6515b078580bb30713ecd53fccb09d460acecfd27ad7d8f28333f87e258a2",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "proof": "native_fissionable_resampling_without_domain_restriction",
+      "cause": null
+    },
+    {
+      "id": "all-fuel-cells",
+      "xml_sha256": "93b8b1f3ca7f786ea344498719b78c6c8861c0dd6f325bb71595ee0985f08b18",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "proof": "identical_accepted_and_fissionable_flat_cell_sets",
+      "cause": null
+    },
+    {
+      "id": "fuel-material",
+      "xml_sha256": "765eaf63a29bea9b04110c6879aba4a88e278e8a61d1d28f181a1b40db5d4e3d",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "proof": "identical_accepted_and_fissionable_flat_cell_sets",
+      "cause": null
+    },
+    {
+      "id": "redundant-fuel-domain",
+      "xml_sha256": "fa35d1eea50c8718c39dd7de85cbace1477e7a197616316f3b03741d87f91b97",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "proof": "identical_accepted_and_fissionable_flat_cell_sets",
+      "cause": null
+    },
+    {
+      "id": "all-cells-with-filter",
+      "xml_sha256": "a2adee3f8fb412570baa0a629faa86a08cb96a9d9b463877f00ffa64932b694c",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "proof": "identical_accepted_and_fissionable_flat_cell_sets",
+      "cause": null
+    },
+    {
+      "id": "water-domain",
+      "xml_sha256": "60eea3fb864bc067a817214e5ed5e4ac23623ca1391449be4d6c96fb70de3458",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "proof": "strict_interior_counterexample",
+      "cause": "accepted_support_mismatch"
+    },
+    {
+      "id": "missing-fuel-cell",
+      "xml_sha256": "c05b94d988c7fca3da1fc3ac67c2f09d5b9fc5346f29873bb5f6dbf56cc0547e",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "proof": "strict_interior_counterexample",
+      "cause": "accepted_support_mismatch"
+    },
+    {
+      "id": "extra-water-cell",
+      "xml_sha256": "1710f517fdae7586457361c29adffd3c7e3876fd74c7dca4ceba076eb2b853b1",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "proof": "strict_interior_counterexample",
+      "cause": "accepted_support_mismatch"
+    },
+    {
+      "id": "renumbered-cells-and-materials",
+      "xml_sha256": "28875b4e5df720d298b184c5b3f8475aa459f958dd1248521259d843645763de",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "proof": "identical_accepted_and_fissionable_flat_cell_sets",
+      "cause": null
+    },
+    {
+      "id": "same-id-now-water",
+      "xml_sha256": "39e9fed57ee96c27fa34604a139d48ec4ec763190d0ed36ec9847340b13329eb",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "proof": "strict_interior_counterexample",
+      "cause": "accepted_support_mismatch"
+    },
+    {
+      "id": "unsupported-universe-domain",
+      "xml_sha256": "d9c351c1e789c1b30ccc425c1b6455e5539c5cc08e28d9f554c926429e7ed92e",
+      "expected": null,
+      "actual": null,
+      "passed": true,
+      "proof": null,
+      "cause": "unsupported_or_incomplete_domain_constraint"
+    },
+    {
+      "id": "unknown-extra-restriction",
+      "xml_sha256": "d07edef4d5cc68cc9e90b8faa126f87dc40d98d916c058f99dcf11103434b350",
+      "expected": null,
+      "actual": null,
+      "passed": true,
+      "proof": null,
+      "cause": "additional_constraints_may_change_support"
+    },
+    {
+      "id": "known-omission-with-unknown",
+      "xml_sha256": "b299f3364ee3c9959da95a890a376eb273ff62aaa0e16729059980ad6c8f0ae8",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "proof": "strict_interior_counterexample",
+      "cause": "accepted_support_mismatch"
+    },
+    {
+      "id": "duplicate-domain-field",
+      "xml_sha256": "efe4ca6c201e4b0373d4b5bb68bb252ffa4bcc8c5a4389745bb096923efcf4d4",
+      "expected": null,
+      "actual": null,
+      "passed": true,
+      "proof": null,
+      "cause": "unsupported_constraint_structure"
+    }
+  ],
+  "native": {
+    "format": "native-representation-qualification-v1",
+    "source_rows": [
+      {
+        "id": "fissionable-flag",
+        "counts": {
+          "fuel": 4096,
+          "left": 2012,
+          "outside_box": 0
+        },
+        "positions_sha256": "e910858b4de2332c0e38fabfbce2087485a0f0f73be0cba90efcac75ad3efdf9",
+        "passed": true
+      },
+      {
+        "id": "all-fuel-cells",
+        "counts": {
+          "fuel": 4096,
+          "left": 2012,
+          "outside_box": 0
+        },
+        "positions_sha256": "e910858b4de2332c0e38fabfbce2087485a0f0f73be0cba90efcac75ad3efdf9",
+        "passed": true
+      },
+      {
+        "id": "fuel-material",
+        "counts": {
+          "fuel": 4096,
+          "left": 2012,
+          "outside_box": 0
+        },
+        "positions_sha256": "e910858b4de2332c0e38fabfbce2087485a0f0f73be0cba90efcac75ad3efdf9",
+        "passed": true
+      },
+      {
+        "id": "redundant-fuel-domain",
+        "counts": {
+          "fuel": 4096,
+          "left": 2012,
+          "outside_box": 0
+        },
+        "positions_sha256": "e910858b4de2332c0e38fabfbce2087485a0f0f73be0cba90efcac75ad3efdf9",
+        "passed": true
+      },
+      {
+        "id": "all-cells-with-filter",
+        "counts": {
+          "fuel": 4096,
+          "left": 2012,
+          "outside_box": 0
+        },
+        "positions_sha256": "e910858b4de2332c0e38fabfbce2087485a0f0f73be0cba90efcac75ad3efdf9",
+        "passed": true
+      },
+      {
+        "id": "water-domain",
+        "counts": {
+          "fuel": 0,
+          "left": 1022,
+          "outside_box": 0
+        },
+        "positions_sha256": "c360e6df76b3c81640d0a8f086d529d2ba31023a0c67bae2729fe406bb3c0ae3",
+        "passed": true
+      },
+      {
+        "id": "missing-fuel-cell",
+        "counts": {
+          "fuel": 4096,
+          "left": 4096,
+          "outside_box": 0
+        },
+        "positions_sha256": "4483f25a9fe1b9f6f5c3ed6cda6159094283ef17ed25e4e68436addf239f7af1",
+        "passed": true
+      },
+      {
+        "id": "extra-water-cell",
+        "counts": {
+          "fuel": 2493,
+          "left": 1634,
+          "outside_box": 0
+        },
+        "positions_sha256": "8aca5aa74fe4cbd1d893595b833901e9b1f0c04b57e34708f14ef26a2c9f42a4",
+        "passed": true
+      },
+      {
+        "id": "renumbered-cells-and-materials",
+        "counts": {
+          "fuel": 4096,
+          "left": 2012,
+          "outside_box": 0
+        },
+        "positions_sha256": "e910858b4de2332c0e38fabfbce2087485a0f0f73be0cba90efcac75ad3efdf9",
+        "passed": true
+      },
+      {
+        "id": "same-id-now-water",
+        "counts": {
+          "fuel": 0,
+          "left": 1022,
+          "outside_box": 0
+        },
+        "positions_sha256": "c360e6df76b3c81640d0a8f086d529d2ba31023a0c67bae2729fe406bb3c0ae3",
+        "passed": true
+      }
+    ],
+    "crossing_rows": [
+      {
+        "id": "coincident-vacuum-first",
+        "native_status": "transport_completed",
+        "passed": true,
+        "observer_expected": "conformity_established",
+        "conformity_inferred_from_transport": false
+      },
+      {
+        "id": "coincident-vacuum-last",
+        "native_status": "transport_completed",
+        "passed": true,
+        "observer_expected": "conformity_established",
+        "conformity_inferred_from_transport": false
+      },
+      {
+        "id": "coincident-transmission-first",
+        "native_status": "native_process_failed",
+        "passed": true,
+        "observer_expected": "indeterminate",
+        "conformity_inferred_from_transport": false
+      },
+      {
+        "id": "coincident-transmission-last",
+        "native_status": "transport_completed",
+        "passed": true,
+        "observer_expected": "indeterminate",
+        "conformity_inferred_from_transport": false
+      }
+    ],
+    "provider_calls": 0,
+    "campaign_candidates": 0,
+    "status": "passed"
+  },
+  "earlier_attempts": [
+    {
+      "id": "native-laws-01",
+      "status": "blocked",
+      "reason": "Python bindings could not find the installed native library"
+    },
+    {
+      "id": "native-laws-02",
+      "status": "blocked",
+      "reason": "Import scope error in the new control driver"
+    },
+    {
+      "id": "native-laws-03",
+      "status": "blocked",
+      "reason": "Control fixture omitted explicit native run_mode"
+    },
+    {
+      "id": "native-laws-04",
+      "status": "failed",
+      "reason": "Source samples completed; crossing output included undefined unrequested eigenvalue estimators and was unusable. No crossing qualification credit."
+    }
+  ]
+}

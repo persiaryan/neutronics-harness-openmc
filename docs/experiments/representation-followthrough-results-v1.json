@@ -1,0 +1,253 @@
+{
+  "campaign_candidates": 0,
+  "control_and_implementation_author": "same_AI_assistant",
+  "date": "2026-10-24",
+  "format": "representation-followthrough-results-v1",
+  "frozen_campaign_seal": {
+    "aggregate_sha256": "943071068bc5a9ca81a3cb1a856af21b3652c062a80a124bd70c2f97eef46485",
+    "files_verified": 55781,
+    "status": "passed"
+  },
+  "grading_enabled": false,
+  "implementation_commit": "36362a0d308866c5fa92163257d92363d116285a",
+  "independent_human_review": "pending",
+  "native_integration": {
+    "automatic_retries": 0,
+    "comparison_transport": "Same new verified execution and XML for old/new fidelity",
+    "fixed_controls": 4,
+    "new_native_transport_calls": 4,
+    "retained_evidence_reconstructed": true,
+    "rows": [
+      {
+        "actual": "conforming_within_protocol",
+        "case": "wrapped_eight_pin_channel",
+        "evidence_status": "coherent",
+        "expected": "conforming_within_protocol",
+        "id": "compact-wrapper",
+        "known_mismatches": [],
+        "legacy_score": null,
+        "legacy_strict_correct": false,
+        "legacy_unknown_checks": [
+          "geometry.boundaries"
+        ],
+        "observed_wall_seconds": {
+          "additional_source_observation": 2.957,
+          "prospective_assessment": 220.84,
+          "v2_boundary_observation": 2.558,
+          "v3_boundary_observation": 2.494
+        },
+        "passed": true,
+        "score": 100.0,
+        "strict_correct": true,
+        "unassessed_checks": []
+      },
+      {
+        "actual": "conforming_within_protocol",
+        "case": "indc107_reflective_pin",
+        "evidence_status": "coherent",
+        "expected": "conforming_within_protocol",
+        "id": "cell-selected-source",
+        "known_mismatches": [],
+        "legacy_score": null,
+        "legacy_strict_correct": false,
+        "legacy_unknown_checks": [
+          "physics_settings.physics",
+          "physics_settings.sampling",
+          "physics_settings.source",
+          "physics_settings.entropy_mesh_and_output"
+        ],
+        "observed_wall_seconds": {
+          "additional_source_observation": 2.436,
+          "prospective_assessment": 262.18,
+          "v2_boundary_observation": 2.566,
+          "v3_boundary_observation": 2.354
+        },
+        "passed": true,
+        "score": 100.0,
+        "strict_correct": true,
+        "unassessed_checks": []
+      },
+      {
+        "actual": "nonconforming",
+        "case": "indc107_reflective_pin",
+        "evidence_status": "coherent",
+        "expected": "nonconforming",
+        "id": "wrong-particle-count",
+        "known_mismatches": [
+          "keff.equivalence_demonstrated",
+          "physics_settings.sampling",
+          "settings.particles"
+        ],
+        "legacy_score": 75.0,
+        "legacy_strict_correct": false,
+        "legacy_unknown_checks": [],
+        "observed_wall_seconds": {
+          "additional_source_observation": 2.368,
+          "prospective_assessment": 143.771,
+          "v2_boundary_observation": 2.587,
+          "v3_boundary_observation": 2.344
+        },
+        "passed": true,
+        "score": 75.0,
+        "strict_correct": false,
+        "unassessed_checks": []
+      },
+      {
+        "actual": "indeterminate",
+        "case": "indc107_reflective_pin",
+        "evidence_status": "coherent",
+        "expected": "indeterminate",
+        "id": "unsupported-energy-restriction",
+        "known_mismatches": [],
+        "legacy_score": null,
+        "legacy_strict_correct": false,
+        "legacy_unknown_checks": [
+          "physics_settings.physics",
+          "physics_settings.sampling",
+          "physics_settings.source",
+          "physics_settings.entropy_mesh_and_output"
+        ],
+        "observed_wall_seconds": {
+          "additional_source_observation": 2.337,
+          "prospective_assessment": 261.526,
+          "v2_boundary_observation": 2.633,
+          "v3_boundary_observation": 2.336
+        },
+        "passed": true,
+        "score": null,
+        "strict_correct": false,
+        "unassessed_checks": [
+          "physics_settings.source"
+        ]
+      }
+    ],
+    "status": "passed"
+  },
+  "next_study": {
+    "independent_controls": "not_run",
+    "provider_budget": "not_set",
+    "sample_size": "requires_justification",
+    "scientific_approval": "pending_owner_review",
+    "status": "proposed_not_launched"
+  },
+  "original_outcomes_reassessed": false,
+  "portable_tests": {
+    "failed": 0,
+    "passed": 720
+  },
+  "provider_calls": 0,
+  "reference_requalification": {
+    "evidence_status": "coherent",
+    "new_reference_neutron_transport_calls": 0,
+    "new_xml_observations": 120,
+    "packages": 12,
+    "packages_and_reviews": [
+      {
+        "case": "offset_plate_bank",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "911845c14edd084fd314f19b4503d4c4a0e47acef7399958666599952631a0d2"
+      },
+      {
+        "case": "staggered_seven_pin_cluster",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "30113a5a69fd510fa5e53d6ff4d8887f178ff5ca4100a61472e55d7e1bbafe1b"
+      },
+      {
+        "case": "three_annular_fuel_channels",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "fb0c06d09c57dc4e2ba8d163cac6255668546e21e4ec1815874b2d0f7e07cee5"
+      },
+      {
+        "case": "separated_twin_bundles",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "8c3ddeeac18c9569b541fd04773f665ce49336cf55e798087011c8a79e48294c"
+      },
+      {
+        "case": "cross_shaped_mixture",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "f240ed106e1f69e7a8853573f3540d7bf8c5eae28b3d64adff1f6ac516ea23ca"
+      },
+      {
+        "case": "stepped_axial_mixture",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "153554987c3142842a29bbb9a268c00ebcc41e3b6eab5c60617d26155fb6fbee"
+      },
+      {
+        "case": "wrapped_eight_pin_channel",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "c266a9de205fc777d9b1025a736517a6f0890d8f3223db30f3473fa63f774bd2"
+      },
+      {
+        "case": "mixed_boundary_fuel_slab",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "6e6baff8c2ea2cf164793bbb4515f188b2a6457921fb7172a15aa2eeef92755d"
+      },
+      {
+        "case": "cylindrical_void_sleeve",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "8fe5fda4fda197bae8e48c7f9b9d2feb3b2feb241a23806f46e5aec432d2a888"
+      },
+      {
+        "case": "dual_temperature_pin_pair",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "5815035e70db306988eaf75fa65e6ff57e82013d28dab0c90f66d37387800765"
+      },
+      {
+        "case": "restricted_source_nine_pin",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "90d4c8f7a088a991c09252a634f48d4cd594ed59c817429a3a4879da6c480f51"
+      },
+      {
+        "case": "indc107_reflective_pin",
+        "evidence_status": "coherent",
+        "reconstructed_runs": 5,
+        "reference_manifest_sha256": "d037a50909788ce6a1999a8fa67360f99eb391409c133404eae68bfc58a54fdc"
+      }
+    ],
+    "retained_native_runs_reconstructed": 60,
+    "source_law_note": "Four uniform and one separately required point-source initialization control per task"
+  },
+  "reports": {
+    "fixed_native_plan": {
+      "sha256": "58d76ede3120533f8a4f923f1c27590a92bd7307a6427f02f6ef308f0b00c3e4"
+    },
+    "geometry_v2": {
+      "sha256": "c43afcabd8aa8fe3147204421d8651b246920f51624caa2f68a8a8ef652e5438"
+    },
+    "geometry_v3": {
+      "sha256": "8754823340f7aba69837cdd9e4347cb8db3f0a7c2d216f44bfa2bdecca40a02e"
+    },
+    "native_integration": {
+      "sha256": "503587d13362c390b35456b36b33f7dbd5994a139634f66abe44504a8aee4d87"
+    },
+    "native_source_and_crossing": {
+      "sha256": "40c8f9b3cae4f17703fdf6b9fea47550f757e1f4142515f1c71d4e0307692276"
+    },
+    "reference_requalification": {
+      "sha256": "8a4b0a146dcbf6f3d57822ab6b753b9ca7bff81dee5ff198f03022383788ea5e"
+    },
+    "source_support": {
+      "sha256": "8e4f33c69f4ae1bc972fa7a3072c788496418f7cbf8a9a6e42dba62782dba2d9"
+    }
+  },
+  "semantics": {
+    "files": {
+      "evaluation/candidates/representation.py": "1fcb99d3656e92d13645ad707eb205ec0a8d0db0a97beda539df89d65073c206",
+      "evaluation/scientific/boundary_worker_v3.py": "b0867fa056f2461992ce290d0e2e60319b3675b08d4986ef6a4bd2325c6e07cc",
+      "evaluation/scientific/source_domains.py": "f81a3b0a3e9d0f7e9ff58150998fe52e34e69a319269650b47fce7feb352a44e",
+      "evaluation/scientific/source_domains_worker_v1.py": "a59fc369af7472a1f96205facc55fc0d0a7c92e7eb1cc4e2890f703fd3cc47a3"
+    },
+    "format": "representation-fidelity-v1"
+  }
+}

@@ -83,7 +83,9 @@ def evaluation_definition(rubric, rubric_hash, protocol):
         return dict(label={'en':name.replace('_',' ').capitalize()},description={'en':'All declared required observations must satisfy this check.'},unit=None,rule=None)
     checks={domain:{name:item(name) for name in group['checks']} for domain,group in rubric['categories'].items()}
     rules={k:rubric[k] for k in ('equivalence_margin_pcm','interval_multiplier','maximum_candidate_std_dev_pcm','entropy_active_half_drift_screen_bits') if k in rubric}
-    value=dict(format='evaluation-definition-v1',protocol=protocol,report_format='private-candidate-diagnostic-v5',
+    from evaluator.profiles import REPRESENTATION_PROTOCOL
+    value=dict(format='evaluation-definition-v1',protocol=protocol,
+               report_format='private-candidate-diagnostic-v6' if protocol==REPRESENTATION_PROTOCOL else 'private-candidate-diagnostic-v5',
                rubric_sha256=rubric_hash,score=dict(maximum=100,applicable_points=rubric['applicable_points']),
                checks=checks,gates={name:item(name) for name in rubric['hard_gates']},
                domain_labels={domain:{'en':domain.replace('_',' ').capitalize()} for domain in checks},
@@ -97,7 +99,7 @@ def validate_evaluation_definition(value):
     if not isinstance(value,dict) or value.get('format')!='evaluation-definition-v1' or value.get('aggregation')!='all-required-checks-v1':
         raise ValueError('Unsupported evaluation definition')
     identifier(value['protocol'])
-    if value.get('report_format') not in ('private-candidate-diagnostic-v5','evaluation-report-v1'):
+    if value.get('report_format') not in ('private-candidate-diagnostic-v5','private-candidate-diagnostic-v6','evaluation-report-v1'):
         raise ValueError('Unsupported report format')
     for field in ('maximum','applicable_points'):
         n=value['score'][field]

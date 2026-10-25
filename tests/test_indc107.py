@@ -62,7 +62,14 @@ class Indc107Tests(unittest.TestCase):
     def test_original_identity_admission_requires_unchanged_physical_contract(self):
         proof=references.compatibility()
         recorded=proof['previous_identities'][0]
-        self.assertTrue(references.identity_matches('offset_plate_bank',recorded))
+        self.assertFalse(references.identity_matches('offset_plate_bank',recorded))
+        historical={**proof['baseline_identity'],**proof['added_files'],
+                    str(references.COMPATIBILITY.relative_to(references.ROOT)):references.COMPATIBILITY_SHA256}
+        historical['evaluation/confirmation/cases.py']=proof['current_cases_sha256']
+        with patch.object(references,'identity',return_value=historical):
+            self.assertTrue(references.identity_matches('offset_plate_bank',recorded))
+            with patch.object(cases,'temperature',return_value=800.):
+                self.assertFalse(references.identity_matches('offset_plate_bank',recorded))
         self.assertFalse(references.identity_matches(CASE,recorded))
         with patch.object(cases,'temperature',return_value=800.):
             self.assertFalse(references.identity_matches('offset_plate_bank',recorded))
